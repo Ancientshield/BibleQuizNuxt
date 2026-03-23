@@ -75,15 +75,15 @@ const options = computed(() => {
 });
 
 // 未作答→default / 答對→correct / 答錯→wrong / 其餘→disabled
-function getOptionState(label: string): OptionState {
+const getOptionState = (label: string): OptionState => {
   if (!answered.value) return 'default';
   if (correctAnswer.value === label) return 'correct';
   if (selectedAnswer.value === label && correctAnswer.value !== label) return 'wrong';
   return 'disabled';
-}
+};
 
 // 選擇→鎖定→API 驗答→1.2s 展示結果→0.3s 滑出→下一題
-async function handleSelect(label: string) {
+const handleSelect = async (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
   selectedAnswer.value = label;
@@ -104,12 +104,12 @@ async function handleSelect(label: string) {
       isTransitioning.value = false;
     }, 300);
   }, 1200);
-}
+};
 
 // 重新從 API 取得 10 題
-async function handleRestart() {
+const handleRestart = async () => {
   await fetchQuestions();
-}
+};
 
 // 頁面載入時自動取題
 onMounted(() => {
