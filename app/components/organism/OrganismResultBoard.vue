@@ -8,7 +8,12 @@
       {{ total }}
       題
     </p>
-    <button class="result-board__restart" @click="$emit('restart')">再玩一次</button>
+    <button
+      class="result-board__restart"
+      @click="emit('restart')"
+    >
+      再玩一次
+    </button>
   </div>
 </template>
 
@@ -19,9 +24,11 @@ defineProps<{
 }>();
 
 // 簡易版結算，Phase B-6-6 做完整版含每題明細
-defineEmits<{
+interface Emits {
   restart: []; // 點擊「再玩一次」→ quiz.vue 重新 fetchQuestions()
-}>();
+}
+
+const emit = defineEmits<Emits>();
 </script>
 
 <style lang="scss" scoped>

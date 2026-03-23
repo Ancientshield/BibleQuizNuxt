@@ -18,13 +18,22 @@
     <div class="option-btn__content">
       <!-- 左側：徽章 + 文字 -->
       <div class="option-btn__left">
-        <AtomOptionBadge :label="label" :state="state" />
+        <AtomOptionBadge
+          :label="label"
+          :state="state"
+        />
         <span>{{ text }}</span>
       </div>
 
       <!-- 右側：答題結果圖示（僅作答後顯示） -->
-      <AtomResultIcon v-if="state === 'correct'" type="correct" />
-      <AtomResultIcon v-else-if="state === 'wrong'" type="wrong" />
+      <AtomResultIcon
+        v-if="state === 'correct'"
+        type="correct"
+      />
+      <AtomResultIcon
+        v-else-if="state === 'wrong'"
+        type="wrong"
+      />
     </div>
   </button>
 </template>
@@ -40,9 +49,11 @@ const props = defineProps<{
   disabled: boolean; // 答題後鎖定，防止重複點擊
 }>();
 
-const emit = defineEmits<{
+interface Emits {
   select: [label: string, event: MouseEvent]; // 點擊事件，傳回選項代號
-}>();
+}
+
+const emit = defineEmits<Emits>();
 
 // 動態 BEM modifier class：option-btn--default / --correct / --wrong / --disabled
 const stateClass = computed(() => `option-btn--${props.state}`);
@@ -51,7 +62,7 @@ const stateClass = computed(() => `option-btn--${props.state}`);
 const ripple = ref<{ x: number; y: number } | null>(null);
 
 // 點擊 → 算座標觸發 ripple → 600ms 清除 → emit 給父層
-function handleClick(e: MouseEvent) {
+const handleClick = (e: MouseEvent) => {
   const target = e.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();
   ripple.value = {
@@ -64,7 +75,7 @@ function handleClick(e: MouseEvent) {
   }, 600);
 
   emit('select', props.label, e);
-}
+};
 </script>
 
 <style lang="scss" scoped>
