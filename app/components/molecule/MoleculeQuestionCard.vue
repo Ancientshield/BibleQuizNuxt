@@ -18,7 +18,7 @@ defineProps<{
 .question-card {
   position: relative;
   width: 100%;
-  max-width: 56rem; // 與選項格 options-grid 等寬
+  max-width: 48rem;
   border-radius: 1rem;
   background: rgba(15, 23, 42, 0.4); // slate-900/40
   backdrop-filter: blur(24px); // 玻璃擬態毛玻璃效果
@@ -31,7 +31,8 @@ defineProps<{
     padding: 2.5rem;
   }
 
-  &__glow { // 光暈偽邊框：purple→cyan→purple 漸層 + blur
+  &__glow {
+    // 光暈偽邊框：purple→cyan→purple 漸層 + blur
     position: absolute;
     inset: -2px;
     border-radius: inherit;
