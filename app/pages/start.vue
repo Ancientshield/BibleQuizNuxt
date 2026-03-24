@@ -89,8 +89,7 @@ const handleSelect = async (label: string) => {
   selectedAnswer.value = label;
   answered.value = true;
 
-  const isCorrect = await checkAnswer(currentQuestion.value.id, label);
-  correctAnswer.value = isCorrect ? label : null;
+  correctAnswer.value = await checkAnswer(currentQuestion.value.id, label);
 
   // 1.2s 後開始切題過渡
   setTimeout(() => {
@@ -111,9 +110,24 @@ const handleRestart = async () => {
   await fetchQuestions();
 };
 
-// 頁面載入時自動取題
-onMounted(() => {
-  fetchQuestions();
+// ── B-7-2：頁面載入時取題，若取不到（API 沒開、網路斷）就導回首頁 ──
+onMounted(async () => {
+  await fetchQuestions();
+  // 直接在瀏覽器輸入 /start 進來，但後端沒開或取題失敗 → 導回首頁
+  if (questions.value.length === 0) {
+    navigateTo('/', { replace: true });
+  }
+});
+
+// ── B-7-8：攔截「上一頁」或手動切換路由 ──
+// onBeforeRouteLeave 是 Vue Router 的導航守衛，在使用者要離開這個頁面時觸發。
+// 常見情境：按瀏覽器上一頁、點導航連結、或用程式碼 navigateTo()。
+// 如果測驗還在進行中（有題目且未結束），就跳出 window.confirm 讓使用者確認。
+// 回傳 false = 取消離開，留在當前頁面。
+onBeforeRouteLeave(() => {
+  if (!isFinished.value && questions.value.length > 0) {
+    return window.confirm('確定要離開？測驗進度不會保留');
+  }
 });
 </script>
 
