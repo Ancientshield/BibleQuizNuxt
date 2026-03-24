@@ -161,21 +161,21 @@ const handleClick = (e: MouseEvent) => {
     background: rgba(34, 211, 238, 0.3); // cyan-400/30
     width: 10px;
     height: 10px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
     pointer-events: none;
+    will-change: transform, opacity;
     animation: ripple 0.6s ease-out forwards;
   }
 }
 
+// 用 transform: scale() 取代 width/height 動畫，避免觸發 layout
 @keyframes ripple {
   0% {
-    width: 10px;
-    height: 10px;
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
   100% {
-    width: 500px;
-    height: 500px;
+    transform: translate(-50%, -50%) scale(50);
     opacity: 0;
   }
 }

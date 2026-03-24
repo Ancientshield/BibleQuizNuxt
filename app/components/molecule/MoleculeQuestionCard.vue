@@ -1,7 +1,5 @@
 <template>
   <div class="question-card">
-    <!-- 光暈偽邊框：漸層 purple → cyan → purple，blur 模糊 -->
-    <div class="question-card__glow" />
     <h1 class="question-card__text">
       {{ content }}
     </h1>
@@ -26,22 +24,23 @@ defineProps<{
   padding: 1.5rem;
   box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
 
-  @media (min-width: 768px) {
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-  }
-
-  &__glow {
-    // 光暈偽邊框：purple→cyan→purple 漸層 + blur
+  // 光暈偽邊框：purple → cyan → purple 漸層 + blur
+  &::before {
+    content: '';
     position: absolute;
     inset: -2px;
     border-radius: inherit;
     background: linear-gradient(to right, rgba(168, 85, 247, 0.2), rgba(34, 211, 238, 0.2), rgba(168, 85, 247, 0.2));
     filter: blur(4px);
-    z-index: -1;
+  }
+
+  @media (min-width: 768px) {
+    border-radius: 1.5rem;
+    padding: 2.5rem;
   }
 
   &__text {
+    position: relative;
     font-size: 1.25rem;
     font-weight: 700;
     text-align: center;
