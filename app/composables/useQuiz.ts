@@ -39,15 +39,16 @@ export const useQuiz = () => {
     answers.value = [];
   };
 
-  const checkAnswer = async (questionId: number, answer: string): Promise<boolean> => {
-    const isCorrect = await $fetch<boolean>('/api/biblequiz/check', {
+  // 回傳正確答案（"A"/"B"/"C"/"D"），供頁面同時標示對錯
+  const checkAnswer = async (questionId: number, answer: string): Promise<string> => {
+    const result = await $fetch<{ correct: boolean; correctAnswer: string }>('/api/biblequiz/check', {
       method: 'POST',
       params: { questionId, answer },
     });
 
-    if (isCorrect) score.value++;
-    answers.value.push({ questionId, selectedAnswer: answer, isCorrect });
-    return isCorrect;
+    if (result.correct) score.value++;
+    answers.value.push({ questionId, selectedAnswer: answer, isCorrect: result.correct });
+    return result.correctAnswer;
   };
 
   const nextQuestion = () => {
