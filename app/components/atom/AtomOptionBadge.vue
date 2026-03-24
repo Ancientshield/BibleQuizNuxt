@@ -1,5 +1,8 @@
 <template>
-  <span :class="stateClass" class="badge">
+  <span
+    :class="stateClass"
+    class="badge"
+  >
     {{ label }}
   </span>
 </template>
@@ -13,19 +16,7 @@ const props = defineProps<{
   state: BadgeState; // 視覺狀態，由父層 MoleculeOptionButton 傳入
 }>();
 
-// 根據 state 動態加上 BEM modifier class
-const stateClass = computed(() => {
-  switch (props.state) {
-    case 'correct':
-      return 'badge--correct';
-    case 'wrong':
-      return 'badge--wrong';
-    case 'disabled':
-      return 'badge--disabled';
-    default:
-      return 'badge--default';
-  }
-});
+const stateClass = computed(() => `badge--${props.state}`);
 </script>
 
 <style lang="scss" scoped>

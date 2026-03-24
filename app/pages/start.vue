@@ -39,7 +39,7 @@
       </template>
 
       <!-- ===== 結算畫面 ===== -->
-      <OrganismResultBoard
+      <LazyOrganismResultBoard
         v-else-if="isFinished"
         :score="score"
         :total="questions.length"
