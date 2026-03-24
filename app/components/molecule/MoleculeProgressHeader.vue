@@ -9,12 +9,10 @@
     <!-- 下排：進度條 -->
     <div class="progress-bar">
       <!-- 填充區塊，寬度 = (current / total) * 100% -->
-      <div class="progress-bar__fill" :style="{ width: `${(current / total) * 100}%` }">
-        <div class="progress-bar__shine-overlay" />
-        <div class="progress-bar__shine">
-          <div class="progress-bar__shine-sweep" />
-        </div>
-      </div>
+      <div
+        class="progress-bar__fill"
+        :style="{ width: `${(current / total) * 100}%` }"
+      />
     </div>
   </header>
 </template>
@@ -86,29 +84,27 @@ defineProps<{
     border-radius: 9999px;
     background: linear-gradient(to right, #06b6d4, #3b82f6, #a855f7); // cyan-500 → blue-500 → purple-500
     transition: all 0.5s ease-out;
-    overflow: hidden; // 裁切 shine 層，消除圓角邊緣薄膜
-  }
-
-  &__shine-overlay { // 上半白色漸層，模擬立體光澤
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
-  }
-
-  &__shine {
-    position: absolute;
-    inset: 0;
     overflow: hidden;
-  }
 
-  &__shine-sweep { // 左→右掃過的光帶（2s 循環）
-    position: absolute;
-    inset: 0;
-    left: -100%;
-    width: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transform: skewX(12deg);
-    animation: shine 2s ease-in-out infinite;
+    // 上半白色漸層，模擬立體光澤
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    // 左→右掃過的光帶（2s 循環）
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      left: -100%;
+      width: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: skewX(12deg);
+      animation: shine 2s ease-in-out infinite;
+    }
   }
 }
 

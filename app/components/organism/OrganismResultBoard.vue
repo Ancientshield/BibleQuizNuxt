@@ -1,8 +1,5 @@
 <template>
   <div class="result-board">
-    <!-- 卡片外圍光暈 -->
-    <div class="result-board__glow" />
-
     <!-- 玻璃擬態主卡片 -->
     <div class="result-board__card">
       <!-- 分數圓環 -->
@@ -92,11 +89,6 @@
         class="result-board__restart"
         @click="emit('restart')"
       >
-        <div class="result-board__restart-bg" />
-        <div class="result-board__restart-hover-glow" />
-        <div class="result-board__restart-shine">
-          <div class="result-board__restart-shine-ray" />
-        </div>
         <span class="result-board__restart-text">
           再玩一次
           <svg
@@ -197,7 +189,9 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
   align-items: center;
   justify-content: center;
 
-  &__glow {
+  // 卡片外圍光暈
+  &::before {
+    content: '';
     position: absolute;
     width: 100%;
     max-width: 28rem;
@@ -353,6 +347,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     cursor: pointer;
     transition: all 0.3s;
     margin-top: 0.5rem;
+    background: linear-gradient(to right, #06b6d4, #a855f7, #ec4899);
 
     @media (min-width: 768px) {
       padding: 1rem;
@@ -366,47 +361,40 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     &:active {
       transform: scale(0.98);
     }
-  }
 
-  &__restart-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, #06b6d4, #a855f7, #ec4899);
-  }
+    // hover 光暈
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+      background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
+      filter: blur(16px);
+    }
 
-  &__restart-hover-glow {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.3s;
-    background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
-    filter: blur(16px);
-
-    .result-board__restart:hover & {
+    &:hover::before {
       opacity: 1;
     }
-  }
 
-  &__restart-shine {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
+    // 掃光
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: 50%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: skewX(12deg) translateX(-200%);
+    }
 
-  &__restart-shine-ray {
-    position: absolute;
-    inset: 0;
-    width: 50%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transform: skewX(12deg) translateX(-200%);
-
-    .result-board__restart:hover & {
+    &:hover::after {
       animation: button-shine 0.6s ease-out;
     }
   }
 
   &__restart-text {
     position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
