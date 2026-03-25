@@ -1,9 +1,11 @@
 <template>
   <button
     :disabled="disabled"
-    :class="stateClass"
+    :class="[stateClass, { 'option-btn--hovered': isHovered }]"
     class="option-btn"
     @click="handleClick"
+    @pointerenter="handlePointerEnter"
+    @pointerleave="handlePointerLeave"
   >
     <!-- Ripple 水波紋：從點擊位置擴散的圓形半透明動畫 -->
     <span
@@ -57,6 +59,17 @@ const emit = defineEmits<Emits>();
 
 // 動態 BEM modifier class：option-btn--default / --correct / --wrong / --disabled
 const stateClass = computed(() => `option-btn--${props.state}`);
+
+// 只有滑鼠 pointer 才啟用 hover 效果，觸控永遠不觸發
+const isHovered = ref(false);
+
+const handlePointerEnter = (e: PointerEvent) => {
+  if (e.pointerType === 'mouse' && !props.disabled) isHovered.value = true;
+};
+
+const handlePointerLeave = () => {
+  isHovered.value = false;
+};
 
 // Ripple 水波紋座標（null 表示不顯示）
 const ripple = ref<{ x: number; y: number } | null>(null);
@@ -119,13 +132,12 @@ const handleClick = (e: MouseEvent) => {
     border-color: rgba(71, 85, 105, 0.5); // slate-600/50
     color: #fff;
 
-    // 只在有滑鼠的裝置啟用 hover 效果，避免手機 tap 後 :hover 黏住
-    @media (hover: hover) {
-      &:hover:not(:disabled) {
-        transform: scale(1.02);
-        border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
-        box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
-      }
+    // hover 效果改由 JS PointerEvent 控制（pointerType === 'mouse' 才加 class）
+    // 不用 CSS :hover，因為手機 tap 後 :hover 會黏住
+    &.option-btn--hovered {
+      transform: scale(1.02);
+      border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
+      box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
     }
   }
 
