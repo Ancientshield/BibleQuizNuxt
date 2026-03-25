@@ -126,6 +126,8 @@ const handleSelect = async (label: string) => {
   // 1.2s 後開始切題過渡
   setTimeout(() => {
     isTransitioning.value = true;
+    // 清除按鈕 focus，避免下一題的同位置選項殘留發光邊框
+    (document.activeElement as HTMLElement)?.blur();
     // 0.3s 滑出動畫完成後載入下一題
     setTimeout(() => {
       nextQuestion();
@@ -166,7 +168,7 @@ onBeforeRouteLeave(() => {
 <style lang="scss" scoped>
 .quiz-page {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   overflow: hidden;
   background: #020617; // slate-950
@@ -190,7 +192,7 @@ onBeforeRouteLeave(() => {
     position: relative;
     z-index: 10;
     display: flex;
-    min-height: 100vh;
+    min-height: 100dvh;
     flex-direction: column;
     padding: 1.5rem 1rem;
 
