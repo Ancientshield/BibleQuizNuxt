@@ -101,6 +101,17 @@ const handleClick = (e: MouseEvent) => {
     cursor: not-allowed;
   }
 
+  // 觸控裝置點擊後不殘留 focus 發光邊框
+  &:focus-visible {
+    outline: 2px solid rgba(34, 211, 238, 0.7);
+    outline-offset: 2px;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: inherit;
+  }
+
   // ── States ──
   &--default {
     background: rgba(30, 41, 59, 0.6); // slate-800/60
