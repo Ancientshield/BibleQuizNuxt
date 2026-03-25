@@ -62,17 +62,43 @@ const answered = ref(false); // 是否已作答（鎖定按鈕用）
 const correctAnswer = ref<string | null>(null); // API 回傳的正確答案（答錯時為 null）
 const isTransitioning = ref(false); // 切題滑出動畫中
 
-// QuestionDTO 四選項欄位 → 陣列，供 v-for 渲染
-const options = computed(() => {
-  const q = currentQuestion.value;
-  if (!q) return [];
-  return [
-    { label: 'A', text: q.optionA },
-    { label: 'B', text: q.optionB },
-    { label: 'C', text: q.optionC },
-    { label: 'D', text: q.optionD },
-  ];
-});
+// ── 選項隨機排列 ──
+// 每換一題 shuffle 一次，避免選項永遠在同一個位置。
+// 多記一個 originalLabel，送 API 時轉回原始代號（因為後端是無狀態的，不知道前端怎麼洗牌）。
+const LABELS = ['A', 'B', 'C', 'D'] as const;
+
+const shuffleArray = <T,>(arr: T[]): T[] => {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+const options = ref<Array<{ label: string; originalLabel: string; text: string }>>([]);
+
+watch(
+  currentQuestion,
+  q => {
+    if (!q) {
+      options.value = [];
+      return;
+    }
+    const shuffled = shuffleArray([
+      { originalLabel: 'A', text: q.optionA },
+      { originalLabel: 'B', text: q.optionB },
+      { originalLabel: 'C', text: q.optionC },
+      { originalLabel: 'D', text: q.optionD },
+    ]);
+    options.value = shuffled.map((item, i) => ({
+      label: LABELS[i],
+      originalLabel: item.originalLabel,
+      text: item.text,
+    }));
+  },
+  { immediate: true }
+);
 
 // 未作答→default / API 未回應→default / 答對→correct / 答錯→wrong / 其餘→disabled
 const getOptionState = (label: string): OptionState => {
@@ -87,10 +113,15 @@ const getOptionState = (label: string): OptionState => {
 const handleSelect = async (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
-  selectedAnswer.value = label;
+  selectedAnswer.value = label; // 顯示用的 label（洗牌後的位置）
   answered.value = true;
 
-  correctAnswer.value = await checkAnswer(currentQuestion.value.id, label);
+  // 顯示 label → 原始 label，送 API 用
+  const originalLabel = options.value.find(o => o.label === label)?.originalLabel ?? label;
+  const apiCorrectAnswer = await checkAnswer(currentQuestion.value.id, originalLabel);
+
+  // API 回傳的原始 label → 顯示 label，供 getOptionState 比對
+  correctAnswer.value = options.value.find(o => o.originalLabel === apiCorrectAnswer)?.label ?? apiCorrectAnswer;
 
   // 1.2s 後開始切題過渡
   setTimeout(() => {
