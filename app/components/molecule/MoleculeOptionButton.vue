@@ -119,10 +119,13 @@ const handleClick = (e: MouseEvent) => {
     border-color: rgba(71, 85, 105, 0.5); // slate-600/50
     color: #fff;
 
-    &:hover:not(:disabled) {
-      transform: scale(1.02);
-      border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
-      box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+    // 只在有滑鼠的裝置啟用 hover 效果，避免手機 tap 後 :hover 黏住
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        transform: scale(1.02);
+        border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
+        box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+      }
     }
   }
 
