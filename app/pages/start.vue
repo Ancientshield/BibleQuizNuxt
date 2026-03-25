@@ -23,11 +23,14 @@
         </section>
 
         <!-- 選項區：2×2 格線（桌面）/ 1×4 堆疊（手機） -->
-        <section class="quiz-page__options-area">
+        <section
+          class="quiz-page__options-area"
+          :class="{ 'quiz-page__options-area--transitioning': isTransitioning }"
+        >
           <div class="quiz-page__options-grid">
             <MoleculeOptionButton
               v-for="option in options"
-              :key="option.label"
+              :key="`${currentIndex}-${option.label}`"
               :label="option.label"
               :text="option.text"
               :state="getOptionState(option.label)"
@@ -222,10 +225,17 @@ onBeforeRouteLeave(() => {
   }
 
   &__options-area {
+    transition: all 0.5s;
+
     @media (min-width: 768px) {
       flex: 1;
       display: flex;
       align-items: center;
+    }
+
+    &--transitioning {
+      opacity: 0;
+      transform: translateX(-2.5rem);
     }
   }
 
