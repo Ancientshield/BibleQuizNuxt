@@ -74,11 +74,12 @@ const options = computed(() => {
   ];
 });
 
-// 未作答→default / 答對→correct / 答錯→wrong / 其餘→disabled
+// 未作答→default / API 未回應→default / 答對→correct / 答錯→wrong / 其餘→disabled
 const getOptionState = (label: string): OptionState => {
   if (!answered.value) return 'default';
+  if (correctAnswer.value === null) return 'default'; // API 還沒回來，不判定對錯
   if (correctAnswer.value === label) return 'correct';
-  if (selectedAnswer.value === label && correctAnswer.value !== label) return 'wrong';
+  if (selectedAnswer.value === label) return 'wrong';
   return 'disabled';
 };
 
