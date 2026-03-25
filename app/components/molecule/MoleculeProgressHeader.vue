@@ -11,7 +11,7 @@
       <!-- 填充區塊，寬度 = (current / total) * 100% -->
       <div
         class="progress-bar__fill"
-        :style="{ width: `${(current / total) * 100}%` }"
+        :style="{ width: `${(score / total) * 100}%` }"
       />
     </div>
   </header>
