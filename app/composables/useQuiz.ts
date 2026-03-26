@@ -1,17 +1,21 @@
-// 後端回傳的題目（不含正確答案）
+// 後端回傳的選項（含 isCorrect，前端本地驗答用）
+interface OptionDTO {
+  id: number;
+  content: string;
+  isCorrect: boolean;
+}
+
+// 後端回傳的題目（含選項與答案）
 interface QuestionDTO {
   id: number;
   content: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
+  options: OptionDTO[];
 }
 
 // 前端自行管理的作答紀錄
 interface AnswerRecord {
   questionId: number;
-  selectedAnswer: string; // 'A' | 'B' | 'C' | 'D'
+  selectedOptionId: number;
   isCorrect: boolean;
 }
 
@@ -21,6 +25,8 @@ interface QuizResult {
   totalQuestions: number;
   records: AnswerRecord[];
 }
+
+export type { OptionDTO, QuestionDTO };
 
 export const useQuiz = () => {
   const questions = ref<QuestionDTO[]>([]);
@@ -39,16 +45,18 @@ export const useQuiz = () => {
     answers.value = [];
   };
 
-  // 回傳正確答案（"A"/"B"/"C"/"D"），供頁面同時標示對錯
-  const checkAnswer = async (questionId: number, answer: string): Promise<string> => {
-    const result = await $fetch<{ correct: boolean; correctAnswer: string }>('/api/biblequiz/check', {
-      method: 'POST',
-      params: { questionId, answer },
-    });
+  // 同步本地驗答 — 零延遲，不發 API
+  const checkAnswer = (optionId: number): boolean => {
+    const q = currentQuestion.value;
+    if (!q) return false;
 
-    if (result.correct) score.value++;
-    answers.value.push({ questionId, selectedAnswer: answer, isCorrect: result.correct });
-    return result.correctAnswer;
+    const selected = q.options.find(o => o.id === optionId);
+    if (!selected) return false;
+
+    const isCorrect = selected.isCorrect;
+    if (isCorrect) score.value++;
+    answers.value.push({ questionId: q.id, selectedOptionId: optionId, isCorrect });
+    return isCorrect;
   };
 
   const nextQuestion = () => {

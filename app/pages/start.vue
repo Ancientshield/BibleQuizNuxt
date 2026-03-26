@@ -60,14 +60,13 @@ const { questions, currentIndex, score, isFinished, currentQuestion, fetchQuesti
   useQuiz();
 
 // ── UI 狀態（僅限本頁面使用） ──
-const selectedAnswer = ref<string | null>(null); // 使用者選的答案（"A"/"B"/"C"/"D"）
+const selectedLabel = ref<string | null>(null); // 使用者選的顯示標籤（"A"/"B"/"C"/"D"）
 const answered = ref(false); // 是否已作答（鎖定按鈕用）
-const correctAnswer = ref<string | null>(null); // API 回傳的正確答案（答錯時為 null）
+const correctLabel = ref<string | null>(null); // 正確答案的顯示標籤
 const isTransitioning = ref(false); // 切題滑出動畫中
 
 // ── 選項隨機排列 ──
 // 每換一題 shuffle 一次，避免選項永遠在同一個位置。
-// 多記一個 originalLabel，送 API 時轉回原始代號（因為後端是無狀態的，不知道前端怎麼洗牌）。
 const LABELS = ['A', 'B', 'C', 'D'] as const;
 
 const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -79,7 +78,7 @@ const shuffleArray = <T,>(arr: T[]): T[] => {
   return shuffled;
 };
 
-const options = ref<Array<{ label: string; originalLabel: string; text: string }>>([]);
+const options = ref<Array<{ label: string; optionId: number; text: string; isCorrect: boolean }>>([]);
 
 watch(
   currentQuestion,
@@ -88,55 +87,49 @@ watch(
       options.value = [];
       return;
     }
-    const shuffled = shuffleArray([
-      { originalLabel: 'A', text: q.optionA },
-      { originalLabel: 'B', text: q.optionB },
-      { originalLabel: 'C', text: q.optionC },
-      { originalLabel: 'D', text: q.optionD },
-    ]);
+    const shuffled = shuffleArray(q.options.map(o => ({ optionId: o.id, text: o.content, isCorrect: o.isCorrect })));
     options.value = shuffled.map((item, i) => ({
       label: LABELS[i],
-      originalLabel: item.originalLabel,
+      optionId: item.optionId,
       text: item.text,
+      isCorrect: item.isCorrect,
     }));
   },
   { immediate: true }
 );
 
-// 未作答→default / API 未回應→default / 答對→correct / 答錯→wrong / 其餘→disabled
+// 未作答→default / 答對→correct / 答錯→wrong / 其餘→disabled
 const getOptionState = (label: string): OptionState => {
   if (!answered.value) return 'default';
-  if (correctAnswer.value === null) return 'default'; // API 還沒回來，不判定對錯
-  if (correctAnswer.value === label) return 'correct';
-  if (selectedAnswer.value === label) return 'wrong';
+  if (correctLabel.value === label) return 'correct';
+  if (selectedLabel.value === label) return 'wrong';
   return 'disabled';
 };
 
-// 選擇→鎖定→API 驗答→1.2s 展示結果→0.3s 滑出→下一題
-const handleSelect = async (label: string) => {
+// 選擇→鎖定→本地驗答（零延遲）→1.2s 展示結果→0.3s 滑出→下一題
+const handleSelect = (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
-  selectedAnswer.value = label; // 顯示用的 label（洗牌後的位置）
+  selectedLabel.value = label;
   answered.value = true;
 
-  // 顯示 label → 原始 label，送 API 用
-  const originalLabel = options.value.find(o => o.label === label)?.originalLabel ?? label;
-  const apiCorrectAnswer = await checkAnswer(currentQuestion.value.id, originalLabel);
+  // 本地驗答 — 同步，不發 API
+  const selected = options.value.find(o => o.label === label);
+  if (selected) checkAnswer(selected.optionId);
 
-  // API 回傳的原始 label → 顯示 label，供 getOptionState 比對
-  correctAnswer.value = options.value.find(o => o.originalLabel === apiCorrectAnswer)?.label ?? apiCorrectAnswer;
+  // 找出正確答案的顯示標籤
+  correctLabel.value = options.value.find(o => o.isCorrect)?.label ?? null;
 
   // 1.2s 後開始切題過渡
   setTimeout(() => {
     isTransitioning.value = true;
-    // 清除按鈕 focus，避免下一題的同位置選項殘留發光邊框
     (document.activeElement as HTMLElement)?.blur();
     // 0.3s 滑出動畫完成後載入下一題
     setTimeout(() => {
       nextQuestion();
-      selectedAnswer.value = null;
+      selectedLabel.value = null;
       answered.value = false;
-      correctAnswer.value = null;
+      correctLabel.value = null;
       isTransitioning.value = false;
     }, 300);
   }, 1200);
