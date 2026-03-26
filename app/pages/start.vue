@@ -73,7 +73,9 @@ const shuffleArray = <T,>(arr: T[]): T[] => {
   const shuffled = [...arr];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    const temp = shuffled[i]!;
+    shuffled[i] = shuffled[j]!;
+    shuffled[j] = temp;
   }
   return shuffled;
 };
@@ -89,7 +91,7 @@ watch(
     }
     const shuffled = shuffleArray(q.options.map(o => ({ optionId: o.id, text: o.content, isCorrect: o.isCorrect })));
     options.value = shuffled.map((item, i) => ({
-      label: LABELS[i],
+      label: LABELS[i] ?? 'A',
       optionId: item.optionId,
       text: item.text,
       isCorrect: item.isCorrect,
