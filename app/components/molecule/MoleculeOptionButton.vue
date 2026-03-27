@@ -103,6 +103,7 @@ const handleClick = (e: MouseEvent) => {
   transition: all 0.3s ease-out;
   border: 2px solid;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent; // iOS tap 後預設會加半透明高光，關掉
 
   @media (min-width: 768px) {
     border-radius: 1rem;
@@ -132,12 +133,16 @@ const handleClick = (e: MouseEvent) => {
     border-color: rgba(71, 85, 105, 0.5); // slate-600/50
     color: #fff;
 
-    // hover 效果改由 JS PointerEvent 控制（pointerType === 'mouse' 才加 class）
-    // 不用 CSS :hover，因為手機 tap 後 :hover 會黏住
-    &.option-btn--hovered {
-      transform: scale(1.02);
-      border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
-      box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+    // hover 效果：JS PointerEvent（pointerType === 'mouse'）控制 class，
+    // CSS @media (hover: hover) 做第二道防線。
+    // iOS WebKit tap 後會發合成 mouse 事件（pointerType 報 'mouse'），
+    // 繞過 JS 判斷讓光圈殘留，media query 確保觸控裝置不套用。
+    @media (hover: hover) {
+      &.option-btn--hovered {
+        transform: scale(1.02);
+        border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
+        box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+      }
     }
   }
 
