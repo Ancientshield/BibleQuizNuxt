@@ -71,14 +71,12 @@ const isTransitioning = ref(false); // 切題滑出動畫中
 const LABELS = ['A', 'B', 'C', 'D'] as const;
 
 const shuffleArray = <T,>(arr: T[]): T[] => {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    const temp = shuffled[i]!;
-    shuffled[i] = shuffled[j]!;
-    shuffled[j] = temp;
+    [a[i], a[j]] = [a[j]!, a[i]!];
   }
-  return shuffled;
+  return a;
 };
 
 const options = ref<Array<{ label: string; optionId: number; text: string }>>([]);
@@ -86,22 +84,14 @@ const options = ref<Array<{ label: string; optionId: number; text: string }>>([]
 watch(
   currentQuestion,
   q => {
-    if (!q) {
-      options.value = [];
-      return;
-    }
-    const shuffled = shuffleArray(q.options.map(o => ({ optionId: o.id, text: o.content })));
-    options.value = shuffled.map((item, i) => ({
-      label: LABELS[i],
-      optionId: item.optionId,
-      text: item.text,
-      isCorrect: item.isCorrect,
-    }));
+    options.value = q
+      ? shuffleArray(q.options).map((o, i) => ({ label: LABELS[i]!, optionId: o.id, text: o.content }))
+      : [];
   },
   { immediate: true }
 );
 
-// 未作答→default / 正確選項→correct / 選錯→wrong / 其餘→disabled
+// 未作答 → default / 正確選項 → correct / 選錯 → wrong / 其餘 → disabled
 const getOptionState = (label: string): OptionState => {
   if (!answered.value || correctOptionId.value === null) return 'default';
   const opt = options.value.find(o => o.label === label);
@@ -111,7 +101,7 @@ const getOptionState = (label: string): OptionState => {
   return 'disabled';
 };
 
-// 選擇→鎖定→本地驗答（零延遲）→1.2s 展示結果→0.3s 滑出→下一題
+// 選擇 →鎖定 → 本地驗答（零延遲）→ 1.2s 展示結果 → 0.3s 滑出 → 下一題
 const handleSelect = (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
@@ -150,17 +140,6 @@ onMounted(async () => {
   // 直接在瀏覽器輸入 /start 進來，但後端沒開或取題失敗 → 導回首頁
   if (questions.value.length === 0) {
     navigateTo('/', { replace: true });
-  }
-});
-
-// ── B-7-8：攔截「上一頁」或手動切換路由 ──
-// onBeforeRouteLeave 是 Vue Router 的導航守衛，在使用者要離開這個頁面時觸發。
-// 常見情境：按瀏覽器上一頁、點導航連結、或用程式碼 navigateTo()。
-// 如果測驗還在進行中（有題目且未結束），就跳出 window.confirm 讓使用者確認。
-// 回傳 false = 取消離開，留在當前頁面。
-onBeforeRouteLeave(() => {
-  if (!isFinished.value && questions.value.length > 0) {
-    return window.confirm('確定要離開？測驗進度不會保留');
   }
 });
 </script>
