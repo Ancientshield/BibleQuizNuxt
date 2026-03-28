@@ -1,5 +1,28 @@
 <template>
   <main class="home-page">
+    <!-- 右上角登入按鈕 -->
+    <button
+      class="home-page__login-btn"
+      @click="navigateTo('/login')"
+    >
+      <svg
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle
+          cx="12"
+          cy="7"
+          r="4"
+        />
+      </svg>
+      登入
+    </button>
+
     <!-- 動態漸層背景（與 start.vue 相同色系） -->
     <div class="home-page__bg home-page__bg--gradient" />
     <div class="home-page__bg home-page__bg--radial" />
@@ -454,6 +477,43 @@ const startGame = () => {
     font-size: 0.875rem;
     color: #64748b; // slate-500
     text-align: center;
+  }
+
+  // ── 右上角登入按鈕 ──
+  &__login-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 20;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    color: #94a3b8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s;
+
+    svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    &:hover {
+      background: rgba(15, 23, 42, 0.7);
+      color: #22d3ee;
+      border-color: rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
   }
 }
 
