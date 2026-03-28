@@ -1,5 +1,5 @@
 # ── Build stage ── SSG 產出靜態檔案
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
