@@ -461,9 +461,10 @@ const handleSubmit = async () => {
   }
 };
 
-// ── 社群登入（OAuth 尚未實作） ──
+// ── 社群登入 ──
 const handleSocial = (provider: string) => {
-  alert(`${provider} 登入即將推出，敬請期待！`);
+  const registrationId = provider.toLowerCase();
+  window.location.href = `http://localhost:8080/oauth2/authorization/${registrationId}`;
 };
 
 // ── 忘記密碼（尚未實作） ──
