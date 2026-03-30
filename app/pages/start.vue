@@ -55,6 +55,8 @@
 <script setup lang="ts">
 import type { OptionState } from '~/components/molecule/MoleculeOptionButton.vue';
 
+definePageMeta({ layout: 'blank' });
+
 // ── 遊戲邏輯（來自 composable） ──
 const { questions, currentIndex, score, isFinished, currentQuestion, fetchQuestions, checkAnswer, nextQuestion } =
   useQuiz();
