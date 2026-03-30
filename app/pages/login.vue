@@ -16,28 +16,6 @@
 
     <!-- 主內容區 -->
     <div class="login-page__content">
-      <!-- 頂部導航列 -->
-      <nav class="login-page__nav">
-        <button
-          class="login-page__back"
-          @click="navigateTo('/')"
-        >
-          <svg
-            class="login-page__back-icon"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12H5" />
-          </svg>
-          返回首頁
-        </button>
-      </nav>
-
       <!-- 垂直水平置中區域 -->
       <div class="login-page__center">
         <div class="login-page__card-wrapper">
@@ -50,22 +28,10 @@
             <div class="login-page__icon-wrapper">
               <div class="login-page__icon-glow" />
               <div class="login-page__icon">
-                <svg
+                <Icon
+                  name="lucide:user"
                   class="login-page__icon-svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle
-                    cx="12"
-                    cy="7"
-                    r="4"
-                  />
-                </svg>
+                />
               </div>
             </div>
 
@@ -92,39 +58,30 @@
               </template>
             </p>
 
+            <!-- 成功訊息 -->
+            <Transition name="fade">
+              <div
+                v-if="successMsg"
+                class="login-page__success"
+              >
+                <Icon
+                  name="lucide:circle-check"
+                  class="login-page__success-icon"
+                />
+                {{ successMsg }}
+              </div>
+            </Transition>
+
             <!-- 錯誤訊息 -->
             <Transition name="fade">
               <div
                 v-if="errorMsg"
                 class="login-page__error"
               >
-                <svg
+                <Icon
+                  name="lucide:circle-alert"
                   class="login-page__error-icon"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                  />
-                  <line
-                    x1="12"
-                    x2="12"
-                    y1="8"
-                    y2="12"
-                  />
-                  <line
-                    x1="12"
-                    x2="12.01"
-                    y1="16"
-                    y2="16"
-                  />
-                </svg>
+                />
                 {{ errorMsg }}
               </div>
             </Transition>
@@ -140,24 +97,10 @@
                   class="login-page__input-wrapper"
                   :class="{ 'login-page__input-wrapper--focus': emailFocused }"
                 >
-                  <svg
+                  <Icon
+                    name="lucide:mail"
                     class="login-page__input-icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <rect
-                      width="20"
-                      height="16"
-                      x="2"
-                      y="4"
-                      rx="2"
-                    />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
+                  />
                   <input
                     v-model="email"
                     type="email"
@@ -177,25 +120,10 @@
                   class="login-page__input-wrapper"
                   :class="{ 'login-page__input-wrapper--focus': passwordFocused }"
                 >
-                  <svg
+                  <Icon
+                    name="lucide:lock"
                     class="login-page__input-icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <rect
-                      width="18"
-                      height="11"
-                      x="3"
-                      y="11"
-                      rx="2"
-                      ry="2"
-                    />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
+                  />
                   <input
                     v-model="password"
                     :type="showPassword ? 'text' : 'password'"
@@ -211,43 +139,14 @@
                     class="login-page__eye"
                     @click="showPassword = !showPassword"
                   >
-                    <!-- 眼睛開啟 -->
-                    <svg
+                    <Icon
                       v-if="showPassword"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="3"
-                      />
-                    </svg>
-                    <!-- 眼睛關閉 -->
-                    <svg
+                      name="lucide:eye"
+                    />
+                    <Icon
                       v-else
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
-                      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
-                      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
-                      <line
-                        x1="2"
-                        x2="22"
-                        y1="2"
-                        y2="22"
-                      />
-                    </svg>
+                      name="lucide:eye-off"
+                    />
                   </button>
                 </div>
                 <!-- 註冊模式：密碼提示 -->
@@ -396,14 +295,14 @@
 </template>
 
 <script setup lang="ts">
-/** 後端 /api/auth 回傳格式 */
-interface AuthResponse {
+import type { UserInfo } from '~/stores/auth';
+
+/** 後端 /api/auth 回傳格式（token + UserInfo） */
+interface AuthResponse extends UserInfo {
   token: string;
-  id: number;
-  email: string;
-  name: string | null;
-  role: string;
 }
+
+const auth = useAuthStore();
 
 // ── 表單狀態 ──
 const isRegister = ref(false);
@@ -412,6 +311,7 @@ const password = ref('');
 const showPassword = ref(false);
 const isLoading = ref(false);
 const errorMsg = ref('');
+const successMsg = ref('');
 
 // ── 輸入框焦點狀態（驅動發光效果） ──
 const emailFocused = ref(false);
@@ -421,6 +321,7 @@ const passwordFocused = ref(false);
 const switchMode = (register: boolean) => {
   isRegister.value = register;
   errorMsg.value = '';
+  successMsg.value = '';
 };
 
 // ── 浮動粒子樣式（與首頁相同邏輯） ──
@@ -439,6 +340,7 @@ const getParticleStyle = (i: number) => {
 const handleSubmit = async () => {
   isLoading.value = true;
   errorMsg.value = '';
+  successMsg.value = '';
 
   try {
     const endpoint = isRegister.value ? '/api/auth/register' : '/api/auth/login';
@@ -447,9 +349,23 @@ const handleSubmit = async () => {
       body: { email: email.value, password: password.value },
     });
 
-    // 儲存 token 與使用者資訊到 localStorage
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify({ id: data.id, email: data.email, name: data.name, role: data.role }));
+    // 註冊成功但未驗證（token 為 null）→ 顯示驗證提示
+    if (!data.token) {
+      successMsg.value = '註冊成功！請到信箱查收驗證信，驗證後即可登入。';
+      isRegister.value = false;
+      email.value = '';
+      password.value = '';
+      return;
+    }
+
+    // 儲存 token + user 到 Pinia store（內部同步寫入 localStorage）
+    auth.setAuth(data.token, {
+      id: data.id,
+      email: data.email,
+      name: data.name,
+      role: data.role,
+      avatarUrl: data.avatarUrl,
+    });
 
     // 導回首頁
     navigateTo('/', { replace: true });
@@ -467,9 +383,9 @@ const handleSocial = (provider: string) => {
   window.location.href = `http://localhost:8080/oauth2/authorization/${registrationId}`;
 };
 
-// ── 忘記密碼（尚未實作） ──
+// ── 忘記密碼 ──
 const handleForgot = () => {
-  alert('此功能尚未開放');
+  navigateTo('/forgot-password');
 };
 </script>
 
@@ -521,32 +437,7 @@ const handleForgot = () => {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-
-  // ── 頂部導航 ──
-  &__nav {
-    padding: 1.25rem 1.5rem;
-  }
-
-  &__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #94a3b8;
-    font-size: 0.875rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s;
-
-    &:hover {
-      color: #22d3ee;
-    }
-  }
-
-  &__back-icon {
-    width: 1.125rem;
-    height: 1.125rem;
+    padding-top: 4rem; // Navbar 高度
   }
 
   // ── 置中區域 ──
@@ -680,6 +571,27 @@ const handleForgot = () => {
     &:hover {
       color: #a855f7;
     }
+  }
+
+  // ── 成功訊息 ──
+  &__success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #86efac;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &__success-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    color: #22c55e;
   }
 
   // ── 錯誤訊息 ──

@@ -1,28 +1,5 @@
 <template>
   <main class="home-page">
-    <!-- 右上角登入按鈕 -->
-    <button
-      class="home-page__login-btn"
-      @click="navigateTo('/login')"
-    >
-      <svg
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-        <circle
-          cx="12"
-          cy="7"
-          r="4"
-        />
-      </svg>
-      登入
-    </button>
-
     <!-- 動態漸層背景（與 start.vue 相同色系） -->
     <div class="home-page__bg home-page__bg--gradient" />
     <div class="home-page__bg home-page__bg--radial" />
@@ -49,20 +26,10 @@
           <div class="home-page__icon-wrapper">
             <div class="home-page__icon-glow" />
             <div class="home-page__icon">
-              <svg
+              <Icon
+                name="lucide:book-open"
                 class="home-page__icon-svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 7v14" />
-                <path
-                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
-                />
-              </svg>
+              />
             </div>
           </div>
 
@@ -96,47 +63,15 @@
                 <div class="home-page__start-btn-shine-ray" />
               </div>
               <span class="home-page__start-btn-text">
-                <svg
+                <Icon
+                  name="lucide:sparkles"
                   class="home-page__start-btn-sparkle"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
-                  />
-                  <path d="M20 2v4" />
-                  <path d="M22 4h-4" />
-                  <circle
-                    cx="4"
-                    cy="20"
-                    r="2"
-                  />
-                </svg>
+                />
                 開始挑戰
-                <svg
+                <Icon
+                  name="lucide:sparkles"
                   class="home-page__start-btn-sparkle"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
-                  />
-                  <path d="M20 2v4" />
-                  <path d="M22 4h-4" />
-                  <circle
-                    cx="4"
-                    cy="20"
-                    r="2"
-                  />
-                </svg>
+                />
               </span>
             </button>
           </div>
@@ -219,7 +154,7 @@ const startGame = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem 1rem;
+    padding: 4rem 1rem 1.5rem; // 上方預留 Navbar 高度
   }
 
   // ── 卡片容器 ──
@@ -477,43 +412,6 @@ const startGame = () => {
     font-size: 0.875rem;
     color: #64748b; // slate-500
     text-align: center;
-  }
-
-  // ── 右上角登入按鈕 ──
-  &__login-btn {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 20;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    background: rgba(15, 23, 42, 0.5);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.3s;
-
-    svg {
-      width: 1.125rem;
-      height: 1.125rem;
-    }
-
-    &:hover {
-      background: rgba(15, 23, 42, 0.7);
-      color: #22d3ee;
-      border-color: rgba(34, 211, 238, 0.3);
-      box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
   }
 }
 
