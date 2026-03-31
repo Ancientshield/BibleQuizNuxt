@@ -45,35 +45,8 @@
             :placeholder="`選項 ${String.fromCharCode(65 + i)}`"
             required
           />
-
-          <!-- 刪除按鈕（至少 2 個選項時不能刪） -->
-          <button
-            v-if="options.length > 2"
-            type="button"
-            class="q-form__option-remove"
-            @click="removeOption(i)"
-          >
-            <Icon
-              name="lucide:x"
-              class="q-form__option-remove-icon"
-            />
-          </button>
         </div>
       </div>
-
-      <!-- 新增選項 -->
-      <button
-        v-if="options.length < 6"
-        type="button"
-        class="q-form__add-option"
-        @click="addOption"
-      >
-        <Icon
-          name="lucide:plus"
-          class="q-form__add-icon"
-        />
-        新增選項
-      </button>
     </div>
 
     <!-- 錯誤訊息 -->
@@ -152,19 +125,6 @@ watch(
     }
   }
 );
-
-const addOption = () => {
-  options.value.push({ content: '' });
-};
-
-const removeOption = (index: number) => {
-  options.value.splice(index, 1);
-  if (correctIndex.value >= options.value.length) {
-    correctIndex.value = 0;
-  } else if (correctIndex.value > index) {
-    correctIndex.value--;
-  }
-};
 
 const handleSubmit = () => {
   errorMsg.value = '';
@@ -296,59 +256,6 @@ const handleSubmit = () => {
       box-shadow: 0 0 12px rgba(34, 211, 238, 0.1);
       background: rgba(30, 41, 59, 0.8);
     }
-  }
-
-  // ── 刪除選項 ──
-  &__option-remove {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 0.375rem;
-    background: none;
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      color: #f87171;
-      border-color: rgba(248, 113, 113, 0.4);
-      background: rgba(239, 68, 68, 0.1);
-    }
-  }
-
-  &__option-remove-icon {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-
-  // ── 新增選項按鈕 ──
-  &__add-option {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.875rem;
-    border-radius: 0.625rem;
-    background: none;
-    border: 1px dashed rgba(51, 65, 85, 0.6);
-    color: #94a3b8;
-    font-size: 0.8125rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: fit-content;
-
-    &:hover {
-      color: #22d3ee;
-      border-color: rgba(34, 211, 238, 0.4);
-    }
-  }
-
-  &__add-icon {
-    width: 0.875rem;
-    height: 0.875rem;
   }
 
   // ── 錯誤訊息 ──
