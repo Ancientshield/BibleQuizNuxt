@@ -86,6 +86,47 @@
           首頁
         </NuxtLink>
 
+        <template v-if="auth.isLoggedIn">
+          <NuxtLink
+            to="/questions/mine"
+            class="navbar-menu__item"
+            @click="menuOpen = false"
+          >
+            <Icon
+              name="lucide:file-text"
+              class="navbar-menu__icon"
+            />
+            我的題目
+          </NuxtLink>
+
+          <NuxtLink
+            to="/my-history"
+            class="navbar-menu__item"
+            @click="menuOpen = false"
+          >
+            <Icon
+              name="lucide:history"
+              class="navbar-menu__icon"
+            />
+            我的紀錄
+          </NuxtLink>
+        </template>
+
+        <template v-if="auth.isAdmin">
+          <div class="navbar-menu__divider" />
+          <NuxtLink
+            to="/admin"
+            class="navbar-menu__item"
+            @click="menuOpen = false"
+          >
+            <Icon
+              name="lucide:shield"
+              class="navbar-menu__icon"
+            />
+            管理後台
+          </NuxtLink>
+        </template>
+
         <button
           v-if="auth.isLoggedIn"
           class="navbar-menu__item navbar-menu__item--danger"
@@ -334,6 +375,12 @@ const handleLogout = () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(51, 65, 85, 0.5);
+    margin: 0.25rem 0.5rem;
   }
 }
 
