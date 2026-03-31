@@ -11,8 +11,24 @@ export default defineNuxtConfig({
   },
   nitro: {
     devProxy: {
-      '/api': {
-        target: 'http://localhost:8080/api',
+      '/api/auth': {
+        target: 'http://localhost:8080/api/auth',
+        changeOrigin: true,
+      },
+      '/api/biblequiz': {
+        target: 'http://localhost:8080/api/biblequiz',
+        changeOrigin: true,
+      },
+      '/api/questions': {
+        target: 'http://localhost:8080/api/questions',
+        changeOrigin: true,
+      },
+      '/api/admin': {
+        target: 'http://localhost:8080/api/admin',
+        changeOrigin: true,
+      },
+      '/api/user': {
+        target: 'http://localhost:8080/api/user',
         changeOrigin: true,
       },
     },
