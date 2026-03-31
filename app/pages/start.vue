@@ -58,8 +58,18 @@ import type { OptionState } from '~/components/molecule/MoleculeOptionButton.vue
 definePageMeta({ layout: 'blank' });
 
 // ── 遊戲邏輯（來自 composable） ──
-const { questions, currentIndex, score, isFinished, currentQuestion, fetchQuestions, checkAnswer, nextQuestion } =
-  useQuiz();
+const {
+  questions,
+  currentIndex,
+  score,
+  isFinished,
+  currentQuestion,
+  fetchQuestions,
+  checkAnswer,
+  nextQuestion,
+  saveProgress,
+  submitResults,
+} = useQuiz();
 
 // ── UI 狀態（僅限本頁面使用） ──
 const selectedOptionId = ref<number | null>(null); // 使用者選的選項 ID
@@ -115,6 +125,7 @@ const handleSelect = (label: string) => {
 
   // 同步本地驗答，回傳正確選項 ID
   correctOptionId.value = checkAnswer(currentQuestion.value.id, opt.optionId);
+  saveProgress();
 
   // 1.2s 後開始切題過渡
   setTimeout(() => {
@@ -130,6 +141,11 @@ const handleSelect = (label: string) => {
     }, 300);
   }, 1200);
 };
+
+// 答完 10 題 → 登入使用者自動提交紀錄到後端
+watch(isFinished, finished => {
+  if (finished) submitResults();
+});
 
 // 重新從 API 取得 10 題
 const handleRestart = async () => {

@@ -79,6 +79,44 @@ export const useQuiz = () => {
     currentIndex.value = 0;
     score.value = 0;
     answers.value = [];
+    localStorage.removeItem('quiz_progress');
+  };
+
+  // ── G-5-7：作答紀錄提交 + localStorage 暫存 ──
+
+  /** 暫存目前的作答進度到 localStorage（每答一題呼叫一次） */
+  const saveProgress = () => {
+    localStorage.setItem(
+      'quiz_progress',
+      JSON.stringify({
+        answers: answers.value,
+        currentIndex: currentIndex.value,
+        score: score.value,
+      })
+    );
+  };
+
+  /** 答完 10 題後，登入使用者才提交作答紀錄到後端 */
+  const submitResults = async () => {
+    const auth = useAuthStore();
+    if (!auth.isLoggedIn) return;
+
+    try {
+      await useAuthFetch('/api/user/quiz/submit', {
+        method: 'POST',
+        body: {
+          score: score.value,
+          answers: answers.value.map(a => ({
+            questionId: a.questionId,
+            selectedOptionId: a.selectedOptionId,
+          })),
+        },
+      });
+    } catch {
+      // 提交失敗不影響結算畫面
+    }
+
+    localStorage.removeItem('quiz_progress');
   };
 
   return {
@@ -93,5 +131,7 @@ export const useQuiz = () => {
     nextQuestion,
     getResult,
     resetQuiz,
+    saveProgress,
+    submitResults,
   };
 };
