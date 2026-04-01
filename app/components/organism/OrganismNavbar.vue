@@ -247,15 +247,15 @@ const handleLogout = () => {
   &__login-btn {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.875rem;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
     border-radius: 9999px;
     background: rgba(15, 23, 42, 0.5);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(51, 65, 85, 0.5);
     color: #94a3b8;
     cursor: pointer;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     transition: all 0.25s;
 
@@ -272,8 +272,8 @@ const handleLogout = () => {
   }
 
   &__login-icon {
-    width: 1rem;
-    height: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   // ── 已登入使用者區域 ──
