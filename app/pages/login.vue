@@ -127,7 +127,7 @@
                   <input
                     v-model="password"
                     :type="showPassword ? 'text' : 'password'"
-                    placeholder="密碼"
+                    :placeholder="isRegister ? '請輸入註冊密碼' : '請輸入登入密碼'"
                     class="login-page__input"
                     required
                     autocomplete="current-password"
