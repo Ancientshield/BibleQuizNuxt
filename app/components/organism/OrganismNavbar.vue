@@ -299,8 +299,8 @@ const handleLogout = () => {
 
   // ── 頭像 ──
   &__avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
     overflow: hidden;
     border: 1.5px solid rgba(34, 211, 238, 0.4);
