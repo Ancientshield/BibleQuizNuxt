@@ -88,7 +88,7 @@
 
         <template v-if="auth.isLoggedIn">
           <NuxtLink
-            to="/questions/mine"
+            to="/questions/submissions"
             class="navbar-menu__item"
             @click="menuOpen = false"
           >
@@ -96,7 +96,7 @@
               name="lucide:file-text"
               class="navbar-menu__icon"
             />
-            我的題目
+            我要投稿
           </NuxtLink>
 
           <NuxtLink

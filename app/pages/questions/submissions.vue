@@ -7,11 +7,11 @@
             name="lucide:file-text"
             class="main__title-icon"
           />
-          我的題目
+          我要投稿
         </h1>
         <button
           class="main__action-btn"
-          @click="navigateTo('/questions/new')"
+          @click="navigateTo('/questions/create')"
         >
           <Icon
             name="lucide:plus"
@@ -41,7 +41,7 @@
         <p>還沒有投稿過題目</p>
         <button
           class="mine__empty-btn"
-          @click="navigateTo('/questions/new')"
+          @click="navigateTo('/questions/create')"
         >
           投稿第一題
         </button>
@@ -69,7 +69,7 @@
           <div class="mine__card-bottom">
             <span class="mine__option-count">{{ q.options.length }} 個選項</span>
             <div
-              v-if="q.status === 'PENDING'"
+              v-if="q.status === 'PENDING' || q.status === 'REJECTED'"
               class="mine__actions"
             >
               <button

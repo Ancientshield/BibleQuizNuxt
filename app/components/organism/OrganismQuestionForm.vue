@@ -17,7 +17,8 @@
 
     <!-- 選項列表 -->
     <div class="q-form__field">
-      <label class="q-form__label">選項（勾選正確答案）</label>
+      <label class="q-form__label">題目答案</label>
+      <p class="q-form__hint">輸入四個選項，並選擇一個選項作為正確答案</p>
 
       <div class="q-form__options">
         <div
@@ -203,6 +204,13 @@ const handleSubmit = () => {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+  }
+
+  // ── 提示文字 ──
+  &__hint {
+    color: $text-dim;
+    font-size: 1rem;
+    margin-top: -0.25rem;
   }
 
   // ── Radio 按鈕（自訂樣式） ──
