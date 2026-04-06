@@ -112,7 +112,7 @@ const statusLabel = (status: string) => {
   const map: Record<string, string> = {
     PENDING: '待審核',
     PUBLISHED: '已上架',
-    REJECTED: '被退回',
+    REJECTED: '未通過',
   };
   return map[status] || status;
 };

@@ -83,7 +83,7 @@
               @click="handleReject(q.id)"
             >
               <Icon name="lucide:x" />
-              退回
+              不通過
             </button>
           </div>
 
@@ -240,7 +240,7 @@ const filters = [
   { label: '全部', value: '' },
   { label: '待審核', value: 'PENDING' },
   { label: '已上架', value: 'PUBLISHED' },
-  { label: '被退回', value: 'REJECTED' },
+  { label: '未通過', value: 'REJECTED' },
 ];
 
 const activeFilter = ref('PENDING');
@@ -265,7 +265,7 @@ const publishForm = reactive({
 const filterLabel = computed(() => filters.find(f => f.value === activeFilter.value)?.label || '');
 
 const statusLabel = (status: string) => {
-  const map: Record<string, string> = { PENDING: '待審核', PUBLISHED: '已上架', REJECTED: '被退回' };
+  const map: Record<string, string> = { PENDING: '待審核', PUBLISHED: '已上架', REJECTED: '未通過' };
   return map[status] || status;
 };
 
@@ -329,12 +329,12 @@ const handlePublish = async () => {
 };
 
 const handleReject = async (id: number) => {
-  if (!confirm('確定要退回這題嗎？')) return;
+  if (!confirm('確定這題不通過嗎？')) return;
   try {
     await useAuthFetch(`/api/admin/questions/${id}/reject`, { method: 'PATCH' });
     fetchQuestions();
   } catch {
-    alert('退回失敗');
+    alert('操作失敗');
   }
 };
 
