@@ -44,7 +44,7 @@
           />
           <div>
             <div class="admin-home__link-title">題目審核</div>
-            <div class="admin-home__link-desc">查看、核准或退回投稿題目</div>
+            <div class="admin-home__link-desc">查看、核准投稿題目</div>
           </div>
         </button>
         <button
