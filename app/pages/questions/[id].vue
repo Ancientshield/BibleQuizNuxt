@@ -65,7 +65,7 @@ onMounted(async () => {
     };
   } catch {
     alert('題目載入失敗');
-    navigateTo('/questions/mine');
+    navigateTo('/questions/submissions');
   } finally {
     loadingData.value = false;
   }
@@ -79,7 +79,7 @@ const handleUpdate = async (data: QuestionFormData) => {
       method: 'PUT',
       body: data,
     });
-    navigateTo('/questions/mine');
+    navigateTo('/questions/submissions');
   } catch (err: unknown) {
     const fetchErr = err as { data?: { message?: string } };
     alert(fetchErr.data?.message || '儲存失敗，請稍後再試');

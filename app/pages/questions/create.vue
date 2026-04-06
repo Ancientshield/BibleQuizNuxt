@@ -56,8 +56,8 @@ const handleCreate = async (data: QuestionFormData) => {
       body: data,
     });
     successMsg.value = '投稿成功！題目已送出等待審核。';
-    // 2 秒後跳到我的題目
-    setTimeout(() => navigateTo('/questions/mine'), 2000);
+    // 2 秒後跳到投稿紀錄
+    setTimeout(() => navigateTo('/questions/submissions'), 2000);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { message?: string } };
     alert(fetchErr.data?.message || '投稿失敗，請稍後再試');
