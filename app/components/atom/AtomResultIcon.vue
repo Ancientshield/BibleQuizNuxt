@@ -34,7 +34,7 @@ defineProps<{
   }
 
   &--wrong {
-    color: #f87171; // red-400
+    color: $danger-light; // red-400
   }
 
   animation: scale-in 0.3s ease-out forwards; // 彈入動畫：0→1.2→1

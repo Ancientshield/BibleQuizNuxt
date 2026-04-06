@@ -168,14 +168,14 @@ onMounted(async () => {
   min-height: 100dvh;
   width: 100%;
   overflow: hidden;
-  background: #020617; // slate-950
+  background: $bg-page; // slate-950
 
   &__bg {
     position: absolute;
     inset: 0;
 
     &--gradient {
-      background: linear-gradient(to bottom right, #581c87, #0f172a, #1e3a5f); // purple-900 → slate-900 → blue-900
+      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f); // purple-900 → slate-900 → blue-900
       background-size: 200% 200%;
       animation: gradient-shift 15s ease infinite;
     }

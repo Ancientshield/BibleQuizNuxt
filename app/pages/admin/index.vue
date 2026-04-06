@@ -1,10 +1,10 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:shield"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         管理後台
       </h1>
@@ -103,7 +103,7 @@ onMounted(async () => {
     padding: 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     text-align: center;
   }
 
@@ -112,7 +112,7 @@ onMounted(async () => {
     font-weight: 800;
 
     &--cyan {
-      color: #22d3ee;
+      color: $accent;
     }
 
     &--purple {
@@ -126,7 +126,7 @@ onMounted(async () => {
 
   &__stat-label {
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-top: 0.25rem;
   }
 
@@ -144,14 +144,14 @@ onMounted(async () => {
     padding: 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     cursor: pointer;
     transition: all 0.2s;
     text-align: left;
     width: 100%;
 
     &:hover {
-      border-color: rgba(34, 211, 238, 0.3);
+      border-color: rgba($accent, 0.3);
       background: rgba(30, 41, 59, 0.7);
       transform: translateX(4px);
     }
@@ -160,19 +160,19 @@ onMounted(async () => {
   &__link-icon {
     width: 2rem;
     height: 2rem;
-    color: #22d3ee;
+    color: $accent;
     flex-shrink: 0;
   }
 
   &__link-title {
-    color: #e2e8f0;
+    color: $text-bright;
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 0.125rem;
   }
 
   &__link-desc {
-    color: #64748b;
+    color: $text-dim;
     font-size: 0.8125rem;
   }
 }

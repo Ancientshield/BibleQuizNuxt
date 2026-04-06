@@ -117,7 +117,7 @@ const handleClick = (e: MouseEvent) => {
 
   // 觸控裝置點擊後不殘留 focus 發光邊框
   &:focus-visible {
-    outline: 2px solid rgba(34, 211, 238, 0.7);
+    outline: 2px solid rgba($accent, 0.7);
     outline-offset: 2px;
   }
 
@@ -140,8 +140,8 @@ const handleClick = (e: MouseEvent) => {
     @media (hover: hover) {
       &.option-btn--hovered {
         transform: scale(1.02);
-        border-color: rgba(34, 211, 238, 0.7); // cyan-400/70
-        box-shadow: 0 0 25px rgba(34, 211, 238, 0.3);
+        border-color: rgba($accent, 0.7); // cyan-400/70
+        box-shadow: 0 0 25px rgba($accent, 0.3);
       }
     }
   }
@@ -156,7 +156,7 @@ const handleClick = (e: MouseEvent) => {
 
   &--wrong {
     background: rgba(127, 29, 29, 0.6); // red-900/60
-    border-color: #f87171; // red-400
+    border-color: $danger-light; // red-400
     color: #fee2e2; // red-100
     box-shadow: 0 0 30px rgba(248, 113, 113, 0.4);
     animation: shake 0.5s ease-in-out; // 答錯左右搖晃
@@ -164,8 +164,8 @@ const handleClick = (e: MouseEvent) => {
 
   &--disabled {
     background: rgba(30, 41, 59, 0.3); // slate-800/30
-    border-color: rgba(51, 65, 85, 0.3); // slate-700/30
-    color: rgb(100, 116, 139); // slate-500
+    border-color: rgba($border-base, 0.3); // slate-700/30
+    color: $text-dim; // slate-500
   }
 
   // ── Inner elements ──
@@ -189,7 +189,7 @@ const handleClick = (e: MouseEvent) => {
   &__ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(34, 211, 238, 0.3); // cyan-400/30
+    background: rgba($accent, 0.3); // cyan-400/30
     width: 10px;
     height: 10px;
     transform: translate(-50%, -50%) scale(1);

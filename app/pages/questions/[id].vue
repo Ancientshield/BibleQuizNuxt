@@ -1,10 +1,10 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:pencil"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         編輯題目
       </h1>
@@ -12,7 +12,7 @@
       <!-- Loading -->
       <div
         v-if="loadingData"
-        class="page-shell__loading"
+        class="main__loading"
       >
         載入中...
       </div>
@@ -20,7 +20,7 @@
       <!-- 表單 -->
       <div
         v-else-if="initialData"
-        class="page-shell__card"
+        class="main__card"
       >
         <OrganismQuestionForm
           :initial-data="initialData"

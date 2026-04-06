@@ -144,14 +144,14 @@ const handleSubmit = async () => {
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: #020617;
+  background: $bg-page;
 
   &__bg {
     position: absolute;
     inset: 0;
 
     &--gradient {
-      background: linear-gradient(to bottom right, #581c87, #0f172a, #1e3a5f);
+      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
       background-size: 200% 200%;
       animation: gradient-shift 15s ease infinite;
     }
@@ -189,7 +189,7 @@ const handleSubmit = async () => {
     position: absolute;
     inset: -4px;
     border-radius: 1.5rem;
-    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3));
+    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba($accent, 0.3), rgba(168, 85, 247, 0.3));
     filter: blur(16px);
     animation: pulse-slow 3s ease-in-out infinite;
   }
@@ -197,9 +197,9 @@ const handleSubmit = async () => {
   &__card {
     position: relative;
     border-radius: 1.5rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba($bg-dark, 0.5);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 2rem 1.75rem;
     box-shadow: 0 0 60px rgba(139, 92, 246, 0.2);
 
@@ -222,7 +222,7 @@ const handleSubmit = async () => {
     height: calc(4rem + 24px);
     margin: auto;
     border-radius: 50%;
-    background: rgba(6, 182, 212, 0.2);
+    background: rgba($gradient-start, 0.2);
     filter: blur(16px);
     animation: pulse 2s ease-in-out infinite;
   }
@@ -232,11 +232,11 @@ const handleSubmit = async () => {
     width: 4rem;
     height: 4rem;
     border-radius: 1rem;
-    background: linear-gradient(to bottom right, #06b6d4, #9333ea);
+    background: linear-gradient(to bottom right, $gradient-start, $gradient-end);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 30px rgba($accent, 0.4);
   }
 
   &__icon-svg {
@@ -250,7 +250,7 @@ const handleSubmit = async () => {
     font-weight: 800;
     text-align: center;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #22d3ee, #a855f7, #22d3ee);
+    background: linear-gradient(to right, $accent, #a855f7, $accent);
     background-size: 200% 200%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -259,7 +259,7 @@ const handleSubmit = async () => {
   }
 
   &__subtitle {
-    color: #94a3b8;
+    color: $text-muted;
     text-align: center;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
@@ -271,9 +271,9 @@ const handleSubmit = async () => {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #86efac;
+    background: rgba($success, 0.1);
+    border: 1px solid rgba($success, 0.3);
+    color: $success-light;
     font-size: 0.875rem;
     margin-bottom: 1.25rem;
   }
@@ -282,7 +282,7 @@ const handleSubmit = async () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
-    color: #22c55e;
+    color: $success;
   }
 
   &__error {
@@ -291,8 +291,8 @@ const handleSubmit = async () => {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba($danger, 0.1);
+    border: 1px solid rgba($danger, 0.3);
     color: #fca5a5;
     font-size: 0.875rem;
     margin-bottom: 1.25rem;
@@ -302,7 +302,7 @@ const handleSubmit = async () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
-    color: #ef4444;
+    color: $danger;
   }
 
   &__form {
@@ -319,12 +319,12 @@ const handleSubmit = async () => {
     height: 3.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     transition: all 0.25s;
 
     &--focus {
-      border-color: rgba(34, 211, 238, 0.5);
-      box-shadow: 0 0 16px rgba(34, 211, 238, 0.15);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 0 16px rgba($accent, 0.15);
       background: rgba(30, 41, 59, 0.8);
     }
   }
@@ -332,12 +332,12 @@ const handleSubmit = async () => {
   &__input-icon {
     width: 1.125rem;
     height: 1.125rem;
-    color: #64748b;
+    color: $text-dim;
     flex-shrink: 0;
     transition: color 0.25s;
 
     .forgot-page__input-wrapper--focus & {
-      color: #22d3ee;
+      color: $accent;
     }
   }
 
@@ -346,11 +346,11 @@ const handleSubmit = async () => {
     background: none;
     border: none;
     outline: none;
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.9375rem;
 
     &::placeholder {
-      color: #64748b;
+      color: $text-dim;
     }
   }
 
@@ -364,7 +364,7 @@ const handleSubmit = async () => {
     position: absolute;
     inset: -4px;
     border-radius: 0.75rem;
-    background: linear-gradient(to right, #06b6d4, #a855f7);
+    background: linear-gradient(to right, $gradient-start, #a855f7);
     filter: blur(12px);
     opacity: 0.3;
     transition: opacity 0.3s;
@@ -406,7 +406,7 @@ const handleSubmit = async () => {
   &__submit-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, #06b6d4, #a855f7, #06b6d4);
+    background: linear-gradient(to right, $gradient-start, #a855f7, $gradient-start);
     background-size: 200% 200%;
     animation: gradient-shift 15s ease infinite;
   }
@@ -427,13 +427,13 @@ const handleSubmit = async () => {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    color: #94a3b8;
+    color: $text-muted;
     font-size: 0.875rem;
     text-decoration: none;
     transition: color 0.2s;
 
     &:hover {
-      color: #22d3ee;
+      color: $accent;
     }
 
     svg {
