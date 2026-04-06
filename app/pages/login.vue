@@ -395,7 +395,7 @@ const handleForgot = () => {
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: #020617;
+  background: $bg-page;
 
   // ── 背景層 ──
   &__bg {
@@ -403,7 +403,7 @@ const handleForgot = () => {
     inset: 0;
 
     &--gradient {
-      background: linear-gradient(to bottom right, #581c87, #0f172a, #1e3a5f);
+      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
       background-size: 200% 200%;
       animation: gradient-shift 15s ease infinite;
     }
@@ -425,7 +425,7 @@ const handleForgot = () => {
     position: absolute;
     width: 4px;
     height: 4px;
-    background: rgba(34, 211, 238, 0.3);
+    background: rgba($accent, 0.3);
     border-radius: 50%;
     animation: float 8s ease-in-out infinite;
   }
@@ -461,7 +461,7 @@ const handleForgot = () => {
     position: absolute;
     inset: -4px;
     border-radius: 1.5rem;
-    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3));
+    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba($accent, 0.3), rgba(168, 85, 247, 0.3));
     filter: blur(16px);
     animation: pulse-slow 3s ease-in-out infinite;
   }
@@ -469,9 +469,9 @@ const handleForgot = () => {
   &__card {
     position: relative;
     border-radius: 1.5rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba($bg-dark, 0.5);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 2rem 1.75rem;
     box-shadow: 0 0 60px rgba(139, 92, 246, 0.2);
 
@@ -495,7 +495,7 @@ const handleForgot = () => {
     height: calc(4rem + 24px);
     margin: auto;
     border-radius: 50%;
-    background: rgba(6, 182, 212, 0.2);
+    background: rgba($gradient-start, 0.2);
     filter: blur(16px);
     animation: pulse 2s ease-in-out infinite;
 
@@ -510,11 +510,11 @@ const handleForgot = () => {
     width: 4rem;
     height: 4rem;
     border-radius: 1rem;
-    background: linear-gradient(to bottom right, #06b6d4, #9333ea);
+    background: linear-gradient(to bottom right, $gradient-start, $gradient-end);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 30px rgba($accent, 0.4);
 
     @media (min-width: 768px) {
       width: 4.5rem;
@@ -540,7 +540,7 @@ const handleForgot = () => {
     font-weight: 800;
     text-align: center;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #22d3ee, #a855f7, #22d3ee);
+    background: linear-gradient(to right, $accent, #a855f7, $accent);
     background-size: 200% 200%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -553,14 +553,14 @@ const handleForgot = () => {
   }
 
   &__subtitle {
-    color: #94a3b8;
+    color: $text-muted;
     text-align: center;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
   }
 
   &__toggle {
-    color: #22d3ee;
+    color: $accent;
     background: none;
     border: none;
     cursor: pointer;
@@ -580,9 +580,9 @@ const handleForgot = () => {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #86efac;
+    background: rgba($success, 0.1);
+    border: 1px solid rgba($success, 0.3);
+    color: $success-light;
     font-size: 0.875rem;
     margin-bottom: 1.25rem;
   }
@@ -591,7 +591,7 @@ const handleForgot = () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
-    color: #22c55e;
+    color: $success;
   }
 
   // ── 錯誤訊息 ──
@@ -601,8 +601,8 @@ const handleForgot = () => {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba($danger, 0.1);
+    border: 1px solid rgba($danger, 0.3);
     color: #fca5a5;
     font-size: 0.875rem;
     margin-bottom: 1.25rem;
@@ -612,7 +612,7 @@ const handleForgot = () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
-    color: #ef4444;
+    color: $danger;
   }
 
   // ── 表單 ──
@@ -635,12 +635,12 @@ const handleForgot = () => {
     height: 3.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     transition: all 0.25s;
 
     &--focus {
-      border-color: rgba(34, 211, 238, 0.5);
-      box-shadow: 0 0 16px rgba(34, 211, 238, 0.15);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 0 16px rgba($accent, 0.15);
       background: rgba(30, 41, 59, 0.8);
     }
   }
@@ -648,12 +648,12 @@ const handleForgot = () => {
   &__input-icon {
     width: 1.125rem;
     height: 1.125rem;
-    color: #64748b;
+    color: $text-dim;
     flex-shrink: 0;
     transition: color 0.25s;
 
     .login-page__input-wrapper--focus & {
-      color: #22d3ee;
+      color: $accent;
     }
   }
 
@@ -662,11 +662,11 @@ const handleForgot = () => {
     background: none;
     border: none;
     outline: none;
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.9375rem;
 
     &::placeholder {
-      color: #64748b;
+      color: $text-dim;
     }
   }
 
@@ -677,7 +677,7 @@ const handleForgot = () => {
     background: none;
     border: none;
     cursor: pointer;
-    color: #64748b;
+    color: $text-dim;
     padding: 0.25rem;
     transition: color 0.2s;
 
@@ -687,7 +687,7 @@ const handleForgot = () => {
     }
 
     &:hover {
-      color: #94a3b8;
+      color: $text-muted;
     }
   }
 
@@ -695,7 +695,7 @@ const handleForgot = () => {
     margin-top: 0.375rem;
     margin-left: 0.25rem;
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   // ── 忘記密碼 ──
@@ -706,7 +706,7 @@ const handleForgot = () => {
   }
 
   &__forgot {
-    color: #94a3b8;
+    color: $text-muted;
     background: none;
     border: none;
     cursor: pointer;
@@ -714,7 +714,7 @@ const handleForgot = () => {
     transition: color 0.2s;
 
     &:hover {
-      color: #22d3ee;
+      color: $accent;
     }
   }
 
@@ -729,7 +729,7 @@ const handleForgot = () => {
     position: absolute;
     inset: -4px;
     border-radius: 0.75rem;
-    background: linear-gradient(to right, #06b6d4, #a855f7);
+    background: linear-gradient(to right, $gradient-start, #a855f7);
     filter: blur(12px);
     opacity: 0.3;
     transition: opacity 0.3s;
@@ -771,7 +771,7 @@ const handleForgot = () => {
   &__submit-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, #06b6d4, #a855f7, #06b6d4);
+    background: linear-gradient(to right, $gradient-start, #a855f7, $gradient-start);
     background-size: 200% 200%;
     animation: gradient-shift 15s ease infinite;
   }
@@ -812,11 +812,11 @@ const handleForgot = () => {
   &__divider-line {
     flex: 1;
     height: 1px;
-    background: rgba(51, 65, 85, 0.6);
+    background: rgba($border-base, 0.6);
   }
 
   &__divider-text {
-    color: #64748b;
+    color: $text-dim;
     font-size: 0.8125rem;
   }
 
@@ -835,8 +835,8 @@ const handleForgot = () => {
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #cbd5e1;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-primary;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.25s;

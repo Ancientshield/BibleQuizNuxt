@@ -1,10 +1,10 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:list-checks"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         題目審核
       </h1>
@@ -24,7 +24,7 @@
       <!-- Loading -->
       <div
         v-if="loading"
-        class="page-shell__loading"
+        class="main__loading"
       >
         載入中...
       </div>
@@ -364,20 +364,20 @@ onMounted(async () => {
     font-size: 0.8125rem;
     font-weight: 500;
     cursor: pointer;
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     background: transparent;
-    color: #94a3b8;
+    color: $text-muted;
     transition: all 0.2s;
 
     &:hover {
-      color: #e2e8f0;
+      color: $text-bright;
       border-color: rgba(71, 85, 105, 0.7);
     }
 
     &--active {
-      background: rgba(34, 211, 238, 0.15);
-      color: #22d3ee;
-      border-color: rgba(34, 211, 238, 0.4);
+      background: rgba($accent, 0.15);
+      color: $accent;
+      border-color: rgba($accent, 0.4);
     }
   }
 
@@ -385,7 +385,7 @@ onMounted(async () => {
   &__empty {
     text-align: center;
     padding: 3rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   // ── 題目列表 ──
@@ -399,7 +399,7 @@ onMounted(async () => {
     padding: 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
   }
 
   &__card-top {
@@ -421,23 +421,23 @@ onMounted(async () => {
     }
 
     &--published {
-      background: rgba(34, 197, 94, 0.15);
-      color: #22c55e;
+      background: rgba($success, 0.15);
+      color: $success;
     }
 
     &--rejected {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
+      background: rgba($danger, 0.15);
+      color: $danger-light;
     }
   }
 
   &__meta {
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__content {
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.9375rem;
     line-height: 1.5;
     margin-bottom: 0.75rem;
@@ -456,13 +456,13 @@ onMounted(async () => {
     padding: 0.25rem 0.625rem;
     border-radius: 0.375rem;
     background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-muted;
 
     &--correct {
-      border-color: rgba(34, 197, 94, 0.4);
-      color: #86efac;
-      background: rgba(34, 197, 94, 0.08);
+      border-color: rgba($success, 0.4);
+      color: $success-light;
+      background: rgba($success, 0.08);
     }
   }
 
@@ -492,20 +492,20 @@ onMounted(async () => {
   }
 
   &__publish-btn {
-    background: rgba(34, 197, 94, 0.15);
-    color: #22c55e;
+    background: rgba($success, 0.15);
+    color: $success;
 
     &:hover {
-      background: rgba(34, 197, 94, 0.25);
+      background: rgba($success, 0.25);
     }
   }
 
   &__reject-btn {
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
+    background: rgba($danger, 0.1);
+    color: $danger-light;
 
     &:hover {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba($danger, 0.2);
     }
   }
 
@@ -514,7 +514,7 @@ onMounted(async () => {
     display: flex;
     gap: 0.75rem;
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: $text-muted;
 
     span {
       display: flex;
@@ -539,9 +539,9 @@ onMounted(async () => {
     width: 100%;
     max-width: 28rem;
     border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba($bg-dark, 0.95);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 1.5rem;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   }
@@ -549,13 +549,13 @@ onMounted(async () => {
   &__modal-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: $text-bright;
     margin-bottom: 0.25rem;
   }
 
   &__modal-desc {
     font-size: 0.875rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-bottom: 1.25rem;
   }
 
@@ -569,7 +569,7 @@ onMounted(async () => {
 
   &__modal-label {
     font-size: 0.8125rem;
-    color: #cbd5e1;
+    color: $text-primary;
     font-weight: 500;
   }
 
@@ -578,20 +578,20 @@ onMounted(async () => {
     padding: 0.5rem 0.75rem;
     border-radius: 0.625rem;
     background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #e2e8f0;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-bright;
     font-size: 0.875rem;
     outline: none;
     transition: all 0.25s;
 
     &:focus {
-      border-color: rgba(34, 211, 238, 0.5);
-      box-shadow: 0 0 12px rgba(34, 211, 238, 0.1);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 0 12px rgba($accent, 0.1);
     }
 
     option {
       background: #1e293b;
-      color: #e2e8f0;
+      color: $text-bright;
     }
   }
 
@@ -611,22 +611,22 @@ onMounted(async () => {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     background: transparent;
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-muted;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
       border-color: rgba(71, 85, 105, 0.7);
-      color: #e2e8f0;
+      color: $text-bright;
     }
   }
 
   &__modal-confirm {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    background: linear-gradient(to right, #06b6d4, #9333ea);
+    background: linear-gradient(to right, $gradient-start, $gradient-end);
     color: white;
     font-weight: 600;
     font-size: 0.875rem;

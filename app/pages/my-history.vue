@@ -1,10 +1,10 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:history"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         我的紀錄
       </h1>
@@ -31,7 +31,7 @@
       <!-- Loading -->
       <div
         v-if="loading"
-        class="page-shell__loading"
+        class="main__loading"
       >
         載入中...
       </div>
@@ -146,7 +146,7 @@ onMounted(async () => {
     padding: 1rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     text-align: center;
   }
 
@@ -155,7 +155,7 @@ onMounted(async () => {
     font-weight: 800;
 
     &--cyan {
-      color: #22d3ee;
+      color: $accent;
     }
 
     &--purple {
@@ -169,7 +169,7 @@ onMounted(async () => {
 
   &__stat-label {
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-top: 0.125rem;
   }
 
@@ -180,7 +180,7 @@ onMounted(async () => {
     align-items: center;
     gap: 1rem;
     padding: 3rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__empty-icon {
@@ -192,7 +192,7 @@ onMounted(async () => {
   &__empty-btn {
     padding: 0.5rem 1.25rem;
     border-radius: 0.625rem;
-    background: linear-gradient(to right, #06b6d4, #9333ea);
+    background: linear-gradient(to right, $gradient-start, $gradient-end);
     color: white;
     font-weight: 600;
     font-size: 0.875rem;
@@ -218,7 +218,7 @@ onMounted(async () => {
     padding: 0.875rem 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
   }
 
   &__score {
@@ -230,12 +230,12 @@ onMounted(async () => {
   &__score-num {
     font-size: 1.25rem;
     font-weight: 800;
-    color: #22d3ee;
+    color: $accent;
   }
 
   &__score-total {
     font-size: 0.875rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__info {
@@ -245,7 +245,7 @@ onMounted(async () => {
 
   &__date {
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-bottom: 0.375rem;
   }
 
@@ -259,7 +259,7 @@ onMounted(async () => {
   &__bar {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(to right, #06b6d4, #a855f7);
+    background: linear-gradient(to right, $gradient-start, #a855f7);
     transition: width 0.5s ease;
   }
 }

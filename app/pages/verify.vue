@@ -99,12 +99,12 @@ onMounted(async () => {
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background: #020617;
+  background: $bg-page;
 
   &__bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom right, #581c87, #0f172a, #1e3a5f);
+    background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
     background-size: 200% 200%;
     animation: gradient-shift 15s ease infinite;
   }
@@ -138,29 +138,29 @@ onMounted(async () => {
     }
 
     &--success {
-      background: rgba(34, 197, 94, 0.15);
-      border: 2px solid rgba(34, 197, 94, 0.5);
-      box-shadow: 0 0 24px rgba(34, 197, 94, 0.2);
+      background: rgba($success, 0.15);
+      border: 2px solid rgba($success, 0.5);
+      box-shadow: 0 0 24px rgba($success, 0.2);
     }
 
     &--error {
-      background: rgba(239, 68, 68, 0.15);
-      border: 2px solid rgba(239, 68, 68, 0.5);
-      box-shadow: 0 0 24px rgba(239, 68, 68, 0.2);
+      background: rgba($danger, 0.15);
+      border: 2px solid rgba($danger, 0.5);
+      box-shadow: 0 0 24px rgba($danger, 0.2);
     }
   }
 
   &__icon-svg {
     width: 1.75rem;
     height: 1.75rem;
-    color: #94a3b8;
+    color: $text-muted;
 
     .verify-page__icon--success & {
       color: #4ade80;
     }
 
     .verify-page__icon--error & {
-      color: #f87171;
+      color: $danger-light;
     }
 
     &--spin {
@@ -179,13 +179,13 @@ onMounted(async () => {
     }
 
     &--error {
-      color: #f87171;
+      color: $danger-light;
     }
   }
 
   // ── 說明文字 ──
   &__msg {
-    color: #94a3b8;
+    color: $text-muted;
     font-size: 0.9375rem;
   }
 
@@ -194,16 +194,16 @@ onMounted(async () => {
     margin-top: 0.75rem;
     padding: 0.625rem 1.5rem;
     border-radius: 0.5rem;
-    background: rgba(51, 65, 85, 0.5);
+    background: rgba($border-base, 0.5);
     border: 1px solid rgba(71, 85, 105, 0.5);
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s;
 
     &:hover {
-      background: rgba(51, 65, 85, 0.8);
+      background: rgba($border-base, 0.8);
       border-color: rgba(100, 116, 139, 0.5);
       color: white;
     }

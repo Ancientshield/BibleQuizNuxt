@@ -1,10 +1,10 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:bar-chart-3"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         題目統計
       </h1>
@@ -12,7 +12,7 @@
       <!-- Loading -->
       <div
         v-if="loading"
-        class="page-shell__loading"
+        class="main__loading"
       >
         載入中...
       </div>
@@ -166,7 +166,7 @@ onMounted(async () => {
   &__empty {
     text-align: center;
     padding: 3rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__list {
@@ -179,12 +179,12 @@ onMounted(async () => {
     padding: 1rem 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      border-color: rgba(34, 211, 238, 0.3);
+      border-color: rgba($accent, 0.3);
     }
   }
 
@@ -196,7 +196,7 @@ onMounted(async () => {
 
   &__qid {
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__accuracy {
@@ -204,7 +204,7 @@ onMounted(async () => {
     font-weight: 700;
 
     &--high {
-      color: #22c55e;
+      color: $success;
     }
 
     &--mid {
@@ -212,12 +212,12 @@ onMounted(async () => {
     }
 
     &--low {
-      color: #f87171;
+      color: $danger-light;
     }
   }
 
   &__content {
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.9375rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
@@ -227,7 +227,7 @@ onMounted(async () => {
     display: flex;
     gap: 1rem;
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   // ── Modal ──
@@ -246,9 +246,9 @@ onMounted(async () => {
     width: 100%;
     max-width: 32rem;
     border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba($bg-dark, 0.95);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 1.5rem;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   }
@@ -256,13 +256,13 @@ onMounted(async () => {
   &__modal-title {
     font-size: 1.125rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: $text-bright;
     margin-bottom: 0.5rem;
   }
 
   &__modal-question {
     font-size: 0.875rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-bottom: 1.25rem;
     line-height: 1.4;
   }
@@ -284,14 +284,14 @@ onMounted(async () => {
   &__dist-label {
     width: 8rem;
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: $text-muted;
     flex-shrink: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     &--correct {
-      color: #86efac;
+      color: $success-light;
     }
   }
 
@@ -306,11 +306,11 @@ onMounted(async () => {
   &__dist-bar {
     height: 100%;
     border-radius: 9999px;
-    background: #64748b;
+    background: $text-dim;
     transition: width 0.5s ease;
 
     &--correct {
-      background: #22c55e;
+      background: $success;
     }
   }
 
@@ -318,13 +318,13 @@ onMounted(async () => {
     width: 2rem;
     text-align: right;
     font-size: 0.75rem;
-    color: #94a3b8;
+    color: $text-muted;
     flex-shrink: 0;
   }
 
   &__wrong-hint {
     font-size: 0.8125rem;
-    color: #f87171;
+    color: $danger-light;
     margin-bottom: 1rem;
   }
 
@@ -333,15 +333,15 @@ onMounted(async () => {
     padding: 0.625rem;
     border-radius: 0.5rem;
     background: transparent;
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-muted;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
       border-color: rgba(71, 85, 105, 0.7);
-      color: #e2e8f0;
+      color: $text-bright;
     }
   }
 }

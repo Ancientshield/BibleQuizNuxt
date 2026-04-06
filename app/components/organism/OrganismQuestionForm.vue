@@ -162,7 +162,7 @@ const handleSubmit = () => {
   }
 
   &__label {
-    color: #cbd5e1;
+    color: $text-primary;
     font-size: 0.875rem;
     font-weight: 600;
   }
@@ -173,8 +173,8 @@ const handleSubmit = () => {
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #e2e8f0;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-bright;
     font-size: 0.9375rem;
     resize: vertical;
     outline: none;
@@ -182,12 +182,12 @@ const handleSubmit = () => {
     font-family: inherit;
 
     &::placeholder {
-      color: #64748b;
+      color: $text-dim;
     }
 
     &:focus {
-      border-color: rgba(34, 211, 238, 0.5);
-      box-shadow: 0 0 16px rgba(34, 211, 238, 0.15);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 0 16px rgba($accent, 0.15);
       background: rgba(30, 41, 59, 0.8);
     }
   }
@@ -219,9 +219,9 @@ const handleSubmit = () => {
     height: 0;
 
     &:checked + .q-form__radio-dot {
-      border-color: #22d3ee;
-      background: #22d3ee;
-      box-shadow: inset 0 0 0 3px rgba(15, 23, 42, 0.8);
+      border-color: $accent;
+      background: $accent;
+      box-shadow: inset 0 0 0 3px rgba($bg-dark, 0.8);
     }
   }
 
@@ -241,19 +241,19 @@ const handleSubmit = () => {
     padding: 0.625rem 0.875rem;
     border-radius: 0.625rem;
     background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #e2e8f0;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-bright;
     font-size: 0.875rem;
     outline: none;
     transition: all 0.25s;
 
     &::placeholder {
-      color: #64748b;
+      color: $text-dim;
     }
 
     &:focus {
-      border-color: rgba(34, 211, 238, 0.5);
-      box-shadow: 0 0 12px rgba(34, 211, 238, 0.1);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 0 12px rgba($accent, 0.1);
       background: rgba(30, 41, 59, 0.8);
     }
   }
@@ -265,8 +265,8 @@ const handleSubmit = () => {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba($danger, 0.1);
+    border: 1px solid rgba($danger, 0.3);
     color: #fca5a5;
     font-size: 0.875rem;
   }
@@ -275,7 +275,7 @@ const handleSubmit = () => {
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
-    color: #ef4444;
+    color: $danger;
   }
 
   // ── 送出按鈕 ──
@@ -283,7 +283,7 @@ const handleSubmit = () => {
     width: 100%;
     padding: 0.75rem;
     border-radius: 0.75rem;
-    background: linear-gradient(to right, #06b6d4, #9333ea);
+    background: linear-gradient(to right, $gradient-start, $gradient-end);
     color: white;
     font-weight: 700;
     font-size: 1rem;

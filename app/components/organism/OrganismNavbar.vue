@@ -190,11 +190,11 @@ const handleLogout = () => {
   left: 0;
   right: 0;
   z-index: 50;
-  height: 3.5rem;
+  height: $navbar-height;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
   background: transparent;
   transition:
     background 0.3s,
@@ -202,9 +202,9 @@ const handleLogout = () => {
   border-bottom: 1px solid transparent;
 
   &--scrolled {
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba($bg-dark, 0.7);
     backdrop-filter: blur(24px);
-    border-bottom-color: rgba(51, 65, 85, 0.4);
+    border-bottom-color: rgba($border-base, 0.4);
   }
 
   // ── 漢堡按鈕 ──
@@ -216,15 +216,15 @@ const handleLogout = () => {
     height: 2.5rem;
     border-radius: 0.5rem;
     background: none;
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-muted;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      color: #22d3ee;
-      border-color: rgba(34, 211, 238, 0.3);
-      background: rgba(34, 211, 238, 0.06);
+      color: $accent;
+      border-color: rgba($accent, 0.3);
+      background: rgba($accent, 0.06);
     }
 
     &:active {
@@ -233,8 +233,8 @@ const handleLogout = () => {
   }
 
   &__hamburger-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   // ── 右側區域 ──
@@ -250,20 +250,20 @@ const handleLogout = () => {
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
     border-radius: 9999px;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba($bg-dark, 0.5);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    color: #94a3b8;
+    border: 1px solid rgba($border-base, 0.5);
+    color: $text-muted;
     cursor: pointer;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     font-weight: 500;
     transition: all 0.25s;
 
     &:hover {
-      background: rgba(15, 23, 42, 0.8);
-      color: #22d3ee;
-      border-color: rgba(34, 211, 238, 0.3);
-      box-shadow: 0 0 16px rgba(34, 211, 238, 0.15);
+      background: rgba($bg-dark, 0.8);
+      color: $accent;
+      border-color: rgba($accent, 0.3);
+      box-shadow: 0 0 16px rgba($accent, 0.15);
     }
 
     &:active {
@@ -284,8 +284,8 @@ const handleLogout = () => {
   }
 
   &__user-name {
-    color: #cbd5e1;
-    font-size: 0.8125rem;
+    color: $text-primary;
+    font-size: 1rem;
     font-weight: 500;
     max-width: 10rem;
     overflow: hidden;
@@ -303,12 +303,12 @@ const handleLogout = () => {
     height: 2.5rem;
     border-radius: 50%;
     overflow: hidden;
-    border: 1.5px solid rgba(34, 211, 238, 0.4);
-    box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+    border: 1.5px solid rgba($accent, 0.4);
+    box-shadow: 0 0 12px rgba($accent, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to bottom right, #06b6d4, #9333ea);
+    background: linear-gradient(to bottom right, $gradient-start, $gradient-end);
     flex-shrink: 0;
   }
 
@@ -320,7 +320,7 @@ const handleLogout = () => {
 
   &__avatar-text {
     color: white;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1;
   }
@@ -329,14 +329,14 @@ const handleLogout = () => {
 // ── 展開選單 ──
 .navbar-menu {
   position: fixed;
-  top: 3.5rem;
+  top: 4.25rem;
   left: 0;
   z-index: 49;
   width: 15rem;
   padding: 0.5rem;
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba($bg-dark, 0.92);
   backdrop-filter: blur(24px);
-  border: 1px solid rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba($border-base, 0.5);
   border-top: none;
   border-radius: 0 0 0.75rem 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -350,8 +350,8 @@ const handleLogout = () => {
     gap: 0.75rem;
     padding: 0.625rem 0.75rem;
     border-radius: 0.5rem;
-    color: #cbd5e1;
-    font-size: 0.875rem;
+    color: $text-primary;
+    font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
     background: none;
@@ -361,13 +361,13 @@ const handleLogout = () => {
     transition: all 0.2s;
 
     &:hover {
-      background: rgba(34, 211, 238, 0.08);
-      color: #22d3ee;
+      background: rgba($accent, 0.08);
+      color: $accent;
     }
 
     &--danger:hover {
-      background: rgba(239, 68, 68, 0.1);
-      color: #f87171;
+      background: rgba($danger, 0.1);
+      color: $danger-light;
     }
   }
 
@@ -379,7 +379,7 @@ const handleLogout = () => {
 
   &__divider {
     height: 1px;
-    background: rgba(51, 65, 85, 0.5);
+    background: rgba($border-base, 0.5);
     margin: 0.25rem 0.5rem;
   }
 }

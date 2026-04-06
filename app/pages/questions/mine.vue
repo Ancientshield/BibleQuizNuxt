@@ -1,21 +1,21 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <div class="page-shell__header">
-        <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <div class="main__header">
+        <h1 class="main__title">
           <Icon
             name="lucide:file-text"
-            class="page-shell__title-icon"
+            class="main__title-icon"
           />
           我的題目
         </h1>
         <button
-          class="page-shell__action-btn"
+          class="main__action-btn"
           @click="navigateTo('/questions/new')"
         >
           <Icon
             name="lucide:plus"
-            class="page-shell__action-icon"
+            class="main__action-icon"
           />
           投稿新題目
         </button>
@@ -24,7 +24,7 @@
       <!-- Loading -->
       <div
         v-if="loading"
-        class="page-shell__loading"
+        class="main__loading"
       >
         載入中...
       </div>
@@ -156,7 +156,7 @@ onMounted(fetchQuestions);
     align-items: center;
     gap: 1rem;
     padding: 3rem 1rem;
-    color: #64748b;
+    color: $text-dim;
     text-align: center;
   }
 
@@ -169,7 +169,7 @@ onMounted(fetchQuestions);
   &__empty-btn {
     padding: 0.5rem 1.25rem;
     border-radius: 0.625rem;
-    background: linear-gradient(to right, #06b6d4, #9333ea);
+    background: linear-gradient(to right, $gradient-start, $gradient-end);
     color: white;
     font-weight: 600;
     font-size: 0.875rem;
@@ -193,7 +193,7 @@ onMounted(fetchQuestions);
     padding: 1rem 1.25rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     transition: border-color 0.2s;
 
     &:hover {
@@ -221,23 +221,23 @@ onMounted(fetchQuestions);
     }
 
     &--published {
-      background: rgba(34, 197, 94, 0.15);
-      color: #22c55e;
+      background: rgba($success, 0.15);
+      color: $success;
     }
 
     &--rejected {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
+      background: rgba($danger, 0.15);
+      color: $danger-light;
     }
   }
 
   &__date {
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__content {
-    color: #e2e8f0;
+    color: $text-bright;
     font-size: 0.9375rem;
     line-height: 1.5;
     margin-bottom: 0.75rem;
@@ -251,7 +251,7 @@ onMounted(fetchQuestions);
 
   &__option-count {
     font-size: 0.75rem;
-    color: #64748b;
+    color: $text-dim;
   }
 
   &__actions {
@@ -279,20 +279,20 @@ onMounted(fetchQuestions);
   }
 
   &__edit-btn {
-    background: rgba(34, 211, 238, 0.1);
-    color: #22d3ee;
+    background: rgba($accent, 0.1);
+    color: $accent;
 
     &:hover {
-      background: rgba(34, 211, 238, 0.2);
+      background: rgba($accent, 0.2);
     }
   }
 
   &__delete-btn {
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
+    background: rgba($danger, 0.1);
+    color: $danger-light;
 
     &:hover {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba($danger, 0.2);
     }
   }
 }

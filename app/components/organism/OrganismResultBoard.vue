@@ -189,7 +189,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     height: 100%;
     max-height: 28rem;
     border-radius: 1.5rem;
-    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3));
+    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba($accent, 0.3), rgba(168, 85, 247, 0.3));
     filter: blur(24px);
     animation: pulse-slow 3s ease-in-out infinite;
   }
@@ -199,9 +199,9 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     width: 100%;
     max-width: 28rem;
     border-radius: 1.5rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba($bg-dark, 0.5);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 2.5rem 2rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     display: flex;
@@ -222,7 +222,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     // 用 box-shadow 做光暈，不會跟 backdrop-filter 衝突產生方塊
     box-shadow:
       0 0 20px rgba(59, 130, 246, 0.3),
-      0 0 40px rgba(6, 182, 212, 0.2);
+      0 0 40px rgba($gradient-start, 0.2);
     animation: ring-glow 3s ease-in-out infinite;
 
     @media (min-width: 768px) {
@@ -292,7 +292,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
   &__ring-divider {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #94a3b8;
+    color: $text-muted;
     margin-top: 0.75rem;
 
     @media (min-width: 768px) {
@@ -315,7 +315,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
   &__tagline {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #e2e8f0;
+    color: $text-bright;
     text-align: center;
     line-height: 1.6;
 
@@ -338,7 +338,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
     cursor: pointer;
     transition: all 0.3s;
     margin-top: 0.5rem;
-    background: linear-gradient(to right, #06b6d4, #a855f7, #ec4899);
+    background: linear-gradient(to right, $gradient-start, #a855f7, #ec4899);
 
     @media (min-width: 768px) {
       padding: 1rem;
@@ -360,7 +360,7 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
       inset: 0;
       opacity: 0;
       transition: opacity 0.3s;
-      background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
+      background: linear-gradient(to right, $accent, #a855f7, #ec4899);
       filter: blur(16px);
     }
 
@@ -418,12 +418,12 @@ const tagline = computed(() => taglines[props.score] ?? '測驗結束！');
   100% {
     box-shadow:
       0 0 20px rgba(59, 130, 246, 0.3),
-      0 0 40px rgba(6, 182, 212, 0.2);
+      0 0 40px rgba($gradient-start, 0.2);
   }
   50% {
     box-shadow:
       0 0 30px rgba(59, 130, 246, 0.5),
-      0 0 60px rgba(6, 182, 212, 0.35);
+      0 0 60px rgba($gradient-start, 0.35);
   }
 }
 

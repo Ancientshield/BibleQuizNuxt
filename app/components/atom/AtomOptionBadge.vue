@@ -37,8 +37,8 @@ const stateClass = computed(() => `badge--${props.state}`);
   }
 
   &--default {
-    background: rgba(51, 65, 85, 0.8); // slate-700/80
-    color: #22d3ee; // cyan-400
+    background: rgba($border-base, 0.8); // slate-700/80
+    color: $accent; // cyan-400
   }
 
   &--correct {
@@ -47,13 +47,13 @@ const stateClass = computed(() => `badge--${props.state}`);
   }
 
   &--wrong {
-    background: rgba(239, 68, 68, 0.8); // red-500/80
+    background: rgba($danger, 0.8); // red-500/80
     color: #fff;
   }
 
   &--disabled {
-    background: rgba(51, 65, 85, 0.4); // slate-700/40
-    color: rgb(100, 116, 139); // slate-500
+    background: rgba($border-base, 0.4); // slate-700/40
+    color: $text-dim; // slate-500
   }
 }
 </style>

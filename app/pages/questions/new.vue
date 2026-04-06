@@ -1,16 +1,16 @@
 <template>
-  <main class="page-shell">
-    <div class="page-shell__container">
-      <h1 class="page-shell__title">
+  <main class="main">
+    <div class="main__container">
+      <h1 class="main__title">
         <Icon
           name="lucide:plus-circle"
-          class="page-shell__title-icon"
+          class="main__title-icon"
         />
         投稿新題目
       </h1>
-      <p class="page-shell__desc">出一道聖經問答題，等待管理者審核後即可上架。</p>
+      <p class="main__desc">出一道聖經問答題，等待管理者審核後即可上架。</p>
 
-      <div class="page-shell__card">
+      <div class="main__card">
         <OrganismQuestionForm
           :loading="loading"
           submit-text="投稿"
@@ -22,11 +22,11 @@
       <Transition name="fade">
         <div
           v-if="successMsg"
-          class="page-shell__success"
+          class="main__success"
         >
           <Icon
             name="lucide:circle-check"
-            class="page-shell__success-icon"
+            class="main__success-icon"
           />
           {{ successMsg }}
         </div>

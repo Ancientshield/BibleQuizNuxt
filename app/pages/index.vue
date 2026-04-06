@@ -110,7 +110,7 @@ const startGame = () => {
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: #020617; // slate-950
+  background: $bg-page; // slate-950
 
   // ── 背景層（與 start.vue 共用同色系） ──
   &__bg {
@@ -118,7 +118,7 @@ const startGame = () => {
     inset: 0;
 
     &--gradient {
-      background: linear-gradient(to bottom right, #581c87, #0f172a, #1e3a5f);
+      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
       background-size: 200% 200%;
       animation: gradient-shift 15s ease infinite;
     }
@@ -140,7 +140,7 @@ const startGame = () => {
     position: absolute;
     width: 4px;
     height: 4px;
-    background: rgba(34, 211, 238, 0.3); // cyan-400/30
+    background: rgba($accent, 0.3); // cyan-400/30
     border-radius: 50%;
     animation: float 8s ease-in-out infinite;
   }
@@ -168,7 +168,7 @@ const startGame = () => {
     position: absolute;
     inset: -4px;
     border-radius: 1.5rem;
-    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.3));
+    background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba($accent, 0.3), rgba(168, 85, 247, 0.3));
     filter: blur(16px);
     animation: pulse-slow 3s ease-in-out infinite;
   }
@@ -176,9 +176,9 @@ const startGame = () => {
   &__card {
     position: relative;
     border-radius: 1.5rem;
-    background: rgba(15, 23, 42, 0.5); // slate-900/50
+    background: rgba($bg-dark, 0.5); // slate-900/50
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(51, 65, 85, 0.5); // slate-700/50
+    border: 1px solid rgba($border-base, 0.5); // slate-700/50
     padding: 2rem;
     box-shadow: 0 0 60px rgba(139, 92, 246, 0.2);
 
@@ -202,7 +202,7 @@ const startGame = () => {
     height: calc(5rem + 24px);
     margin: auto;
     border-radius: 50%;
-    background: rgba(6, 182, 212, 0.2); // cyan-500/20
+    background: rgba($gradient-start, 0.2); // cyan-500/20
     filter: blur(16px);
     animation: pulse 2s ease-in-out infinite;
 
@@ -217,11 +217,11 @@ const startGame = () => {
     width: 5rem;
     height: 5rem;
     border-radius: 1rem;
-    background: linear-gradient(to bottom right, #06b6d4, #9333ea); // cyan-500 → purple-600
+    background: linear-gradient(to bottom right, $gradient-start, $gradient-end); // cyan-500 → purple-600
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 30px rgba($accent, 0.4);
 
     @media (min-width: 768px) {
       width: 6rem;
@@ -247,7 +247,7 @@ const startGame = () => {
     font-weight: 900;
     text-align: center;
     margin-bottom: 1rem;
-    background: linear-gradient(to right, #22d3ee, #a855f7, #22d3ee); // cyan-400 → purple-400 → cyan-400
+    background: linear-gradient(to right, $accent, #a855f7, $accent); // cyan-400 → purple-400 → cyan-400
     background-size: 200% 200%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -265,7 +265,7 @@ const startGame = () => {
   }
 
   &__subtitle {
-    color: #94a3b8; // slate-400
+    color: $text-muted; // slate-400
     text-align: center;
     font-size: 1.125rem;
     margin-bottom: 2rem;
@@ -283,7 +283,7 @@ const startGame = () => {
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.6); // slate-800/60
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
     padding: 1rem;
     text-align: center;
   }
@@ -297,8 +297,8 @@ const startGame = () => {
     }
 
     &--cyan {
-      color: #22d3ee;
-      filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.5));
+      color: $accent;
+      filter: drop-shadow(0 0 10px rgba($accent, 0.5));
     }
 
     &--amber {
@@ -309,7 +309,7 @@ const startGame = () => {
 
   &__stat-label {
     font-size: 0.875rem;
-    color: #94a3b8;
+    color: $text-muted;
     margin-top: 0.25rem;
   }
 
@@ -350,7 +350,7 @@ const startGame = () => {
     position: absolute;
     inset: -4px;
     border-radius: 1rem;
-    background: linear-gradient(to right, #06b6d4, #a855f7);
+    background: linear-gradient(to right, $gradient-start, #a855f7);
     filter: blur(12px);
     opacity: 0.4;
     transition: opacity 0.3s;
@@ -364,7 +364,12 @@ const startGame = () => {
   &__start-btn-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, #06b6d4, #a855f7, #06b6d4); // cyan-500 → purple-500 → cyan-500
+    background: linear-gradient(
+      to right,
+      $gradient-start,
+      #a855f7,
+      $gradient-start
+    ); // cyan-500 → purple-500 → cyan-500
     background-size: 200% 200%;
     animation: gradient-shift 15s ease infinite;
   }
@@ -410,7 +415,7 @@ const startGame = () => {
   &__footer-text {
     margin-top: 2rem;
     font-size: 0.875rem;
-    color: #64748b; // slate-500
+    color: $text-dim; // slate-500
     text-align: center;
   }
 }
