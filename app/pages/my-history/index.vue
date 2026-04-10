@@ -14,8 +14,10 @@
         v-if="stats"
         class="history__total-score"
       >
-        <div class="history__total-score-value">{{ stats.totalScore?.toLocaleString() ?? 0 }}</div>
-        <div class="history__total-score-label">總積分</div>
+        <div class="history__total-score-row">
+          <div class="history__total-score-value">{{ stats.totalScore?.toLocaleString() ?? 0 }}</div>
+          <span class="history__total-score-unit">EXP</span>
+        </div>
       </div>
 
       <!-- 個人統計 -->
@@ -32,8 +34,8 @@
           <div class="history__stat-label">平均分數</div>
         </div>
         <div class="history__stat-card">
-          <div class="history__stat-value history__stat-value--amber">{{ stats.bestScore }}</div>
-          <div class="history__stat-label">最高分</div>
+          <div class="history__stat-value history__stat-value--amber">{{ stats.perfectGames }}</div>
+          <div class="history__stat-label">滿分次數</div>
         </div>
       </div>
 
@@ -106,7 +108,7 @@ interface RoundHistory {
 interface UserStats {
   totalGames: number;
   averageScore: number;
-  bestScore: number;
+  perfectGames: number;
   totalScore: number;
 }
 
@@ -139,29 +141,60 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .history {
-  // ── 總積分 ──
+  // ── EXP 區塊 ──
   &__total-score {
+    position: relative;
     text-align: center;
     margin-bottom: 1.5rem;
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: 1rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
+    background: radial-gradient(ellipse at 50% 0%, rgba(#fbbf24, 0.08) 0%, transparent 60%), rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(#fbbf24, 0.2);
+
+    // 上下金色光條
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+    }
+
+    &::before {
+      top: 0;
+    }
+
+    &::after {
+      bottom: 0;
+    }
+  }
+
+  &__total-score-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+    // 左邊加一個跟 EXP 等寬的 padding，讓數字視覺置中
+    padding-left: 3.5rem;
+    background: linear-gradient(135deg, #fde68a, #fbbf24, #d97706);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.4));
   }
 
   &__total-score-value {
     font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(to right, $gradient-start, $gradient-end);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    letter-spacing: 0.02em;
   }
 
-  &__total-score-label {
-    font-size: 1rem;
-    color: $text-muted;
-    margin-top: 0.25rem;
+  &__total-score-unit {
+    font-size: 1.5rem;
+    font-weight: 800;
+    white-space: nowrap;
   }
 
   // ── 統計卡片 ──
@@ -177,7 +210,7 @@ onMounted(async () => {
   }
 
   &__stat-card {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid rgba($border-base, 0.5);
@@ -185,7 +218,7 @@ onMounted(async () => {
   }
 
   &__stat-value {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 800;
 
     &--cyan {
@@ -202,9 +235,9 @@ onMounted(async () => {
   }
 
   &__stat-label {
-    font-size: 0.8125rem;
+    font-size: 1rem;
     color: $text-muted;
-    margin-top: 0.125rem;
+    margin-top: 0.25rem;
   }
 
   // ── 空狀態 ──
@@ -229,7 +262,7 @@ onMounted(async () => {
     background: linear-gradient(to right, $gradient-start, $gradient-end);
     color: white;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 1rem;
     border: none;
     cursor: pointer;
 
@@ -275,7 +308,7 @@ onMounted(async () => {
   }
 
   &__score-total {
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: $text-dim;
   }
 
@@ -285,7 +318,7 @@ onMounted(async () => {
   }
 
   &__date {
-    font-size: 0.8125rem;
+    font-size: 1rem;
     color: $text-muted;
     margin-bottom: 0.375rem;
   }
