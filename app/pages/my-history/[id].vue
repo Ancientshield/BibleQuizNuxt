@@ -9,13 +9,22 @@
         答題回顧
       </h1>
 
-      <!-- 總覽 -->
-      <div
-        v-if="detail"
-        class="review__summary"
-      >
-        <span class="review__score">{{ detail.score }}/{{ detail.totalQuestions }}</span>
-        <span class="review__date">{{ formatDate(detail.completedAt) }}</span>
+      <!-- 總覽 + 返回（同一排） -->
+      <div class="review__top-row">
+        <div
+          v-if="detail"
+          class="review__summary"
+        >
+          <span class="review__score">{{ detail.score }}/{{ detail.totalQuestions }}</span>
+          <span class="review__date">{{ formatDate(detail.completedAt) }}</span>
+        </div>
+        <button
+          class="review__back"
+          @click="navigateTo('/my-history')"
+        >
+          <Icon name="lucide:arrow-left" />
+          返回我的紀錄
+        </button>
       </div>
 
       <!-- Loading -->
@@ -85,16 +94,19 @@
           </p>
         </div>
       </div>
-
-      <!-- 返回 -->
-      <button
-        class="review__back"
-        @click="navigateTo('/my-history')"
-      >
-        <Icon name="lucide:arrow-left" />
-        返回我的紀錄
-      </button>
     </div>
+
+    <!-- 回到頂部 -->
+    <Transition name="fade">
+      <button
+        v-if="showScrollTop"
+        class="review__scroll-top"
+        @click="scrollToTop"
+      >
+        <Icon name="lucide:arrow-up" />
+        回到頂部
+      </button>
+    </Transition>
   </main>
 </template>
 
@@ -137,6 +149,21 @@ const formatDate = (iso: string) => {
   return `${d.getFullYear()}/${mm}/${dd} ${hh}:${mi}`;
 };
 
+const showScrollTop = ref(false);
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const onScroll = () => {
+  showScrollTop.value = window.scrollY > 300;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onUnmounted(() => window.removeEventListener('scroll', onScroll));
+});
+
 onMounted(async () => {
   try {
     detail.value = await useAuthFetch<RoundDetail>(`/api/user/history/${route.params.id}`);
@@ -150,12 +177,45 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .review {
-  // ── 總覽 ──
+  // ── 總覽 + 返回（同一排） ──
+  &__top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
   &__summary {
     display: flex;
     align-items: baseline;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: rgba($bg-dark, 0.85);
+    border: 1px solid rgba($accent, 0.3);
+    color: $accent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    &:hover {
+      background: rgba($accent, 0.15);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 4px 24px rgba($accent, 0.2);
+    }
   }
 
   &__score {
@@ -289,29 +349,48 @@ onMounted(async () => {
     }
   }
 
-  // ── 返回按鈕 ──
-  &__back {
+  // ── 回到頂部 ──
+  &__scroll-top {
+    position: fixed;
+    bottom: 6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background: rgba($bg-dark, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba($accent, 0.3);
+    color: $accent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    border-radius: 0.625rem;
-    background: transparent;
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-muted;
-    font-size: 1rem;
-    cursor: pointer;
     transition: all 0.2s;
+    z-index: 40;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
     svg {
-      width: 1rem;
-      height: 1rem;
+      width: 1.25rem;
+      height: 1.25rem;
     }
 
     &:hover {
-      color: $accent;
-      border-color: rgba($accent, 0.3);
+      background: rgba($accent, 0.15);
+      border-color: rgba($accent, 0.5);
+      box-shadow: 0 4px 24px rgba($accent, 0.2);
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -43,15 +43,15 @@ export const useQuizItems = () => {
     used.audiencePoll = true;
     try {
       const data = await $fetch<{ optionId: number; percentage: number }[]>(`/api/biblequiz/poll/${question.id}`);
+      // 先全部填 0%，再覆蓋有資料的
       const map: Record<number, number> = {};
+      question.options.forEach(o => (map[o.id] = 0));
       data.forEach(d => (map[d.optionId] = d.percentage));
       pollData.value = map;
     } catch {
-      // API 不存在或沒資料時，用平均分佈
-      const opts = question.options;
-      const avg = Math.round(100 / opts.length);
+      // API 失敗時，全部顯示 0%
       const map: Record<number, number> = {};
-      opts.forEach(o => (map[o.id] = avg));
+      question.options.forEach(o => (map[o.id] = 0));
       pollData.value = map;
     }
   };

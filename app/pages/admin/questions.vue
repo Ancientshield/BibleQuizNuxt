@@ -3,7 +3,7 @@
     <div class="main__container aq__wide-container">
       <h1 class="main__title">
         <Icon
-          name="lucide:database"
+          name="lucide:settings"
           class="main__title-icon"
         />
         進階管理
@@ -15,7 +15,7 @@
           :class="['aq__tab', { 'aq__tab--active': activeTab === 'manage' }]"
           @click="switchTab('manage')"
         >
-          <Icon name="lucide:database" />
+          <Icon name="lucide:list" />
           題目管理
         </button>
         <button

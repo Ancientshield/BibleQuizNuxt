@@ -139,7 +139,7 @@
             @click="goTo('/admin/questions')"
           >
             <Icon
-              name="lucide:database"
+              name="lucide:settings"
               class="navbar-menu__icon"
             />
             進階管理

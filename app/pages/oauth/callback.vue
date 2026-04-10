@@ -1,6 +1,7 @@
 <template>
   <div class="oauth-callback">
-    <p>登入中...</p>
+    <div class="oauth-callback__spinner" />
+    <p class="oauth-callback__text">登入中</p>
   </div>
 </template>
 
@@ -41,3 +42,35 @@ onMounted(async () => {
   navigateTo('/', { replace: true });
 });
 </script>
+
+<style lang="scss" scoped>
+.oauth-callback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  background: $bg-page;
+  gap: 1.25rem;
+
+  &__spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid rgba($border-base, 0.3);
+    border-top-color: $accent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__text {
+    color: $text-muted;
+    font-size: 1rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

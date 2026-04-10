@@ -1,7 +1,7 @@
 <template>
   <button
     :disabled="disabled"
-    :class="[stateClass, { 'option-btn--hovered': isHovered }]"
+    :class="[stateClass, { 'option-btn--hovered': isHovered, 'option-btn--eliminated': eliminated }]"
     class="option-btn"
     @click="handleClick"
     @pointerenter="handlePointerEnter"
@@ -56,9 +56,10 @@ const props = withDefaults(
     text: string;
     state: OptionState;
     disabled: boolean;
+    eliminated?: boolean;
     pollPercentage?: number | null;
   }>(),
-  { pollPercentage: null }
+  { eliminated: false, pollPercentage: null }
 );
 
 interface Emits {
@@ -176,6 +177,17 @@ const handleClick = (e: MouseEvent) => {
     background: rgba(30, 41, 59, 0.3); // slate-800/30
     border-color: rgba($border-base, 0.3); // slate-700/30
     color: $text-dim; // slate-500
+  }
+
+  &--eliminated {
+    opacity: 0.35;
+    background: rgba(30, 41, 59, 0.2);
+    border-color: rgba($border-base, 0.15);
+    color: $text-dim;
+    text-decoration: line-through;
+    transition:
+      opacity 0.4s ease,
+      background 0.4s ease;
   }
 
   // ── Inner elements ──

@@ -9,6 +9,15 @@
         我的紀錄
       </h1>
 
+      <!-- 總積分 -->
+      <div
+        v-if="stats"
+        class="history__total-score"
+      >
+        <div class="history__total-score-value">{{ stats.totalScore?.toLocaleString() ?? 0 }}</div>
+        <div class="history__total-score-label">總積分</div>
+      </div>
+
       <!-- 個人統計 -->
       <div
         v-if="stats"
@@ -98,6 +107,7 @@ interface UserStats {
   totalGames: number;
   averageScore: number;
   bestScore: number;
+  totalScore: number;
 }
 
 const loading = ref(true);
@@ -129,6 +139,31 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .history {
+  // ── 總積分 ──
+  &__total-score {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba($border-base, 0.5);
+  }
+
+  &__total-score-value {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(to right, $gradient-start, $gradient-end);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__total-score-label {
+    font-size: 1rem;
+    color: $text-muted;
+    margin-top: 0.25rem;
+  }
+
   // ── 統計卡片 ──
   &__stats {
     display: grid;
