@@ -96,22 +96,11 @@
 </template>
 
 <script setup lang="ts">
+import type { RoundHistory, UserStats } from '~/composables/useQuizHistoryApi';
+
 definePageMeta({ middleware: 'auth' });
 
-interface RoundHistory {
-  roundId: number;
-  score: number;
-  totalQuestions: number;
-  completedAt: string;
-}
-
-interface UserStats {
-  totalGames: number;
-  averageScore: number;
-  perfectGames: number;
-  totalScore: number;
-}
-
+const { listHistory, getStats } = useQuizHistoryApi();
 const loading = ref(true);
 const history = ref<RoundHistory[]>([]);
 const stats = ref<UserStats | null>(null);
@@ -126,11 +115,11 @@ const formatDate = (iso: string) => {
 };
 
 onMounted(async () => {
-  const historyPromise = useAuthFetch<RoundHistory[]>('/api/user/history')
+  const historyPromise = listHistory()
     .then(d => (history.value = d))
     .catch(() => {});
 
-  const statsPromise = useAuthFetch<UserStats>('/api/user/stats')
+  const statsPromise = getStats()
     .then(d => (stats.value = d))
     .catch(() => {});
 

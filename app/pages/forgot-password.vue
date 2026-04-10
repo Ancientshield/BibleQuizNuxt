@@ -112,6 +112,8 @@
 </template>
 
 <script setup lang="ts">
+const { forgotPassword } = useAuthApi();
+
 const email = ref('');
 const isLoading = ref(false);
 const errorMsg = ref('');
@@ -123,10 +125,7 @@ const handleSubmit = async () => {
   errorMsg.value = '';
 
   try {
-    await $fetch('/api/auth/forgot-password', {
-      method: 'POST',
-      body: { email: email.value },
-    });
+    await forgotPassword(email.value);
 
     successMsg.value = '重設密碼信已寄出，請查收信箱。';
   } catch (err: unknown) {

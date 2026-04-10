@@ -111,31 +111,11 @@
 </template>
 
 <script setup lang="ts">
+import type { RoundDetail } from '~/composables/useQuizHistoryApi';
+
 definePageMeta({ middleware: 'auth' });
 
-interface OptionItem {
-  id: number;
-  content: string;
-  correct: boolean;
-}
-
-interface AnswerDetail {
-  questionId: number;
-  questionContent: string;
-  bibleRef: string | null;
-  options: OptionItem[];
-  selectedOptionId: number;
-  correct: boolean;
-}
-
-interface RoundDetail {
-  roundId: number;
-  score: number;
-  totalQuestions: number;
-  completedAt: string;
-  answers: AnswerDetail[];
-}
-
+const { getRoundDetail } = useQuizHistoryApi();
 const route = useRoute();
 const loading = ref(true);
 const detail = ref<RoundDetail | null>(null);
@@ -166,7 +146,7 @@ onMounted(() => {
 
 onMounted(async () => {
   try {
-    detail.value = await useAuthFetch<RoundDetail>(`/api/user/history/${route.params.id}`);
+    detail.value = await getRoundDetail(route.params.id as string);
   } catch {
     navigateTo('/my-history', { replace: true });
   } finally {

@@ -95,16 +95,11 @@
 </template>
 
 <script setup lang="ts">
+import type { QuestionItem } from '~/composables/useQuestionApi';
+
 definePageMeta({ middleware: 'auth' });
 
-interface QuestionItem {
-  id: number;
-  content: string;
-  status: string;
-  options: { id: number }[];
-  createdAt: string;
-}
-
+const { listMine, remove } = useQuestionApi();
 const loading = ref(true);
 const questions = ref<QuestionItem[]>([]);
 
@@ -125,7 +120,7 @@ const formatDate = (iso: string) => {
 const fetchQuestions = async () => {
   loading.value = true;
   try {
-    questions.value = await useAuthFetch<QuestionItem[]>('/api/questions/mine');
+    questions.value = await listMine();
   } catch {
     alert('載入失敗');
   } finally {
@@ -136,7 +131,7 @@ const fetchQuestions = async () => {
 const handleDelete = async (id: number) => {
   if (!confirm('確定要刪除這題嗎？')) return;
   try {
-    await useAuthFetch(`/api/questions/${id}`, { method: 'DELETE' });
+    await remove(id);
     questions.value = questions.value.filter(q => q.id !== id);
   } catch (err: unknown) {
     const fetchErr = err as { data?: { message?: string } };

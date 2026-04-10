@@ -295,14 +295,8 @@
 </template>
 
 <script setup lang="ts">
-import type { UserInfo } from '~/stores/auth';
-
-/** 後端 /api/auth 回傳格式（token + UserInfo） */
-interface AuthResponse extends UserInfo {
-  token: string;
-}
-
 const auth = useAuthStore();
+const { login: apiLogin, register: apiRegister } = useAuthApi();
 
 // ── 表單狀態 ──
 const isRegister = ref(false);
@@ -343,11 +337,8 @@ const handleSubmit = async () => {
   successMsg.value = '';
 
   try {
-    const endpoint = isRegister.value ? '/api/auth/register' : '/api/auth/login';
-    const data = await $fetch<AuthResponse>(endpoint, {
-      method: 'POST',
-      body: { email: email.value, password: password.value },
-    });
+    const apiFn = isRegister.value ? apiRegister : apiLogin;
+    const data = await apiFn(email.value, password.value);
 
     // 註冊成功但未驗證（token 為 null）→ 顯示驗證提示
     if (!data.token) {

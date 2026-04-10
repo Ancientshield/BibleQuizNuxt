@@ -36,25 +36,20 @@
 </template>
 
 <script setup lang="ts">
+import type { QuestionFormData } from '~/composables/useQuestionApi';
+
 definePageMeta({ middleware: 'auth' });
 
+const { create } = useQuestionApi();
 const loading = ref(false);
 const successMsg = ref('');
-
-interface QuestionFormData {
-  content: string;
-  options: { content: string; correct: boolean }[];
-}
 
 const handleCreate = async (data: QuestionFormData) => {
   loading.value = true;
   successMsg.value = '';
 
   try {
-    await useAuthFetch('/api/questions', {
-      method: 'POST',
-      body: data,
-    });
+    await create(data);
     successMsg.value = '投稿成功！題目已送出等待審核。';
     // 2 秒後跳到投稿紀錄
     setTimeout(() => navigateTo('/questions/submissions'), 2000);

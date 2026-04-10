@@ -34,31 +34,23 @@
 </template>
 
 <script setup lang="ts">
+import type { QuestionFormData } from '~/composables/useQuestionApi';
+
 definePageMeta({ middleware: 'auth' });
 
+const { getDetail, update } = useQuestionApi();
 const route = useRoute();
 const questionId = Number(route.params.id);
 
 const loadingData = ref(true);
 const loading = ref(false);
 
-interface QuestionFormData {
-  content: string;
-  options: { content: string; correct: boolean }[];
-}
-
-interface QuestionDetail {
-  id: number;
-  content: string;
-  options: { id: number; content: string; correct: boolean }[];
-}
-
 const initialData = ref<QuestionFormData | null>(null);
 
 // 載入題目資料
 onMounted(async () => {
   try {
-    const data = await useAuthFetch<QuestionDetail>(`/api/questions/${questionId}`);
+    const data = await getDetail(questionId);
     initialData.value = {
       content: data.content,
       options: data.options.map(o => ({ content: o.content, correct: o.correct })),
@@ -75,10 +67,7 @@ const handleUpdate = async (data: QuestionFormData) => {
   loading.value = true;
 
   try {
-    await useAuthFetch(`/api/questions/${questionId}`, {
-      method: 'PUT',
-      body: data,
-    });
+    await update(questionId, data);
     navigateTo('/questions/submissions');
   } catch (err: unknown) {
     const fetchErr = err as { data?: { message?: string } };

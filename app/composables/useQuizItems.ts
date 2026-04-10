@@ -9,7 +9,7 @@ import type { QuestionDTO } from './useQuiz';
  */
 export const useQuizItems = () => {
   const used = reactive({
-    fiftyFifty: false,
+    eliminate: false,
     scriptureHint: false,
     audiencePoll: false,
   });
@@ -18,11 +18,11 @@ export const useQuizItems = () => {
   const hintVisible = ref(false);
   const pollData = ref<Record<number, number> | null>(null);
 
-  // ── 50/50 ──
-
-  const useFiftyFifty = (question: QuestionDTO | null) => {
-    if (used.fiftyFifty || !question) return;
-    used.fiftyFifty = true;
+  // ── 刪去法 ──
+  // 移除 2 個錯誤選項（前端本地處理，不需 API 支援）
+  const useEliminate = (question: QuestionDTO | null) => {
+    if (used.eliminate || !question) return;
+    used.eliminate = true;
     const wrong = question.options.filter(o => !o.correct);
     const shuffled = [...wrong].sort(() => Math.random() - 0.5);
     eliminatedOptionIds.value = shuffled.slice(0, 2).map(o => o.id);
@@ -38,11 +38,14 @@ export const useQuizItems = () => {
 
   // ── 觀眾投票 ──
 
+  const fetchPollData = (questionId: number) =>
+    $fetch<{ optionId: number; percentage: number }[]>(`/api/biblequiz/poll/${questionId}`);
+
   const useAudiencePoll = async (question: QuestionDTO | null) => {
     if (used.audiencePoll || !question) return;
     used.audiencePoll = true;
     try {
-      const data = await $fetch<{ optionId: number; percentage: number }[]>(`/api/biblequiz/poll/${question.id}`);
+      const data = await fetchPollData(question.id);
       // 先全部填 0%，再覆蓋有資料的
       const map: Record<number, number> = {};
       question.options.forEach(o => (map[o.id] = 0));
@@ -67,7 +70,7 @@ export const useQuizItems = () => {
   // ── 整局重置 ──
 
   const resetAll = () => {
-    used.fiftyFifty = false;
+    used.eliminate = false;
     used.scriptureHint = false;
     used.audiencePoll = false;
     resetForNextQuestion();
@@ -78,7 +81,7 @@ export const useQuizItems = () => {
     eliminatedOptionIds,
     hintVisible,
     pollData,
-    useFiftyFifty,
+    useEliminate,
     useScriptureHint,
     useAudiencePoll,
     resetForNextQuestion,

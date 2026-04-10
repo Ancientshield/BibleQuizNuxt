@@ -41,10 +41,10 @@
           <button
             :class="[
               'quiz-page__item quiz-page__item--fifty',
-              { 'quiz-page__item--used': used.fiftyFifty, 'quiz-page__item--burst': justUsed.fiftyFifty },
+              { 'quiz-page__item--used': used.eliminate, 'quiz-page__item--burst': justUsed.eliminate },
             ]"
-            :disabled="used.fiftyFifty || answered"
-            @click="handleUseItem('fiftyFifty')"
+            :disabled="used.eliminate || answered"
+            @click="handleUseItem('eliminate')"
           >
             <span class="quiz-page__item-glow" />
             <Icon name="lucide:scissors" />
@@ -133,7 +133,7 @@ const {
   eliminatedOptionIds,
   hintVisible,
   pollData,
-  useFiftyFifty,
+  useEliminate,
   useScriptureHint,
   useAudiencePoll,
   resetForNextQuestion,
@@ -147,10 +147,10 @@ const correctOptionId = ref<number | null>(null);
 const isTransitioning = ref(false);
 
 // ── 道具使用特效 ──
-const justUsed = reactive({ fiftyFifty: false, scriptureHint: false, audiencePoll: false });
+const justUsed = reactive({ eliminate: false, scriptureHint: false, audiencePoll: false });
 
-const handleUseItem = (item: 'fiftyFifty' | 'scriptureHint' | 'audiencePoll') => {
-  if (item === 'fiftyFifty') useFiftyFifty(currentQuestion.value);
+const handleUseItem = (item: 'eliminate' | 'scriptureHint' | 'audiencePoll') => {
+  if (item === 'eliminate') useEliminate(currentQuestion.value);
   else if (item === 'scriptureHint') useScriptureHint();
   else useAudiencePoll(currentQuestion.value);
 

@@ -157,6 +157,7 @@
 </template>
 
 <script setup lang="ts">
+const { resetPassword } = useAuthApi();
 const route = useRoute();
 const token = computed(() => route.query.token as string);
 
@@ -189,10 +190,7 @@ const handleSubmit = async () => {
   errorMsg.value = '';
 
   try {
-    await $fetch('/api/auth/reset-password', {
-      method: 'POST',
-      body: { token: token.value, password: password.value },
-    });
+    await resetPassword(token.value, password.value);
 
     successMsg.value = '密碼已重設成功！';
   } catch (err: unknown) {

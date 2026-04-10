@@ -6,8 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UserInfo } from '~/stores/auth';
-
 /**
  * OAuth callback 頁面
  *
@@ -20,6 +18,7 @@ import type { UserInfo } from '~/stores/auth';
  * 3. 存到 Pinia auth store（內部同步寫入 localStorage）
  * 4. 跳轉到首頁
  */
+const { fetchProfile } = useAuthApi();
 const route = useRoute();
 const auth = useAuthStore();
 
@@ -32,7 +31,7 @@ onMounted(async () => {
   }
 
   try {
-    const data = await $fetch<UserInfo>('/api/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
+    const data = await fetchProfile(token);
     auth.setAuth(token, data);
   } catch {
     // profile 取失敗仍存 token，首頁會顯示 fallback

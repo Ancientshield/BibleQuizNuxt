@@ -539,43 +539,13 @@ definePageMeta({ middleware: ['auth', 'admin'] });
 
 const PAGE_SIZE = 10;
 
-// ── 型別 ──
+import type {
+  AdminQuestionItem as QuestionItem,
+  AdminCategory as Category,
+  AdminBibleBook as BibleBook,
+} from '~/composables/useAdminQuestionApi';
 
-interface QuestionItem {
-  id: number;
-  content: string;
-  status: string;
-  categoryId: number | null;
-  categoryName: string | null;
-  bibleBookId: number | null;
-  bibleRef: string | null;
-  bibleChapter: number | null;
-  bibleVerseStart: number | null;
-  bibleVerseEnd: number | null;
-  options: { id: number; content: string; correct: boolean; selectedCount?: number }[];
-  totalAnswered: number | null;
-  correctCount: number | null;
-  accuracyRate: number | null;
-  mostSelectedWrongOption: string | null;
-  authorName: string | null;
-  createdAt: string;
-}
-
-interface PageResponse {
-  content: QuestionItem[];
-  totalElements: number;
-  totalPages: number;
-}
-
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface BibleBook {
-  id: number;
-  name: string;
-}
+const adminApi = useAdminQuestionApi();
 
 // ── 書卷章數（和合本，ID = sortOrder 1~66） ──
 const BOOK_CHAPTERS: Record<number, number> = {
@@ -846,7 +816,7 @@ const fetchQuestions = async () => {
     params.set('size', String(PAGE_SIZE));
     if (activeTab.value === 'stats' || activeTab.value === 'options') params.set('includeStats', 'true');
 
-    const data = await useAuthFetch<PageResponse>(`/api/admin/questions?${params.toString()}`);
+    const data = await adminApi.listQuestions(params.toString());
     questions.value = data.content;
     totalElements.value = data.totalElements;
   } catch {
@@ -902,10 +872,7 @@ const handlePublish = async () => {
   }
   publishLoading.value = true;
   try {
-    await useAuthFetch(`/api/admin/questions/${publishTarget.value.id}/publish`, {
-      method: 'PATCH',
-      body: publishForm,
-    });
+    await adminApi.publish(publishTarget.value.id, publishForm);
     publishTarget.value = null;
     fetchQuestions();
   } catch (err: unknown) {
@@ -921,7 +888,7 @@ const handlePublish = async () => {
 const handleReject = async (id: number) => {
   if (!confirm('確定這題不通過嗎？')) return;
   try {
-    await useAuthFetch(`/api/admin/questions/${id}/reject`, { method: 'PATCH' });
+    await adminApi.reject(id);
     fetchQuestions();
   } catch {
     alert('操作失敗');
@@ -969,17 +936,14 @@ const handleEdit = async () => {
 
   editLoading.value = true;
   try {
-    await useAuthFetch(`/api/admin/questions/${editTarget.value.id}`, {
-      method: 'PUT',
-      body: {
-        content: editForm.content.trim(),
-        options: validOptions,
-        categoryId: editForm.categoryId,
-        bibleBookId: editForm.bibleBookId,
-        bibleChapter: editForm.bibleChapter,
-        bibleVerseStart: editForm.bibleVerseStart,
-        bibleVerseEnd: editForm.bibleVerseEnd,
-      },
+    await adminApi.update(editTarget.value.id, {
+      content: editForm.content.trim(),
+      options: validOptions,
+      categoryId: editForm.categoryId,
+      bibleBookId: editForm.bibleBookId,
+      bibleChapter: editForm.bibleChapter,
+      bibleVerseStart: editForm.bibleVerseStart,
+      bibleVerseEnd: editForm.bibleVerseEnd,
     });
     editTarget.value = null;
     fetchQuestions();
@@ -996,7 +960,7 @@ const handleEdit = async () => {
 const handleDelete = async (id: number) => {
   if (!confirm('確定要刪除這題嗎？此操作無法復原。')) return;
   try {
-    await useAuthFetch(`/api/admin/questions/${id}`, { method: 'DELETE' });
+    await adminApi.remove(id);
     fetchQuestions();
   } catch {
     alert('刪除失敗');
@@ -1008,8 +972,8 @@ const handleDelete = async (id: number) => {
 onMounted(async () => {
   await Promise.all([
     fetchQuestions(),
-    useAuthFetch<Category[]>('/api/admin/questions/categories').then(d => (categories.value = d)),
-    useAuthFetch<BibleBook[]>('/api/admin/questions/bible-books').then(d => (bibleBooks.value = d)),
+    adminApi.getCategories().then(d => (categories.value = d)),
+    adminApi.getBibleBooks().then(d => (bibleBooks.value = d)),
   ]);
 });
 </script>

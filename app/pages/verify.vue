@@ -54,6 +54,7 @@
 </template>
 
 <script setup lang="ts">
+const { verifyEmail } = useAuthApi();
 const route = useRoute();
 const router = useRouter();
 
@@ -72,10 +73,7 @@ onMounted(async () => {
   }
 
   try {
-    await $fetch('/api/auth/verify', {
-      method: 'GET',
-      params: { token },
-    });
+    await verifyEmail(token);
     success.value = true;
 
     const timer = setInterval(() => {
