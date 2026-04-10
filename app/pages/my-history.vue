@@ -63,6 +63,7 @@
           v-for="r in history"
           :key="r.roundId"
           class="history__card"
+          @click="navigateTo(`/my-history/${r.roundId}`)"
         >
           <div class="history__score">
             <span class="history__score-num">{{ r.score }}</span>
@@ -113,18 +114,16 @@ const formatDate = (iso: string) => {
 };
 
 onMounted(async () => {
-  try {
-    const [h, s] = await Promise.all([
-      useAuthFetch<RoundHistory[]>('/api/user/history'),
-      useAuthFetch<UserStats>('/api/user/stats'),
-    ]);
-    history.value = h;
-    stats.value = s;
-  } catch {
-    alert('載入失敗');
-  } finally {
-    loading.value = false;
-  }
+  const historyPromise = useAuthFetch<RoundHistory[]>('/api/user/history')
+    .then(d => (history.value = d))
+    .catch(() => {});
+
+  const statsPromise = useAuthFetch<UserStats>('/api/user/stats')
+    .then(d => (stats.value = d))
+    .catch(() => {});
+
+  await Promise.all([historyPromise, statsPromise]);
+  loading.value = false;
 });
 </script>
 
@@ -219,6 +218,13 @@ onMounted(async () => {
     border-radius: 0.75rem;
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid rgba($border-base, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: rgba($accent, 0.3);
+      background: rgba(30, 41, 59, 0.7);
+    }
   }
 
   &__score {

@@ -28,7 +28,7 @@ interface QuizResult {
   records: AnswerRecord[];
 }
 
-export type { OptionDTO, QuestionDTO };
+export type { OptionDTO, QuestionDTO, AnswerRecord };
 
 export const useQuiz = () => {
   const questions = ref<QuestionDTO[]>([]);
@@ -66,13 +66,11 @@ export const useQuiz = () => {
     currentIndex.value++;
   };
 
-  const getResult = (): QuizResult => {
-    return {
-      score: score.value,
-      totalQuestions: questions.value.length,
-      records: answers.value,
-    };
-  };
+  const getResult = (): QuizResult => ({
+    score: score.value,
+    totalQuestions: questions.value.length,
+    records: answers.value,
+  });
 
   const resetQuiz = () => {
     questions.value = [];
@@ -84,7 +82,6 @@ export const useQuiz = () => {
 
   // ── G-5-7：作答紀錄提交 + localStorage 暫存 ──
 
-  /** 暫存目前的作答進度到 localStorage（每答一題呼叫一次） */
   const saveProgress = () => {
     localStorage.setItem(
       'quiz_progress',
@@ -96,7 +93,6 @@ export const useQuiz = () => {
     );
   };
 
-  /** 答完 10 題後，登入使用者才提交作答紀錄到後端 */
   const submitResults = async () => {
     const auth = useAuthStore();
     if (!auth.isLoggedIn) return;

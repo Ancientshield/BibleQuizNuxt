@@ -27,9 +27,15 @@
         <span>{{ text }}</span>
       </div>
 
-      <!-- 右側：答題結果圖示（僅作答後顯示） -->
+      <!-- 右側：投票百分比 or 答題結果圖示 -->
+      <span
+        v-if="pollPercentage != null && state === 'default'"
+        class="option-btn__poll"
+      >
+        {{ pollPercentage }}%
+      </span>
       <AtomResultIcon
-        v-if="state === 'correct'"
+        v-else-if="state === 'correct'"
         type="correct"
       />
       <AtomResultIcon
@@ -44,12 +50,16 @@
 // 匯出型別，供 quiz.vue 等外部元件使用
 export type OptionState = 'default' | 'correct' | 'wrong' | 'disabled';
 
-const props = defineProps<{
-  label: string; // 選項代號："A" | "B" | "C" | "D"
-  text: string; // 選項文字內容
-  state: OptionState; // 視覺狀態，由父層根據答題結果決定
-  disabled: boolean; // 答題後鎖定，防止重複點擊
-}>();
+const props = withDefaults(
+  defineProps<{
+    label: string;
+    text: string;
+    state: OptionState;
+    disabled: boolean;
+    pollPercentage?: number | null;
+  }>(),
+  { pollPercentage: null }
+);
 
 interface Emits {
   select: [label: string, event: MouseEvent]; // 點擊事件，傳回選項代號
@@ -184,6 +194,13 @@ const handleClick = (e: MouseEvent) => {
     @media (min-width: 768px) {
       gap: 1rem;
     }
+  }
+
+  &__poll {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $accent;
+    white-space: nowrap;
   }
 
   &__ripple {

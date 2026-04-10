@@ -46,10 +46,14 @@
         <!-- 已登入 -->
         <div
           v-else-if="auth.isLoggedIn"
+          ref="userMenuRef"
           class="navbar__user"
         >
           <span class="navbar__user-name">{{ auth.user?.name || auth.user?.email }}</span>
-          <div class="navbar__avatar">
+          <button
+            class="navbar__avatar"
+            @click="userMenuOpen = !userMenuOpen"
+          >
             <img
               v-if="auth.user?.avatarUrl"
               :src="auth.user.avatarUrl"
@@ -63,7 +67,26 @@
             >
               {{ auth.avatarLetter }}
             </span>
-          </div>
+          </button>
+
+          <!-- 頭像下拉 -->
+          <Transition name="menu">
+            <div
+              v-if="userMenuOpen"
+              class="navbar__user-dropdown"
+            >
+              <button
+                class="navbar__user-dropdown-item navbar__user-dropdown-item--danger"
+                @click="handleLogout"
+              >
+                <Icon
+                  name="lucide:log-out"
+                  class="navbar__user-dropdown-icon"
+                />
+                登出
+              </button>
+            </div>
+          </Transition>
         </div>
       </div>
     </header>
@@ -74,70 +97,54 @@
         v-if="menuOpen"
         class="navbar-menu"
       >
-        <NuxtLink
-          to="/"
+        <button
           class="navbar-menu__item"
-          @click="menuOpen = false"
+          @click="goTo('/')"
         >
           <Icon
             name="lucide:home"
             class="navbar-menu__icon"
           />
           首頁
-        </NuxtLink>
+        </button>
 
         <template v-if="auth.isLoggedIn">
-          <NuxtLink
-            to="/questions/submissions"
+          <button
             class="navbar-menu__item"
-            @click="menuOpen = false"
+            @click="goTo('/questions/submissions')"
           >
             <Icon
               name="lucide:file-text"
               class="navbar-menu__icon"
             />
             我要投稿
-          </NuxtLink>
+          </button>
 
-          <NuxtLink
-            to="/my-history"
+          <button
             class="navbar-menu__item"
-            @click="menuOpen = false"
+            @click="goTo('/my-history')"
           >
             <Icon
               name="lucide:history"
               class="navbar-menu__icon"
             />
             我的紀錄
-          </NuxtLink>
+          </button>
         </template>
 
         <template v-if="auth.isAdmin">
           <div class="navbar-menu__divider" />
-          <NuxtLink
-            to="/admin"
+          <button
             class="navbar-menu__item"
-            @click="menuOpen = false"
+            @click="goTo('/admin/questions')"
           >
             <Icon
-              name="lucide:shield"
+              name="lucide:database"
               class="navbar-menu__icon"
             />
-            管理後台
-          </NuxtLink>
+            進階管理
+          </button>
         </template>
-
-        <button
-          v-if="auth.isLoggedIn"
-          class="navbar-menu__item navbar-menu__item--danger"
-          @click="handleLogout"
-        >
-          <Icon
-            name="lucide:log-out"
-            class="navbar-menu__icon"
-          />
-          登出
-        </button>
       </nav>
     </Transition>
 
@@ -158,6 +165,8 @@ const route = useRoute();
 
 const isLoginPage = computed(() => route.path === '/login');
 const menuOpen = ref(false);
+const userMenuOpen = ref(false);
+const userMenuRef = ref<HTMLDivElement | null>(null);
 const isScrolled = ref(false);
 
 // 路由切換時自動關閉選單
@@ -165,19 +174,37 @@ watch(
   () => route.path,
   () => {
     menuOpen.value = false;
+    userMenuOpen.value = false;
   }
 );
+
+// 點外面關閉頭像下拉
+const onClickOutsideUser = (e: MouseEvent) => {
+  if (userMenuRef.value && !userMenuRef.value.contains(e.target as Node)) {
+    userMenuOpen.value = false;
+  }
+};
 
 onMounted(() => {
   const onScroll = () => {
     isScrolled.value = window.scrollY > 20;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
-  onUnmounted(() => window.removeEventListener('scroll', onScroll));
+  document.addEventListener('click', onClickOutsideUser);
+  onUnmounted(() => {
+    window.removeEventListener('scroll', onScroll);
+    document.removeEventListener('click', onClickOutsideUser);
+  });
 });
+
+const goTo = (path: string) => {
+  menuOpen.value = false;
+  navigateTo(path);
+};
 
 const handleLogout = () => {
   menuOpen.value = false;
+  userMenuOpen.value = false;
   auth.logout();
   navigateTo('/', { replace: true });
 };
@@ -297,6 +324,11 @@ const handleLogout = () => {
     }
   }
 
+  // ── 已登入使用者（相對定位，讓下拉對齊） ──
+  &__user {
+    position: relative;
+  }
+
   // ── 頭像 ──
   &__avatar {
     width: 2.5rem;
@@ -310,6 +342,53 @@ const handleLogout = () => {
     justify-content: center;
     background: linear-gradient(to bottom right, $gradient-start, $gradient-end);
     flex-shrink: 0;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      box-shadow: 0 0 18px rgba($accent, 0.3);
+    }
+  }
+
+  // ── 頭像下拉選單 ──
+  &__user-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 7rem;
+    padding: 0.375rem;
+    background: rgba($bg-dark, 0.95);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba($border-base, 0.5);
+    border-radius: 0.625rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  &__user-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    background: none;
+    border: none;
+    color: $text-primary;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &--danger:hover {
+      background: rgba($danger, 0.1);
+      color: $danger-light;
+    }
+  }
+
+  &__user-dropdown-icon {
+    width: 1rem;
+    height: 1rem;
   }
 
   &__avatar-img {
