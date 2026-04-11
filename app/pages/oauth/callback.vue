@@ -10,14 +10,20 @@
  * OAuth callback 頁面
  *
  * 後端 OAuth2SuccessHandler 登入成功後 redirect 到：
- * http://localhost:3000/oauth/callback?token=eyJhbG...
+ * https://biblequiz.cc/oauth/callback/?token=eyJhbG...
  *
  * 這個頁面做四件事：
  * 1. 從 URL query string 取出 token
  * 2. 呼叫 /api/auth/profile 取得使用者資訊（含 avatarUrl）
  * 3. 存到 Pinia auth store（內部同步寫入 localStorage）
  * 4. 跳轉到首頁
+ *
+ * 強制 client-only：OAuth callback 本質上就是 client-side 的一次性跳板，
+ * SSG 預渲染會因 path 正規化差異（/oauth/callback vs /oauth/callback/）
+ * 導致 hydration mismatch，讓 onMounted 不觸發 → 頁面卡在「登入中」。
  */
+definePageMeta({ ssr: false });
+
 const { fetchProfile } = useAuthApi();
 const route = useRoute();
 const auth = useAuthStore();
