@@ -75,7 +75,8 @@ export const useAdminQuestionApi = () => {
   const remove = (id: number) => useAuthFetch(`/api/admin/questions/${id}`, { method: 'DELETE' });
 
   // ── 取得分類清單（給下拉選單用） ──
-  const getCategories = () => useAuthFetch<AdminCategory[]>('/api/admin/questions/categories');
+  // 分類 CRUD 端點移到 /api/admin/categories（見 AdminCategoryController）
+  const getCategories = () => useAuthFetch<AdminCategory[]>('/api/admin/categories');
 
   // ── 取得聖經書卷清單（66 卷，給核准 / 編輯時選書卷用） ──
   const getBibleBooks = () => useAuthFetch<AdminBibleBook[]>('/api/admin/questions/bible-books');
