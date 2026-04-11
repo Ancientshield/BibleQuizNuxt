@@ -88,7 +88,10 @@
             <span class="history__score-total">/{{ r.totalQuestions }}</span>
           </div>
           <div class="history__info">
-            <div class="history__date">{{ formatDate(r.completedAt) }}</div>
+            <div class="history__date">
+              <span class="history__hint">點擊查看紀錄</span>
+              <span>{{ formatDate(r.completedAt) }}</span>
+            </div>
             <div class="history__bar-wrapper">
               <div
                 class="history__bar"
@@ -271,9 +274,17 @@ onMounted(async () => {
   }
 
   &__date {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
     font-size: 1rem;
     color: $text-muted;
     margin-bottom: 0.375rem;
+  }
+
+  &__hint {
+    font-size: 1rem;
+    color: $text-dim;
   }
 
   &__bar-wrapper {
