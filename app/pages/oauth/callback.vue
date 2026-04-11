@@ -1,5 +1,12 @@
 <template>
   <ClientOnly>
+    <template #fallback>
+      <!-- prerender 時顯示的 fallback，DOM 結構必須跟主內容一致才能 hydration 對齊 -->
+      <div class="oauth-callback">
+        <div class="oauth-callback__spinner" />
+        <p class="oauth-callback__text">登入中</p>
+      </div>
+    </template>
     <div class="oauth-callback">
       <div class="oauth-callback__spinner" />
       <p class="oauth-callback__text">登入中</p>
