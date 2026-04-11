@@ -9,16 +9,14 @@
           />
           我要投稿
         </h1>
-        <button
-          class="main__action-btn"
+        <AtomButton
+          variant="primary"
+          size="button-l"
           @click="navigateTo('/questions/create')"
         >
-          <Icon
-            name="lucide:plus"
-            class="main__action-icon"
-          />
+          <Icon name="lucide:plus" />
           投稿新題目
-        </button>
+        </AtomButton>
       </div>
 
       <!-- Loading -->
@@ -39,12 +37,13 @@
           class="mine__empty-icon"
         />
         <p>還沒有投稿過題目</p>
-        <button
-          class="mine__empty-btn"
+        <AtomButton
+          variant="primary"
+          size="button-l"
           @click="navigateTo('/questions/create')"
         >
           投稿第一題
-        </button>
+        </AtomButton>
       </div>
 
       <!-- 題目列表 -->
@@ -72,20 +71,24 @@
               v-if="q.status === 'PENDING' || q.status === 'REJECTED'"
               class="mine__actions"
             >
-              <button
-                class="mine__edit-btn"
+              <AtomButton
+                variant="primary"
+                appearance="outline-view"
+                size="button-s"
                 @click="navigateTo(`/questions/${q.id}`)"
               >
                 <Icon name="lucide:pencil" />
                 編輯
-              </button>
-              <button
-                class="mine__delete-btn"
+              </AtomButton>
+              <AtomButton
+                variant="danger"
+                appearance="outline-view"
+                size="button-s"
                 @click="handleDelete(q.id)"
               >
                 <Icon name="lucide:trash-2" />
                 刪除
-              </button>
+              </AtomButton>
             </div>
           </div>
         </div>
@@ -159,22 +162,6 @@ onMounted(fetchQuestions);
     width: 3rem;
     height: 3rem;
     color: #475569;
-  }
-
-  &__empty-btn {
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.625rem;
-    background: linear-gradient(to right, $gradient-start, $gradient-end);
-    color: white;
-    font-weight: 600;
-    font-size: 0.875rem;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.2s;
-
-    &:hover {
-      opacity: 0.9;
-    }
   }
 
   // ── 題目列表 ──
@@ -252,43 +239,6 @@ onMounted(fetchQuestions);
   &__actions {
     display: flex;
     gap: 0.5rem;
-  }
-
-  &__edit-btn,
-  &__delete-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.625rem;
-    border-radius: 0.375rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-
-    svg {
-      width: 0.75rem;
-      height: 0.75rem;
-    }
-  }
-
-  &__edit-btn {
-    background: rgba($accent, 0.1);
-    color: $accent;
-
-    &:hover {
-      background: rgba($accent, 0.2);
-    }
-  }
-
-  &__delete-btn {
-    background: rgba($danger, 0.1);
-    color: $danger-light;
-
-    &:hover {
-      background: rgba($danger, 0.2);
-    }
   }
 }
 </style>

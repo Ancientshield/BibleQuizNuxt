@@ -10,29 +10,11 @@
       </h1>
 
       <!-- ══ Tab 切換 ══ -->
-      <div class="aq__tabs">
-        <button
-          :class="['aq__tab', { 'aq__tab--active': activeTab === 'manage' }]"
-          @click="switchTab('manage')"
-        >
-          <Icon name="lucide:list" />
-          題目管理
-        </button>
-        <button
-          :class="['aq__tab', { 'aq__tab--active': activeTab === 'stats' }]"
-          @click="switchTab('stats')"
-        >
-          <Icon name="lucide:bar-chart-3" />
-          題目統計
-        </button>
-        <button
-          :class="['aq__tab', { 'aq__tab--active': activeTab === 'options' }]"
-          @click="switchTab('options')"
-        >
-          <Icon name="lucide:list" />
-          選項統計
-        </button>
-      </div>
+      <MoleculeTabs
+        :model-value="activeTab"
+        :items="tabItems"
+        @update:model-value="switchTab"
+      />
 
       <!-- ══ 篩選列 ══ -->
       <OrganismFilterBar
@@ -628,13 +610,22 @@ const VERSE_OPTIONS = Array.from({ length: 176 }, (_, i) => i + 1);
 
 // ── Tab ──
 
-const activeTab = ref<'manage' | 'stats' | 'options'>('manage');
+type TabKey = 'manage' | 'stats' | 'options';
+
+const activeTab = ref<TabKey>('manage');
 const sortField = ref<'totalAnswered' | 'accuracyRate' | ''>('');
 const sortDir = ref<'asc' | 'desc'>('desc');
 
-const switchTab = (tab: 'manage' | 'stats' | 'options') => {
-  if (activeTab.value === tab) return;
-  activeTab.value = tab;
+const tabItems = [
+  { value: 'manage', label: '題目管理', icon: 'lucide:list' },
+  { value: 'stats', label: '題目統計', icon: 'lucide:bar-chart-3' },
+  { value: 'options', label: '選項統計', icon: 'lucide:list' },
+];
+
+const switchTab = (tab: string) => {
+  const next = tab as TabKey;
+  if (activeTab.value === next) return;
+  activeTab.value = next;
   currentPage.value = 1;
   sortField.value = '';
   fetchQuestions();
@@ -986,42 +977,6 @@ onMounted(async () => {
   }
 
   // ── Tab 切換 ──
-  &__tabs {
-    display: flex;
-    gap: 0.25rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 1px solid rgba($border-base, 0.5);
-  }
-
-  &__tab {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.625rem 1rem;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: $text-muted;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      color: $text-bright;
-    }
-
-    &--active {
-      color: $accent;
-      border-bottom-color: $accent;
-    }
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
-
   // ── 空狀態 ──
   &__empty {
     text-align: center;

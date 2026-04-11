@@ -63,12 +63,13 @@
           class="history__empty-icon"
         />
         <p>還沒有遊戲紀錄</p>
-        <button
-          class="history__empty-btn"
+        <AtomButton
+          variant="primary"
+          size="button-l"
           @click="navigateTo('/start')"
         >
           開始挑戰
-        </button>
+        </AtomButton>
       </div>
 
       <!-- 歷史列表 -->
@@ -76,11 +77,11 @@
         v-else
         class="history__list"
       >
-        <div
+        <NuxtLink
           v-for="r in history"
           :key="r.roundId"
+          :to="`/my-history/${r.roundId}`"
           class="history__card"
-          @click="navigateTo(`/my-history/${r.roundId}`)"
         >
           <div class="history__score">
             <span class="history__score-num">{{ r.score }}</span>
@@ -95,7 +96,7 @@
               />
             </div>
           </div>
-        </div>
+        </NuxtLink>
       </div>
     </div>
   </main>
@@ -220,21 +221,6 @@ onMounted(async () => {
     color: #475569;
   }
 
-  &__empty-btn {
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.625rem;
-    background: linear-gradient(to right, $gradient-start, $gradient-end);
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
-
   // ── 歷史列表 ──
   &__list {
     display: flex;
@@ -252,6 +238,9 @@ onMounted(async () => {
     border: 1px solid rgba($border-base, 0.5);
     cursor: pointer;
     transition: all 0.2s;
+    // NuxtLink 渲染成 <a>，清掉預設底線與顏色
+    text-decoration: none;
+    color: inherit;
 
     &:hover {
       border-color: rgba($accent, 0.3);

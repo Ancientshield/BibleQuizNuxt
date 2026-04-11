@@ -18,13 +18,14 @@
           <span class="review__score">{{ detail.score }}/{{ detail.totalQuestions }}</span>
           <span class="review__date">{{ formatDate(detail.completedAt) }}</span>
         </div>
-        <button
-          class="review__back"
+        <AtomButton
+          variant="primary"
+          appearance="outline-view"
           @click="navigateTo('/my-history')"
         >
           <Icon name="lucide:arrow-left" />
           返回我的紀錄
-        </button>
+        </AtomButton>
       </div>
 
       <!-- Loading -->
@@ -168,33 +169,6 @@ onMounted(async () => {
     display: flex;
     align-items: baseline;
     gap: 1rem;
-  }
-
-  &__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    background: rgba($bg-dark, 0.85);
-    border: 1px solid rgba($accent, 0.3);
-    color: $accent;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-
-    svg {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    &:hover {
-      background: rgba($accent, 0.15);
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 4px 24px rgba($accent, 0.2);
-    }
   }
 
   &__score {

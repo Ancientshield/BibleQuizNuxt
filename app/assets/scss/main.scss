@@ -62,37 +62,6 @@
     }
   }
 
-  // ── 操作按鈕 ──
-  &__action-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.625rem;
-    background: linear-gradient(to right, $gradient-start, $gradient-end);
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-
-    &:hover {
-      opacity: 0.9;
-      transform: scale(1.02);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
-
-  &__action-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
   // ── Loading ──
   &__loading {
     text-align: center;
