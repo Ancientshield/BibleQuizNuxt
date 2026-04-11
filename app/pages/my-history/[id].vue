@@ -85,13 +85,12 @@
           </div>
 
           <!-- 經文出處（答錯才顯示） -->
-          <p
+          <AtomBibleRefPill
             v-if="!a.correct && a.bibleRef"
+            :text="a.bibleRef"
+            shape="card"
             class="review__ref"
-          >
-            <Icon name="lucide:book-open" />
-            {{ a.bibleRef }}
-          </p>
+          />
         </div>
       </div>
     </div>
@@ -309,24 +308,9 @@ onMounted(async () => {
     }
   }
 
-  // ── 經文出處 ──
+  // ── 經文出處定位 ──
   &__ref {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     margin-top: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    background: rgba(251, 191, 36, 0.08);
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    color: #fbbf24;
-    font-size: 1rem;
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-      flex-shrink: 0;
-    }
   }
 
   // ── 回到頂部 ──

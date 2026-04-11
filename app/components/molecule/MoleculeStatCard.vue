@@ -1,3 +1,10 @@
+<!--
+  MoleculeStatCard — 統計數字卡片（大數字 + 小標籤）。
+
+  使用場景：首頁統計預覽、my-history 總覽。
+  - size: md（首頁）/ lg（my-history，數字更大、padding 更大）
+  - color: cyan / amber / purple 三色，對應不同語意（cyan 主色、amber 金幣/成就、purple 強調）
+-->
 <template>
   <div
     class="stat-card"

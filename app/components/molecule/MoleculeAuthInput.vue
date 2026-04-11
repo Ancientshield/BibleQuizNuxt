@@ -1,3 +1,14 @@
+<!--
+  MoleculeAuthInput — 帶 icon 和光暈 focus 效果的 input。
+
+  主要用於 auth 頁面（login / forgot-password / reset-password）的表單欄位。
+  - icon: 左側的 lucide icon（mail / lock 等）
+  - toggleable: 密碼欄位專用，會顯示右側的眼睛圖示切換 show/hide
+  - hint: 欄位下方的灰色提示文字（例如「密碼至少 8 個字元」）
+
+  為什麼要自管 `focused` 和 `showPassword`：
+  這兩個純 UI 狀態不需要讓外部知道，外部只關心 v-model 的值。
+-->
 <template>
   <div class="auth-input">
     <div

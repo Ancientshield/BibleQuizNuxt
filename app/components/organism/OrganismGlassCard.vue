@@ -1,11 +1,29 @@
+<!--
+  OrganismGlassCard — 玻璃擬態全頁卡片。
+
+  用於首頁和 auth 頁面（login / forgot-password / reset-password）。
+  結構：全頁漸層背景 + 可選浮動粒子 + 置中玻璃卡片（含 icon + 標題 + 副標題 + 主內容 slot）。
+
+  - size: md（auth 頁面，28rem 寬，icon 4rem）/ lg（首頁，32rem 寬，icon 5rem，字更大）
+  - showParticles: 只有首頁 + 登入頁打開，其他 auth 頁面關掉避免太花
+
+  slot 配置：
+  - default: 主內容（表單、統計卡、按鈕等）
+  - subtitle: 可取代純文字副標題（例如登入頁的「已有帳號？登入」帶超連結）
+  - success: 可取代純文字成功訊息（例如 reset-password 成功後的「前往登入」連結）
+  - footer: 卡片外底部（條款文字、返回連結）
+
+  為什麼 auth 頁面也用 md 而不是寫死：
+  雖然目前只有首頁是 lg，但未來可能有「關於」「排行榜」等頁面也要 lg 尺寸，
+  保留 size prop 比未來再加回來容易。
+-->
 <template>
   <main
     class="glass-card"
     :class="[`glass-card--${size}`]"
   >
     <!-- 動態漸層背景 -->
-    <div class="glass-card__bg glass-card__bg--gradient" />
-    <div class="glass-card__bg glass-card__bg--radial" />
+    <AtomGradientBackground />
 
     <!-- 浮動粒子 -->
     <div
@@ -126,22 +144,6 @@ const getParticleStyle = (i: number) => {
   width: 100%;
   overflow: hidden;
   background: $bg-page;
-
-  // ── 背景層 ──
-  &__bg {
-    position: absolute;
-    inset: 0;
-
-    &--gradient {
-      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
-      background-size: 200% 200%;
-      animation: gradient-shift 15s ease infinite;
-    }
-
-    &--radial {
-      background: radial-gradient(ellipse at top, rgba(107, 33, 168, 0.2), transparent, transparent);
-    }
-  }
 
   // ── 浮動粒子 ──
   &__particles {

@@ -1,8 +1,7 @@
 <template>
   <main class="quiz-page">
     <!-- 動態漸層背景 -->
-    <div class="quiz-page__bg quiz-page__bg--gradient" />
-    <div class="quiz-page__bg quiz-page__bg--radial" />
+    <AtomGradientBackground />
 
     <!-- 主內容區 -->
     <div class="quiz-page__content">
@@ -23,13 +22,11 @@
 
           <!-- 經文提示（grid 同層，不影響題目位置） -->
           <Transition name="hint">
-            <p
+            <AtomBibleRefPill
               v-if="hintVisible && currentQuestion.bibleRef"
+              :text="currentQuestion.bibleRef"
               class="quiz-page__hint"
-            >
-              <Icon name="lucide:book-open" />
-              {{ currentQuestion.bibleRef }}
-            </p>
+            />
           </Transition>
         </section>
 
@@ -38,42 +35,33 @@
           class="quiz-page__items"
           :class="{ 'quiz-page__items--transitioning': isTransitioning }"
         >
-          <button
-            :class="[
-              'quiz-page__item quiz-page__item--fifty',
-              { 'quiz-page__item--used': used.eliminate, 'quiz-page__item--burst': justUsed.eliminate },
-            ]"
-            :disabled="used.eliminate || answered"
-            @click="handleUseItem('eliminate')"
-          >
-            <span class="quiz-page__item-glow" />
-            <Icon name="lucide:scissors" />
-            <span class="quiz-page__item-label">刪去法</span>
-          </button>
-          <button
-            :class="[
-              'quiz-page__item quiz-page__item--scripture',
-              { 'quiz-page__item--used': used.scriptureHint, 'quiz-page__item--burst': justUsed.scriptureHint },
-            ]"
-            :disabled="used.scriptureHint || answered"
-            @click="handleUseItem('scriptureHint')"
-          >
-            <span class="quiz-page__item-glow" />
-            <Icon name="lucide:book-open" />
-            <span class="quiz-page__item-label">經文提示</span>
-          </button>
-          <button
-            :class="[
-              'quiz-page__item quiz-page__item--poll',
-              { 'quiz-page__item--used': used.audiencePoll, 'quiz-page__item--burst': justUsed.audiencePoll },
-            ]"
-            :disabled="used.audiencePoll || answered"
-            @click="handleUseItem('audiencePoll')"
-          >
-            <span class="quiz-page__item-glow" />
-            <Icon name="lucide:bar-chart-2" />
-            <span class="quiz-page__item-label">歷史投票</span>
-          </button>
+          <MoleculeQuizItem
+            icon="lucide:scissors"
+            label="刪去法"
+            color="red"
+            :used="used.eliminate"
+            :burst="justUsed.eliminate"
+            :disabled="answered"
+            @use="handleUseItem('eliminate')"
+          />
+          <MoleculeQuizItem
+            icon="lucide:book-open"
+            label="經文提示"
+            color="amber"
+            :used="used.scriptureHint"
+            :burst="justUsed.scriptureHint"
+            :disabled="answered"
+            @use="handleUseItem('scriptureHint')"
+          />
+          <MoleculeQuizItem
+            icon="lucide:bar-chart-2"
+            label="歷史投票"
+            color="cyan"
+            :used="used.audiencePoll"
+            :burst="justUsed.audiencePoll"
+            :disabled="answered"
+            @use="handleUseItem('audiencePoll')"
+          />
         </div>
 
         <!-- 選項區 -->
@@ -250,21 +238,6 @@ onMounted(async () => {
   background: $bg-page;
   padding-top: $navbar-height;
 
-  &__bg {
-    position: absolute;
-    inset: 0;
-
-    &--gradient {
-      background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
-      background-size: 200% 200%;
-      animation: gradient-shift 15s ease infinite;
-    }
-
-    &--radial {
-      background: radial-gradient(ellipse at top, rgba(107, 33, 168, 0.2), transparent, transparent);
-    }
-  }
-
   &__content {
     position: relative;
     z-index: 10;
@@ -302,27 +275,10 @@ onMounted(async () => {
     }
   }
 
-  // ── 經文提示（grid 第 3 行，間隙正中間） ──
+  // ── 經文提示定位（grid 第 3 行，間隙正中間） ──
   &__hint {
     grid-row: 3;
     place-self: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
-    background: rgba(251, 191, 36, 0.1);
-    border: 1px solid rgba(251, 191, 36, 0.3);
-    color: #fbbf24;
-    font-size: 1rem;
-    white-space: nowrap;
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-      flex-shrink: 0;
-    }
   }
 
   // ── 道具列 ──
@@ -335,140 +291,6 @@ onMounted(async () => {
 
     &--transitioning {
       opacity: 0;
-    }
-  }
-
-  &__item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1.5px solid;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    overflow: hidden;
-
-    svg {
-      width: 1.5rem;
-      height: 1.5rem;
-      filter: drop-shadow(0 0 4px currentColor);
-      transition: all 0.25s;
-    }
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-
-      svg {
-        transform: scale(1.15);
-        filter: drop-shadow(0 0 8px currentColor);
-      }
-    }
-
-    &:active:not(:disabled) {
-      transform: scale(0.92);
-    }
-
-    // ── 呼吸光暈底層 ──
-    &-glow {
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-
-    &:not(:disabled) &-glow {
-      opacity: 1;
-      animation: item-breathe 2.5s ease-in-out infinite;
-    }
-
-    // ── 道具名稱 ──
-    &-label {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    // ── 50/50：火紅色系 ──
-    &--fifty {
-      border-color: rgba(#f43f5e, 0.4);
-      color: #fb7185;
-
-      .quiz-page__item-glow {
-        background: radial-gradient(ellipse at center, rgba(#f43f5e, 0.15), transparent 70%);
-      }
-
-      &:hover:not(:disabled) {
-        border-color: rgba(#f43f5e, 0.6);
-        box-shadow:
-          0 0 20px rgba(#f43f5e, 0.2),
-          inset 0 0 12px rgba(#f43f5e, 0.06);
-      }
-    }
-
-    // ── 經文：金黃色系 ──
-    &--scripture {
-      border-color: rgba(#fbbf24, 0.4);
-      color: #fbbf24;
-
-      .quiz-page__item-glow {
-        background: radial-gradient(ellipse at center, rgba(#fbbf24, 0.12), transparent 70%);
-      }
-
-      &:hover:not(:disabled) {
-        border-color: rgba(#fbbf24, 0.6);
-        box-shadow:
-          0 0 20px rgba(#fbbf24, 0.2),
-          inset 0 0 12px rgba(#fbbf24, 0.06);
-      }
-    }
-
-    // ── 投票：青藍色系 ──
-    &--poll {
-      border-color: rgba(#22d3ee, 0.4);
-      color: #22d3ee;
-
-      .quiz-page__item-glow {
-        background: radial-gradient(ellipse at center, rgba(#22d3ee, 0.15), transparent 70%);
-      }
-
-      &:hover:not(:disabled) {
-        border-color: rgba(#22d3ee, 0.6);
-        box-shadow:
-          0 0 20px rgba(#22d3ee, 0.2),
-          inset 0 0 12px rgba(#22d3ee, 0.06);
-      }
-    }
-
-    // ── 使用瞬間爆發動畫 ──
-    &--burst {
-      animation: item-burst 0.6s ease-out;
-    }
-
-    // ── 已使用：灰化 + 刪除線 ──
-    &--used {
-      border-color: rgba($border-base, 0.2) !important;
-      color: rgba($text-muted, 0.3) !important;
-      background: rgba(15, 23, 42, 0.4);
-      box-shadow: none !important;
-
-      svg {
-        filter: none;
-      }
-
-      .quiz-page__item-label {
-        text-decoration: line-through;
-      }
-    }
-
-    &:disabled {
-      cursor: not-allowed;
     }
   }
 
@@ -503,7 +325,7 @@ onMounted(async () => {
   }
 }
 
-// ── Transitions ──
+// ── 經文提示進出動畫 ──
 .hint-enter-active,
 .hint-leave-active {
   transition: all 0.3s ease;
@@ -513,42 +335,5 @@ onMounted(async () => {
 .hint-leave-to {
   opacity: 0;
   transform: translateY(0.5rem);
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-// 道具呼吸光暈
-@keyframes item-breathe {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-// 道具使用爆發
-@keyframes item-burst {
-  0% {
-    transform: scale(1);
-    filter: brightness(1);
-  }
-  30% {
-    transform: scale(1.15);
-    filter: brightness(1.6);
-  }
-  100% {
-    transform: scale(1);
-    filter: brightness(1);
-  }
 }
 </style>
