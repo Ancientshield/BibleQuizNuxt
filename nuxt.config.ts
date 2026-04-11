@@ -18,17 +18,6 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },
   },
-  // OAuth callback 是純 client-side 一次性跳板，不能讓 SSG 預渲染，
-  // 否則 /oauth/callback（無斜線 canonical）跟 /oauth/callback/（實際 URL）
-  // 會 hydration mismatch 讓 onMounted 不觸發，頁面卡在「登入中」。
-  //
-  // 用 glob `**` 而不是寫死 `/oauth/callback` —— Nitro 的 routeRules 不做
-  // trailing-slash 正規化，單寫 `/oauth/callback` 只匹配無斜線版本，
-  // 我們需要的是「這條路徑的所有變體都 client-only」。`**` 會同時吃到
-  // `/oauth/callback`、`/oauth/callback/` 跟任何未來可能的子路徑。
-  routeRules: {
-    '/oauth/callback/**': { prerender: false, ssr: false },
-  },
   nitro: {
     devProxy: {
       '/api/auth': {

@@ -1,8 +1,10 @@
 <template>
-  <div class="oauth-callback">
-    <div class="oauth-callback__spinner" />
-    <p class="oauth-callback__text">登入中</p>
-  </div>
+  <ClientOnly>
+    <div class="oauth-callback">
+      <div class="oauth-callback__spinner" />
+      <p class="oauth-callback__text">登入中</p>
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -18,11 +20,14 @@
  * 3. 存到 Pinia auth store（內部同步寫入 localStorage）
  * 4. 跳轉到首頁
  *
- * 強制 client-only：OAuth callback 本質上就是 client-side 的一次性跳板，
- * SSG 預渲染會因 path 正規化差異（/oauth/callback vs /oauth/callback/）
- * 導致 hydration mismatch，讓 onMounted 不觸發 → 頁面卡在「登入中」。
- * 由 nuxt.config.ts 的 routeRules 指定 prerender: false + ssr: false，
- * 這個 page 在 SSG build 時會被跳過，瀏覽器拿到 SPA fallback shell 後才 mount。
+ * 強制 client-only：用 <ClientOnly> 包住 template，讓整段內容只在瀏覽器
+ * 端 mount。之前試過 routeRules { prerender: false } 直接跳過 SSG 產生，
+ * 但 nuxt generate 模式不會為被跳過的 route 生成 SPA shell，nginx 的
+ * try_files fall through 到 / 的 index.html，瀏覽器拿到首頁 HTML 但 URL
+ * 還是 /oauth/callback/?token=...，Vue router 認為當前是 / 導致 callback
+ * 邏輯從未執行。<ClientOnly> 讓頁面正常 prerender 但 template 內容在
+ * build 時是空的 fallback，client side 才真正 mount — 沒有 hydration
+ * mismatch，onMounted 一定會跑。
  */
 
 const { fetchProfile } = useAuthApi();
