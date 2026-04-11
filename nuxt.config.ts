@@ -40,6 +40,14 @@ export default defineNuxtConfig({
         target: 'http://localhost:8080/api/user',
         changeOrigin: true,
       },
+      '/oauth2': {
+        target: 'http://localhost:8080/oauth2',
+        changeOrigin: true,
+      },
+      '/login/oauth2': {
+        target: 'http://localhost:8080/login/oauth2',
+        changeOrigin: true,
+      },
     },
   },
 });

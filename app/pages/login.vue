@@ -187,7 +187,7 @@ const socialProviders: SocialProvider[] = [
 
 const handleSocial = (provider: string) => {
   const registrationId = provider.toLowerCase();
-  window.location.href = `http://localhost:8080/oauth2/authorization/${registrationId}`;
+  window.location.href = `/oauth2/authorization/${registrationId}`;
 };
 
 // ── 忘記密碼 ──
