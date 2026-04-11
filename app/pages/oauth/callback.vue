@@ -1,64 +1,24 @@
 <template>
-  <ClientOnly>
-    <template #fallback>
-      <!-- prerender 時顯示的 fallback，DOM 結構必須跟主內容一致才能 hydration 對齊 -->
-      <div class="oauth-callback">
-        <div class="oauth-callback__spinner" />
-        <p class="oauth-callback__text">登入中</p>
-      </div>
-    </template>
-    <div class="oauth-callback">
-      <div class="oauth-callback__spinner" />
-      <p class="oauth-callback__text">登入中</p>
-    </div>
-  </ClientOnly>
+  <div class="oauth-callback">
+    <div class="oauth-callback__spinner" />
+    <p class="oauth-callback__text">登入中</p>
+  </div>
 </template>
 
 <script setup lang="ts">
 /**
  * OAuth callback 頁面
  *
- * 後端 OAuth2SuccessHandler 登入成功後 redirect 到：
- * https://biblequiz.cc/oauth/callback/?token=eyJhbG...
+ * 邏輯完全在 middleware/oauth-callback.global.ts 處理（見該檔頂部說明）。
+ * 這個 page 只留一個視覺 placeholder —— middleware 在 route navigation 的
+ * guard 階段就會攔截 token、setAuth、navigateTo('/')，瀏覽器根本不會看到
+ * 這個 page 真的 mount。
  *
- * 這個頁面做四件事：
- * 1. 從 URL query string 取出 token
- * 2. 呼叫 /api/auth/profile 取得使用者資訊（含 avatarUrl）
- * 3. 存到 Pinia auth store（內部同步寫入 localStorage）
- * 4. 跳轉到首頁
- *
- * 強制 client-only：用 <ClientOnly> 包住 template，讓整段內容只在瀏覽器
- * 端 mount。之前試過 routeRules { prerender: false } 直接跳過 SSG 產生，
- * 但 nuxt generate 模式不會為被跳過的 route 生成 SPA shell，nginx 的
- * try_files fall through 到 / 的 index.html，瀏覽器拿到首頁 HTML 但 URL
- * 還是 /oauth/callback/?token=...，Vue router 認為當前是 / 導致 callback
- * 邏輯從未執行。<ClientOnly> 讓頁面正常 prerender 但 template 內容在
- * build 時是空的 fallback，client side 才真正 mount — 沒有 hydration
- * mismatch，onMounted 一定會跑。
+ * 保留這個 page 的目的：Spring `OAuth2SuccessHandler` 還是 redirect 到
+ * `/oauth/callback/?token=...` 這個 URL，路由總得有東西匹配到它。真的不小心
+ * 落到這個 page（例如 token query 被過濾掉），使用者看到的是一個旋轉中的
+ * spinner 加「登入中」，middleware 再觸發 / 人工重試也都還 OK。
  */
-
-const { fetchProfile } = useAuthApi();
-const route = useRoute();
-const auth = useAuthStore();
-
-onMounted(async () => {
-  const token = route.query.token as string;
-
-  if (!token) {
-    navigateTo('/login', { replace: true });
-    return;
-  }
-
-  try {
-    const data = await fetchProfile(token);
-    auth.setAuth(token, data);
-  } catch {
-    // profile 取失敗仍存 token，首頁會顯示 fallback
-    auth.setAuth(token, { id: 0, email: '', name: null, role: 'USER', avatarUrl: null });
-  }
-
-  navigateTo('/', { replace: true });
-});
 </script>
 
 <style lang="scss" scoped>
