@@ -25,18 +25,24 @@
         v-if="stats"
         class="history__stats"
       >
-        <div class="history__stat-card">
-          <div class="history__stat-value history__stat-value--cyan">{{ stats.totalGames }}</div>
-          <div class="history__stat-label">遊戲次數</div>
-        </div>
-        <div class="history__stat-card">
-          <div class="history__stat-value history__stat-value--purple">{{ stats.averageScore }}</div>
-          <div class="history__stat-label">平均分數</div>
-        </div>
-        <div class="history__stat-card">
-          <div class="history__stat-value history__stat-value--amber">{{ stats.perfectGames }}</div>
-          <div class="history__stat-label">滿分次數</div>
-        </div>
+        <MoleculeStatCard
+          :value="stats.totalGames"
+          label="遊戲次數"
+          color="cyan"
+          size="lg"
+        />
+        <MoleculeStatCard
+          :value="stats.averageScore"
+          label="平均分數"
+          color="purple"
+          size="lg"
+        />
+        <MoleculeStatCard
+          :value="stats.perfectGames"
+          label="滿分次數"
+          color="amber"
+          size="lg"
+        />
       </div>
 
       <!-- Loading -->
@@ -186,7 +192,7 @@ onMounted(async () => {
     white-space: nowrap;
   }
 
-  // ── 統計卡片 ──
+  // ── 統計卡片 grid ──
   &__stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -196,37 +202,6 @@ onMounted(async () => {
     @media (max-width: 480px) {
       grid-template-columns: 1fr;
     }
-  }
-
-  &__stat-card {
-    padding: 1.25rem 1rem;
-    border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
-    text-align: center;
-  }
-
-  &__stat-value {
-    font-size: 2rem;
-    font-weight: 800;
-
-    &--cyan {
-      color: $accent;
-    }
-
-    &--purple {
-      color: #a855f7;
-    }
-
-    &--amber {
-      color: #fbbf24;
-    }
-  }
-
-  &__stat-label {
-    font-size: 1rem;
-    color: $text-muted;
-    margin-top: 0.25rem;
   }
 
   // ── 空狀態 ──
