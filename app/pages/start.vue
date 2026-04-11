@@ -112,6 +112,8 @@ const {
   checkAnswer,
   nextQuestion,
   saveProgress,
+  hasSavedProgress,
+  restoreProgress,
   submitResults,
 } = useQuiz();
 
@@ -160,6 +162,8 @@ const shuffleArray = <T,>(arr: T[]): T[] => {
 
 const options = ref<Array<{ label: string; optionId: number; text: string }>>([]);
 
+// 每切換一題就重新洗牌，避免正確答案固定在同一個位置被記憶作弊。
+// 用 watch 不用 computed：洗牌有副作用，computed 每次重算會讓選項位置一直跳動。
 watch(
   currentQuestion,
   q => {
@@ -173,7 +177,24 @@ watch(
 // 刪去法：不過濾，全部顯示（被消除的由 MoleculeOptionButton 反灰）
 const visibleOptions = computed(() => options.value);
 
-// 選項狀態
+/**
+ * 決定每個選項目前應該顯示什麼視覺狀態。
+ * template 會用回傳值做 class binding 切換 default / correct / wrong / disabled 四種樣式。
+ *
+ * 狀態邏輯：
+ *   default  — 還沒作答或找不到正確答案（初始狀態，玩家可以自由 hover / 點擊）
+ *   correct  — 答題後，這個選項是正確答案（綠底 + 打勾，無論玩家有沒有選中都會亮）
+ *   wrong    — 答題後，這個選項是玩家選的但答錯（紅底 + 叉叉）
+ *   disabled — 答題後的其他選項（沒選中也不是正解，變灰色）
+ *
+ * 為什麼要同時處理 correct 和 wrong：
+ *   答錯時要同時顯示「正確答案是哪個（綠）」和「你選錯的是哪個（紅）」，
+ *   讓玩家一眼看懂對錯和正解，這是學習體驗的重點。
+ *
+ * 為什麼檢查 correctOptionId 是 null：
+ *   理論上 checkAnswer 一定會回傳正解，但它的型別是 number | null（找不到題目時回 null），
+ *   這裡多一層防護，避免渲染時出現奇怪狀態。
+ */
 const getOptionState = (label: string): OptionState => {
   if (!answered.value || correctOptionId.value === null) return 'default';
   const opt = options.value.find(o => o.label === label);
@@ -183,21 +204,43 @@ const getOptionState = (label: string): OptionState => {
   return 'disabled';
 };
 
-// 選擇 → 驗答 → 展示 → 切題
+/**
+ * 選項被點擊後的完整流程：驗答 → 鎖定 UI → 展示對錯 → 淡出 → 切題 → 重置。
+ *
+ * 時間軸：
+ *   0ms    玩家點選項
+ *   0ms    本地驗答（checkAnswer 從 questions 找 correct 選項）
+ *   0ms    設定 answered=true 鎖住按鈕，答對/答錯顏色立刻顯示
+ *   0ms    寫入 localStorage（斷線也不會丟進度）
+ *   1200ms 進入 isTransitioning 狀態 → 題目卡和選項淡出移動
+ *   1200ms 把焦點從剛才的按鈕上移開（避免鍵盤焦點殘留）
+ *   1500ms 推進到下一題、清掉道具當題狀態、重置所有本題 UI 狀態
+ *
+ * 為什麼用兩層 setTimeout：
+ *   1200ms 讓玩家看清楚對錯反饋（太快切題會看不到正確答案）。
+ *   300ms 是淡出動畫的時間（跟 SCSS transition 0.3s 對齊）。
+ *
+ * 為什麼一進來就檢查 answered：防止使用者在展示期間快速再點別的選項。
+ */
 const handleSelect = (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
   const opt = options.value.find(o => o.label === label);
   if (!opt) return;
 
+  // 鎖定當題狀態：記錄選了哪個、標記已答、算出正確答案、存進度
   selectedOptionId.value = opt.optionId;
   answered.value = true;
   correctOptionId.value = checkAnswer(currentQuestion.value.id, opt.optionId);
   saveProgress();
 
+  // 1.2 秒展示對錯
   setTimeout(() => {
     isTransitioning.value = true;
+    // 移開焦點避免按鈕 focus ring 殘留到下一題
     (document.activeElement as HTMLElement)?.blur();
+
+    // 0.3 秒淡出動畫後才真的切題，等 DOM 更新完才重置 UI 狀態
     setTimeout(() => {
       nextQuestion();
       resetForNextQuestion();
@@ -220,8 +263,15 @@ const handleRestart = async () => {
   await fetchQuestions();
 };
 
-// 頁面載入
+// 頁面載入：先檢查有沒有中斷的進度，有就問使用者要繼續還是重新開始
 onMounted(async () => {
+  if (hasSavedProgress()) {
+    const shouldResume = window.confirm('發現未完成的測驗，要繼續上次的進度嗎？\n（取消會重新開始一局）');
+    if (shouldResume && restoreProgress()) {
+      return;
+    }
+  }
+
   await fetchQuestions();
   if (questions.value.length === 0) {
     navigateTo('/', { replace: true });

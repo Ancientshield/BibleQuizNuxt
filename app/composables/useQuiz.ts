@@ -116,11 +116,51 @@ export const useQuiz = () => {
     localStorage.setItem(
       'quiz_progress',
       JSON.stringify({
+        questions: questions.value,
         answers: answers.value,
         currentIndex: currentIndex.value,
         score: score.value,
       })
     );
+  };
+
+  /**
+   * 檢查 localStorage 有沒有未完成的進度，有就回傳 true 不做任何事。
+   *
+   * 不直接自動恢復，因為呼叫端要有機會提示使用者「要繼續還是重新開始」。
+   * 實際恢復用 restoreProgress()。
+   */
+  const hasSavedProgress = (): boolean => {
+    const raw = localStorage.getItem('quiz_progress');
+    if (!raw) return false;
+    try {
+      const data = JSON.parse(raw);
+      return Array.isArray(data.questions) && data.questions.length > 0 && data.currentIndex < data.questions.length;
+    } catch {
+      return false;
+    }
+  };
+
+  /**
+   * 從 localStorage 恢復進度到 reactive state。
+   *
+   * 為什麼不在 fetchQuestions 自動恢復：使用者可能答到一半離開想重來，
+   * 自動恢復會讓「重新開始」變得困難。start.vue 應該先問使用者。
+   */
+  const restoreProgress = (): boolean => {
+    const raw = localStorage.getItem('quiz_progress');
+    if (!raw) return false;
+    try {
+      const data = JSON.parse(raw);
+      if (!Array.isArray(data.questions) || data.questions.length === 0) return false;
+      questions.value = data.questions;
+      answers.value = data.answers ?? [];
+      currentIndex.value = data.currentIndex ?? 0;
+      score.value = data.score ?? 0;
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   /**
@@ -165,6 +205,8 @@ export const useQuiz = () => {
     getResult,
     resetQuiz,
     saveProgress,
+    hasSavedProgress,
+    restoreProgress,
     submitResults,
   };
 };
