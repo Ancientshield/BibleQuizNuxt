@@ -74,12 +74,33 @@ export const useAdminQuestionApi = () => {
   // admin 可以直接硬刪（連同關聯的 option、user_quiz_answer 一起）
   const remove = (id: number) => useAuthFetch(`/api/admin/questions/${id}`, { method: 'DELETE' });
 
-  // ── 取得分類清單（給下拉選單用） ──
-  // 分類 CRUD 端點移到 /api/admin/categories（見 AdminCategoryController）
+  // ── 分類 CRUD ──
+  // 全部端點都在 /api/admin/categories（見 AdminCategoryController）
+  // 只有管理者可以動，掛在 /api/admin/** 靠 SecurityConfig 擋成 ADMIN only
   const getCategories = () => useAuthFetch<AdminCategory[]>('/api/admin/categories');
+
+  const createCategory = (name: string) =>
+    useAuthFetch<AdminCategory>('/api/admin/categories', { method: 'POST', body: { name } });
+
+  const updateCategory = (id: number, name: string) =>
+    useAuthFetch<AdminCategory>(`/api/admin/categories/${id}`, { method: 'PATCH', body: { name } });
+
+  // 底下還有題目會 409 Conflict，由呼叫端接住錯誤訊息顯示給管理者
+  const deleteCategory = (id: number) => useAuthFetch(`/api/admin/categories/${id}`, { method: 'DELETE' });
 
   // ── 取得聖經書卷清單（66 卷，給核准 / 編輯時選書卷用） ──
   const getBibleBooks = () => useAuthFetch<AdminBibleBook[]>('/api/admin/questions/bible-books');
 
-  return { listQuestions, publish, reject, update, remove, getCategories, getBibleBooks };
+  return {
+    listQuestions,
+    publish,
+    reject,
+    update,
+    remove,
+    getCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getBibleBooks,
+  };
 };

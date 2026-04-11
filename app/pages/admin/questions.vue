@@ -215,303 +215,31 @@
       />
 
       <!-- ══ 核准 Modal ══ -->
-      <Teleport to="body">
-        <Transition name="modal">
-          <div
-            v-if="publishTarget"
-            class="aq__modal-overlay"
-            @click.self="publishTarget = null"
-          >
-            <div class="aq__modal">
-              <h2 class="aq__modal-title">核准上架</h2>
-              <p class="aq__modal-desc">指定分類和經文出處：</p>
-
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">分類</label>
-                <select
-                  v-model="publishForm.categoryId"
-                  class="aq__modal-select"
-                >
-                  <option
-                    :value="null"
-                    disabled
-                  >
-                    選擇分類
-                  </option>
-                  <option
-                    v-for="c in categories"
-                    :key="c.id"
-                    :value="c.id"
-                  >
-                    {{ c.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">書卷</label>
-                <select
-                  v-model="publishForm.bibleBookId"
-                  class="aq__modal-select"
-                >
-                  <option
-                    :value="null"
-                    disabled
-                  >
-                    選擇書卷
-                  </option>
-                  <option
-                    v-for="b in bibleBooks"
-                    :key="b.id"
-                    :value="b.id"
-                  >
-                    {{ b.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="aq__modal-row">
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">章</label>
-                  <select
-                    v-model.number="publishForm.bibleChapter"
-                    class="aq__modal-select"
-                    :disabled="!publishForm.bibleBookId"
-                  >
-                    <option
-                      :value="null"
-                      disabled
-                    >
-                      選擇章
-                    </option>
-                    <option
-                      v-for="ch in chapterOptions(publishForm.bibleBookId)"
-                      :key="ch"
-                      :value="ch"
-                    >
-                      {{ ch }}
-                    </option>
-                  </select>
-                </div>
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">起始節</label>
-                  <select
-                    v-model.number="publishForm.bibleVerseStart"
-                    class="aq__modal-select"
-                  >
-                    <option
-                      :value="null"
-                      disabled
-                    >
-                      節
-                    </option>
-                    <option
-                      v-for="v in VERSE_OPTIONS"
-                      :key="v"
-                      :value="v"
-                    >
-                      {{ v }}
-                    </option>
-                  </select>
-                </div>
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">結束節</label>
-                  <select
-                    v-model.number="publishForm.bibleVerseEnd"
-                    class="aq__modal-select"
-                  >
-                    <option :value="null">選填</option>
-                    <option
-                      v-for="v in VERSE_OPTIONS"
-                      :key="v"
-                      :value="v"
-                    >
-                      {{ v }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="aq__modal-actions">
-                <AtomButton
-                  appearance="outline-view"
-                  @click="publishTarget = null"
-                >
-                  取消
-                </AtomButton>
-                <AtomButton
-                  :disabled="publishLoading"
-                  @click="handlePublish"
-                >
-                  {{ publishLoading ? '處理中...' : '確認核准' }}
-                </AtomButton>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+      <OrganismPublishQuestionModal
+        :target="publishTarget"
+        :categories="categories"
+        :bible-books="bibleBooks"
+        @close="publishTarget = null"
+        @published="fetchQuestions"
+        @manage-categories="openCategoriesManager"
+      />
 
       <!-- ══ 編輯 Modal ══ -->
-      <Teleport to="body">
-        <Transition name="modal">
-          <div
-            v-if="editTarget"
-            class="aq__modal-overlay"
-            @click.self="editTarget = null"
-          >
-            <div class="aq__modal aq__modal--wide">
-              <h2 class="aq__modal-title">編輯題目 #{{ editTarget.id }}</h2>
+      <OrganismEditQuestionModal
+        :target="editTarget"
+        :categories="categories"
+        :bible-books="bibleBooks"
+        @close="editTarget = null"
+        @updated="fetchQuestions"
+        @manage-categories="openCategoriesManager"
+      />
 
-              <!-- 題目內容 -->
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">題目內容</label>
-                <textarea
-                  v-model="editForm.content"
-                  class="aq__modal-textarea"
-                  rows="3"
-                />
-              </div>
-
-              <!-- 選項 -->
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">選項（選一個正確答案）</label>
-                <div class="aq__edit-options">
-                  <div
-                    v-for="(opt, i) in editForm.options"
-                    :key="i"
-                    class="aq__edit-option"
-                  >
-                    <label class="aq__edit-radio-wrapper">
-                      <input
-                        type="radio"
-                        name="edit-correct"
-                        :value="i"
-                        :checked="editCorrectIndex === i"
-                        class="aq__edit-radio"
-                        @change="editCorrectIndex = i"
-                      />
-                      <span class="aq__edit-radio-dot" />
-                    </label>
-                    <input
-                      v-model="opt.content"
-                      class="aq__modal-input"
-                      :placeholder="`選項 ${String.fromCharCode(65 + i)}`"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <!-- 分類 -->
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">分類</label>
-                <select
-                  v-model="editForm.categoryId"
-                  class="aq__modal-select"
-                >
-                  <option :value="null">未指定</option>
-                  <option
-                    v-for="c in categories"
-                    :key="c.id"
-                    :value="c.id"
-                  >
-                    {{ c.name }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- 書卷 + 章節 -->
-              <div class="aq__modal-field">
-                <label class="aq__modal-label">書卷</label>
-                <select
-                  v-model="editForm.bibleBookId"
-                  class="aq__modal-select"
-                >
-                  <option :value="null">未指定</option>
-                  <option
-                    v-for="b in bibleBooks"
-                    :key="b.id"
-                    :value="b.id"
-                  >
-                    {{ b.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="aq__modal-row">
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">章</label>
-                  <select
-                    v-model.number="editForm.bibleChapter"
-                    class="aq__modal-select"
-                    :disabled="!editForm.bibleBookId"
-                  >
-                    <option
-                      :value="null"
-                      disabled
-                    >
-                      選擇章
-                    </option>
-                    <option
-                      v-for="ch in chapterOptions(editForm.bibleBookId)"
-                      :key="ch"
-                      :value="ch"
-                    >
-                      {{ ch }}
-                    </option>
-                  </select>
-                </div>
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">起始節</label>
-                  <select
-                    v-model.number="editForm.bibleVerseStart"
-                    class="aq__modal-select"
-                  >
-                    <option :value="null">節</option>
-                    <option
-                      v-for="v in VERSE_OPTIONS"
-                      :key="v"
-                      :value="v"
-                    >
-                      {{ v }}
-                    </option>
-                  </select>
-                </div>
-                <div class="aq__modal-field">
-                  <label class="aq__modal-label">結束節</label>
-                  <select
-                    v-model.number="editForm.bibleVerseEnd"
-                    class="aq__modal-select"
-                  >
-                    <option :value="null">選填</option>
-                    <option
-                      v-for="v in VERSE_OPTIONS"
-                      :key="v"
-                      :value="v"
-                    >
-                      {{ v }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="aq__modal-actions">
-                <AtomButton
-                  appearance="outline-view"
-                  @click="editTarget = null"
-                >
-                  取消
-                </AtomButton>
-                <AtomButton
-                  :disabled="editLoading"
-                  @click="handleEdit"
-                >
-                  {{ editLoading ? '處理中...' : '儲存' }}
-                </AtomButton>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+      <!-- ══ 管理分類 Modal ══ -->
+      <OrganismCategoriesManagerModal
+        v-model="categoriesManagerOpen"
+        :categories="categories"
+        @refresh="reloadCategories"
+      />
     </div>
   </main>
 </template>
@@ -529,84 +257,7 @@ import type {
 
 const adminApi = useAdminQuestionApi();
 
-// ── 書卷章數（和合本，ID = sortOrder 1~66） ──
-const BOOK_CHAPTERS: Record<number, number> = {
-  1: 50,
-  2: 40,
-  3: 27,
-  4: 36,
-  5: 34,
-  6: 24,
-  7: 21,
-  8: 4,
-  9: 31,
-  10: 24,
-  11: 22,
-  12: 25,
-  13: 29,
-  14: 36,
-  15: 10,
-  16: 13,
-  17: 10,
-  18: 42,
-  19: 150,
-  20: 31,
-  21: 12,
-  22: 8,
-  23: 66,
-  24: 52,
-  25: 5,
-  26: 48,
-  27: 12,
-  28: 14,
-  29: 3,
-  30: 9,
-  31: 1,
-  32: 4,
-  33: 7,
-  34: 3,
-  35: 3,
-  36: 3,
-  37: 2,
-  38: 14,
-  39: 4,
-  40: 28,
-  41: 16,
-  42: 24,
-  43: 21,
-  44: 28,
-  45: 16,
-  46: 16,
-  47: 13,
-  48: 6,
-  49: 6,
-  50: 4,
-  51: 4,
-  52: 5,
-  53: 3,
-  54: 6,
-  55: 4,
-  56: 3,
-  57: 1,
-  58: 13,
-  59: 5,
-  60: 5,
-  61: 3,
-  62: 5,
-  63: 1,
-  64: 1,
-  65: 1,
-  66: 22,
-};
-
-const chapterOptions = (bookId: number | null) => {
-  if (!bookId) return [];
-  const max = BOOK_CHAPTERS[bookId] || 0;
-  return Array.from({ length: max }, (_, i) => i + 1);
-};
-
-// 節數：聖經最多 176 節（詩篇 119），統一提供 1~176
-const VERSE_OPTIONS = Array.from({ length: 176 }, (_, i) => i + 1);
+// 書卷章數 / 節數選單邏輯改放 utils/bibleReference.ts，被兩個 Modal 共用
 
 // ── Tab ──
 
@@ -751,32 +402,29 @@ const categoryOptions = computed(() => [
   ...categories.value.map(c => ({ label: c.name, value: c.id as string | number })),
 ]);
 
-// ── 核准 Modal ──
-
+// ── 核准 Modal target ──
+// 表單 state 跟呼叫邏輯都在 OrganismPublishQuestionModal 裡，這邊只保留 target
 const publishTarget = ref<QuestionItem | null>(null);
-const publishLoading = ref(false);
-const publishForm = reactive({
-  categoryId: null as number | null,
-  bibleBookId: null as number | null,
-  bibleChapter: null as number | null,
-  bibleVerseStart: null as number | null,
-  bibleVerseEnd: null as number | null,
-});
 
-// ── 編輯 Modal ──
-
+// ── 編輯 Modal target ──
+// 表單 state / 驗證 / API 呼叫都在 OrganismEditQuestionModal 裡，這邊只保留 target
 const editTarget = ref<QuestionItem | null>(null);
-const editLoading = ref(false);
-const editCorrectIndex = ref(0);
-const editForm = reactive({
-  content: '',
-  options: [{ content: '' }, { content: '' }, { content: '' }, { content: '' }] as { content: string }[],
-  categoryId: null as number | null,
-  bibleBookId: null as number | null,
-  bibleChapter: null as number | null,
-  bibleVerseStart: null as number | null,
-  bibleVerseEnd: null as number | null,
-});
+
+// ── 管理分類 Modal ──
+// 實際 CRUD 在 OrganismCategoriesManagerModal 裡跑，這裡只負責開關 + reload categories
+const categoriesManagerOpen = ref(false);
+
+const openCategoriesManager = () => {
+  categoriesManagerOpen.value = true;
+};
+
+const reloadCategories = async () => {
+  try {
+    categories.value = await adminApi.getCategories();
+  } catch {
+    /* 靜默失敗，下次開 Modal 會再試 */
+  }
+};
 
 // ── Helpers ──
 
@@ -840,38 +488,9 @@ const onPageChange = (page: number) => {
 };
 
 // ── 核准 ──
-
+// 開啟 Modal 只需要把 target 傳進 Organism，它會在 watch 裡重置 form
 const openPublishModal = (q: QuestionItem) => {
   publishTarget.value = q;
-  publishForm.categoryId = null;
-  publishForm.bibleBookId = null;
-  publishForm.bibleChapter = null;
-  publishForm.bibleVerseStart = null;
-  publishForm.bibleVerseEnd = null;
-};
-
-const handlePublish = async () => {
-  if (!publishTarget.value) return;
-  if (
-    !publishForm.categoryId ||
-    !publishForm.bibleBookId ||
-    !publishForm.bibleChapter ||
-    !publishForm.bibleVerseStart
-  ) {
-    alert('請填寫分類、書卷、章、起始節');
-    return;
-  }
-  publishLoading.value = true;
-  try {
-    await adminApi.publish(publishTarget.value.id, publishForm);
-    publishTarget.value = null;
-    fetchQuestions();
-  } catch (err: unknown) {
-    const fetchErr = err as { data?: { message?: string } };
-    alert(fetchErr.data?.message || '核准失敗');
-  } finally {
-    publishLoading.value = false;
-  }
 };
 
 // ── 退回 ──
@@ -887,63 +506,9 @@ const handleReject = async (id: number) => {
 };
 
 // ── 編輯 ──
-
+// 開 Modal 只需要把 target 傳進 Organism，它會在 watch 裡把資料倒進 form
 const openEditModal = (q: QuestionItem) => {
   editTarget.value = q;
-  editForm.content = q.content;
-  editForm.options = q.options.map(o => ({ content: o.content }));
-  // 補齊到 4 個選項
-  while (editForm.options.length < 4) editForm.options.push({ content: '' });
-  editCorrectIndex.value = q.options.findIndex(o => o.correct);
-  editForm.categoryId = q.categoryId;
-  editForm.bibleBookId = q.bibleBookId;
-  editForm.bibleChapter = q.bibleChapter;
-  editForm.bibleVerseStart = q.bibleVerseStart;
-  editForm.bibleVerseEnd = q.bibleVerseEnd;
-};
-
-const handleEdit = async () => {
-  if (!editTarget.value) return;
-  if (!editForm.content.trim()) {
-    alert('題目內容不能為空');
-    return;
-  }
-  const nonEmpty = editForm.options.filter(o => o.content.trim());
-  if (nonEmpty.length < 2) {
-    alert('至少需要 2 個選項');
-    return;
-  }
-
-  // 先把 correct flag 附上再過濾，避免 index 錯位
-  const allOptions = editForm.options.map((o, i) => ({
-    content: o.content.trim(),
-    correct: i === editCorrectIndex.value,
-  }));
-  const validOptions = allOptions.filter(o => o.content);
-  if (!validOptions.some(o => o.correct)) {
-    alert('正確答案的選項不能為空');
-    return;
-  }
-
-  editLoading.value = true;
-  try {
-    await adminApi.update(editTarget.value.id, {
-      content: editForm.content.trim(),
-      options: validOptions,
-      categoryId: editForm.categoryId,
-      bibleBookId: editForm.bibleBookId,
-      bibleChapter: editForm.bibleChapter,
-      bibleVerseStart: editForm.bibleVerseStart,
-      bibleVerseEnd: editForm.bibleVerseEnd,
-    });
-    editTarget.value = null;
-    fetchQuestions();
-  } catch (err: unknown) {
-    const fetchErr = err as { data?: { message?: string } };
-    alert(fetchErr.data?.message || '編輯失敗');
-  } finally {
-    editLoading.value = false;
-  }
 };
 
 // ── 刪除 ──
@@ -1111,180 +676,6 @@ onMounted(async () => {
   }
 
   // ── Modal 共用 ──
-  &__modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 1rem;
-  }
-
-  &__modal {
-    width: 100%;
-    max-width: 28rem;
-    max-height: 90vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 1rem;
-    background: rgba($bg-dark, 0.95);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba($border-base, 0.5);
-    padding: 1.5rem;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-
-    &--wide {
-      max-width: 36rem;
-    }
-  }
-
-  &__modal-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: $text-bright;
-    margin-bottom: 0.25rem;
-  }
-
-  &__modal-desc {
-    font-size: 1rem;
-    color: $text-muted;
-    margin-bottom: 1.25rem;
-  }
-
-  &__modal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    margin-bottom: 0.75rem;
-    flex: 1;
-  }
-
-  &__modal-label {
-    font-size: 1rem;
-    color: $text-primary;
-    font-weight: 500;
-  }
-
-  &__modal-select,
-  &__modal-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.25s;
-
-    &:focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 12px rgba($accent, 0.1);
-    }
-
-    option {
-      background: #1e293b;
-      color: $text-bright;
-    }
-  }
-
-  // 自訂 select 箭頭，拉開右邊距離
-  &__modal-select {
-    appearance: none;
-    padding-right: 2.25rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  &__modal-textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
-    font-size: 1rem;
-    resize: vertical;
-    outline: none;
-    transition: all 0.25s;
-    font-family: inherit;
-
-    &:focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 16px rgba($accent, 0.15);
-      background: rgba(30, 41, 59, 0.8);
-    }
-  }
-
-  &__modal-row {
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  &__modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1.25rem;
-  }
-
-  // ── 編輯 Modal 的選項列表 ──
-  &__edit-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__edit-option {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    .aq__modal-input {
-      flex: 1;
-      min-width: 0;
-    }
-  }
-
-  &__edit-radio-wrapper {
-    position: relative;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
-  &__edit-radio {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-
-    &:checked + .aq__edit-radio-dot {
-      border-color: $accent;
-      background: $accent;
-      box-shadow: inset 0 0 0 3px rgba($bg-dark, 0.8);
-    }
-  }
-
-  &__edit-radio-dot {
-    display: block;
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    border: 2px solid rgba(71, 85, 105, 0.8);
-    background: transparent;
-    transition: all 0.2s;
-  }
 }
 
 // ── Modal Transition ──
