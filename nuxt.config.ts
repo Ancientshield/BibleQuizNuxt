@@ -18,6 +18,13 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },
   },
+  // OAuth callback 是純 client-side 一次性跳板，不能讓 SSG 預渲染，
+  // 否則 /oauth/callback（無斜線 canonical）跟 /oauth/callback/（實際 URL）
+  // 會 hydration mismatch 讓 onMounted 不觸發。
+  routeRules: {
+    '/oauth/callback': { prerender: false, ssr: false },
+    '/oauth/callback/': { prerender: false, ssr: false },
+  },
   nitro: {
     devProxy: {
       '/api/auth': {
