@@ -211,6 +211,10 @@ const handleLogout = () => {
 </script>
 
 <style lang="scss" scoped>
+$nav-action-cream: #fff8e7;
+$nav-action-cream-hover: #fffdf5;
+$nav-action-text: #172033;
+
 .navbar {
   position: fixed;
   top: 0;
@@ -242,16 +246,23 @@ const handleLogout = () => {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.5rem;
-    background: none;
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-muted;
+    background: rgba($nav-action-cream, 0.94);
+    border: 1px solid rgba($nav-action-cream, 0.9);
+    color: $nav-action-text;
+    box-shadow:
+      0 8px 20px rgba(2, 6, 23, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.36);
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      color: $accent;
-      border-color: rgba($accent, 0.3);
-      background: rgba($accent, 0.06);
+      color: $bg-page;
+      border-color: rgba($nav-action-cream-hover, 1);
+      background: rgba($nav-action-cream-hover, 0.98);
+      box-shadow:
+        0 10px 24px rgba(2, 6, 23, 0.24),
+        0 0 18px rgba($accent, 0.14),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
     }
 
     &:active {
@@ -277,20 +288,26 @@ const handleLogout = () => {
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
     border-radius: 9999px;
-    background: rgba($bg-dark, 0.5);
+    background: rgba($nav-action-cream, 0.94);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-muted;
+    border: 1px solid rgba($nav-action-cream, 0.9);
+    color: $nav-action-text;
+    box-shadow:
+      0 8px 20px rgba(2, 6, 23, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.36);
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
     transition: all 0.25s;
 
     &:hover {
-      background: rgba($bg-dark, 0.8);
-      color: $accent;
-      border-color: rgba($accent, 0.3);
-      box-shadow: 0 0 16px rgba($accent, 0.15);
+      background: rgba($nav-action-cream-hover, 0.98);
+      color: $bg-page;
+      border-color: rgba($nav-action-cream-hover, 1);
+      box-shadow:
+        0 10px 24px rgba(2, 6, 23, 0.24),
+        0 0 18px rgba($accent, 0.14),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
     }
 
     &:active {
