@@ -1,7 +1,7 @@
 # ── Build stage ── SSG 產出靜態檔案
 FROM node:24-bookworm-slim AS build
 ENV HUSKY=0
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
