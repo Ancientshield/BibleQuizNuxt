@@ -1,5 +1,6 @@
 # ── Build stage ── SSG 產出靜態檔案
-FROM node:24-alpine AS build
+FROM node:24-bookworm-slim AS build
+ENV HUSKY=0
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
