@@ -164,27 +164,30 @@ export const useQuiz = () => {
   };
 
   /**
-   * 結算時把作答紀錄提交到後端（寫入 user_quiz_round + user_quiz_answer 表）。
+   * 結算時把作答紀錄提交到後端（寫入 quiz_round + quiz_answer_log 表）。
    *
-   * 未登入者不提交（遊客可以玩但不累積紀錄）。
+   * 登入者打 /api/user/quiz/submit,後端會累加 total_score。
+   * 未登入者打 /api/guest/quiz/submit,後端用 guest sentinel user id 寫入(不累加積分),
+   * 目的是擴大投票/答對率統計樣本,讓匿名訪客也能貢獻 quiz_answer_log 資料。
    * 提交失敗不影響結算畫面顯示（try/catch 吞掉錯誤），因為分數在前端已經算好了。
    * 成功後清掉 localStorage 進度，避免下次重新載入時誤讀舊資料。
    */
   const submitResults = async () => {
     const auth = useAuthStore();
-    if (!auth.isLoggedIn) return;
+    const body = {
+      score: score.value,
+      answers: answers.value.map(a => ({
+        questionId: a.questionId,
+        selectedOptionId: a.selectedOptionId,
+      })),
+    };
 
     try {
-      await useAuthFetch('/api/user/quiz/submit', {
-        method: 'POST',
-        body: {
-          score: score.value,
-          answers: answers.value.map(a => ({
-            questionId: a.questionId,
-            selectedOptionId: a.selectedOptionId,
-          })),
-        },
-      });
+      if (auth.isLoggedIn) {
+        await useAuthFetch('/api/user/quiz/submit', { method: 'POST', body });
+      } else {
+        await $fetch('/api/guest/quiz/submit', { method: 'POST', body });
+      }
     } catch {
       // 提交失敗不影響結算畫面
     }
