@@ -108,29 +108,27 @@
           首頁
         </button>
 
-        <template v-if="auth.isLoggedIn">
-          <button
-            class="navbar-menu__item"
-            @click="goTo('/questions/submissions')"
-          >
-            <Icon
-              name="lucide:file-text"
-              class="navbar-menu__icon"
-            />
-            我要投稿
-          </button>
+        <button
+          class="navbar-menu__item"
+          @click="goTo('/questions/submissions')"
+        >
+          <Icon
+            name="lucide:file-text"
+            class="navbar-menu__icon"
+          />
+          我要投稿
+        </button>
 
-          <button
-            class="navbar-menu__item"
-            @click="goTo('/my-history')"
-          >
-            <Icon
-              name="lucide:history"
-              class="navbar-menu__icon"
-            />
-            我的紀錄
-          </button>
-        </template>
+        <button
+          class="navbar-menu__item"
+          @click="goTo('/my-history')"
+        >
+          <Icon
+            name="lucide:history"
+            class="navbar-menu__icon"
+          />
+          我的紀錄
+        </button>
 
         <template v-if="auth.isAdmin">
           <div class="navbar-menu__divider" />
@@ -430,12 +428,14 @@ $nav-action-text: #172033;
   z-index: 49;
   width: 15rem;
   padding: 0.5rem;
-  background: rgba($bg-dark, 0.92);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba($border-base, 0.5);
+  background: rgba($nav-action-cream, 0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba($nav-action-cream-hover, 0.95);
   border-top: none;
   border-radius: 0 0 0.75rem 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 12px 32px rgba(2, 6, 23, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.36);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -446,9 +446,9 @@ $nav-action-text: #172033;
     gap: 0.75rem;
     padding: 0.625rem 0.75rem;
     border-radius: 0.5rem;
-    color: $text-primary;
+    color: $nav-action-text;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 650;
     text-decoration: none;
     background: none;
     border: none;
@@ -457,8 +457,15 @@ $nav-action-text: #172033;
     transition: all 0.2s;
 
     &:hover {
-      background: rgba($accent, 0.08);
-      color: $accent;
+      background: rgba($nav-action-cream-hover, 0.98);
+      color: $bg-page;
+      box-shadow:
+        0 6px 16px rgba(2, 6, 23, 0.12),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
 
     &--danger:hover {
@@ -475,7 +482,7 @@ $nav-action-text: #172033;
 
   &__divider {
     height: 1px;
-    background: rgba($border-base, 0.5);
+    background: rgba($nav-action-text, 0.14);
     margin: 0.25rem 0.5rem;
   }
 }
