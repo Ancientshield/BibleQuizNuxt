@@ -424,15 +424,15 @@ $nav-action-text: #172033;
 .navbar-menu {
   position: fixed;
   top: 4.25rem;
-  left: 0;
+  left: 1.5rem;
   z-index: 49;
   width: 15rem;
+  max-width: calc(100vw - 3rem);
   padding: 0.5rem;
   background: rgba($nav-action-cream, 0.96);
   backdrop-filter: blur(16px);
   border: 1px solid rgba($nav-action-cream-hover, 0.95);
-  border-top: none;
-  border-radius: 0 0 0.75rem 0;
+  border-radius: 0.75rem;
   box-shadow:
     0 12px 32px rgba(2, 6, 23, 0.24),
     inset 0 0 0 1px rgba(255, 255, 255, 0.36);
