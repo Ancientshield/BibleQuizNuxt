@@ -282,9 +282,11 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .quiz-page {
   position: relative;
+  min-height: 100svh;
   min-height: 100dvh;
   width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: $bg-page;
   padding-top: $navbar-height;
 
@@ -292,9 +294,10 @@ onMounted(async () => {
     position: relative;
     z-index: 10;
     display: flex;
-    height: calc(100dvh - #{$navbar-height});
+    min-height: calc(100svh - #{$navbar-height});
+    min-height: calc(100dvh - #{$navbar-height});
     flex-direction: column;
-    padding: 1rem 1rem;
+    padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom));
 
     @media (min-width: 768px) {
       padding: 1.5rem 2rem;
@@ -302,11 +305,12 @@ onMounted(async () => {
   }
 
   &__question-area {
-    flex: 1;
+    flex: 1 1 auto;
     display: grid;
-    grid-template-rows: 1fr auto 1fr;
+    grid-template-rows: minmax(0.25rem, 1fr) auto minmax(0.25rem, 1fr);
     justify-items: center;
-    margin-bottom: 0.5rem;
+    min-height: 0;
+    margin-bottom: 0.25rem;
     transition: all 0.5s;
 
     // 題目卡在第 2 行（中間），上下 1fr 等分 → 永遠置中
@@ -335,9 +339,18 @@ onMounted(async () => {
   &__items {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
     transition: all 0.5s;
+
+    @media (min-width: 390px) {
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 768px) {
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
 
     &--transitioning {
       opacity: 0;
@@ -346,6 +359,7 @@ onMounted(async () => {
 
   // ── 選項區 ──
   &__options-area {
+    flex: 0 0 auto;
     transition: all 0.5s;
 
     @media (min-width: 768px) {
@@ -366,7 +380,7 @@ onMounted(async () => {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.5rem;
 
     @media (min-width: 768px) {
       grid-template-columns: 1fr 1fr;

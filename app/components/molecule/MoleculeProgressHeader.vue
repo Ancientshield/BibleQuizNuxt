@@ -27,7 +27,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .progress-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 
   @media (min-width: 768px) {
     margin-bottom: 2.5rem;
@@ -37,14 +37,18 @@ defineProps<{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+
+    @media (min-width: 768px) {
+      margin-bottom: 0.75rem;
+    }
   }
 
   &__question {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
     color: $accent; // cyan-400
-    letter-spacing: 0.05em;
+    letter-spacing: 0;
     filter: drop-shadow(0 0 10px rgba($accent, 0.5));
 
     @media (min-width: 768px) {
@@ -53,7 +57,7 @@ defineProps<{
   }
 
   &__score {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #fbbf24; // amber-400
     filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
@@ -66,7 +70,7 @@ defineProps<{
 
 .progress-bar {
   position: relative;
-  height: 1rem;
+  height: 0.75rem;
   border-radius: 9999px;
   background: rgba(30, 41, 59, 0.8); // slate-800/80
   border: 1px solid $border-base; // slate-700

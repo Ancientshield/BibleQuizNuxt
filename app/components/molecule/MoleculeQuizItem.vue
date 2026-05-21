@@ -48,8 +48,8 @@ defineEmits<{
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 1rem;
+  padding: 0.5625rem 0.75rem;
+  border-radius: 0.75rem;
   background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(12px);
   border: 1.5px solid;
@@ -58,8 +58,8 @@ defineEmits<{
   overflow: hidden;
 
   svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
     filter: drop-shadow(0 0 4px currentColor);
     transition: all 0.25s;
   }
@@ -94,9 +94,36 @@ defineEmits<{
 
   // ── 道具名稱 ──
   &__label {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
+  }
+
+  @media (min-width: 390px) {
+    padding: 0.625rem 1rem;
+
+    svg {
+      width: 1.375rem;
+      height: 1.375rem;
+    }
+
+    &__label {
+      font-size: 0.9375rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    border-radius: 1rem;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &__label {
+      font-size: 1rem;
+    }
   }
 
   // ── 色系：red（刪去法） ──

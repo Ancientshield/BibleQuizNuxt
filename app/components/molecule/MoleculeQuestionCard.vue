@@ -21,7 +21,7 @@ defineProps<{
   background: rgba(15, 23, 42, 0.4); // slate-900/40
   backdrop-filter: blur(24px); // 玻璃擬態毛玻璃效果
   border: 1px solid rgba(51, 65, 85, 0.5); // slate-700/50
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
 
   // 光暈偽邊框：purple → cyan → purple 漸層 + blur
@@ -41,15 +41,20 @@ defineProps<{
 
   &__text {
     position: relative;
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     font-weight: 700;
     text-align: center;
     color: #fff;
-    line-height: 1.75;
-    letter-spacing: 0.05em;
+    line-height: 1.6;
+    letter-spacing: 0;
+
+    @media (min-width: 390px) {
+      font-size: 1.125rem;
+    }
 
     @media (min-width: 768px) {
       font-size: 1.875rem;
+      line-height: 1.75;
     }
 
     @media (min-width: 1024px) {

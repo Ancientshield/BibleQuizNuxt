@@ -107,14 +107,19 @@ const handleClick = (e: MouseEvent) => {
   position: relative;
   overflow: hidden;
   border-radius: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   text-align: left;
   transition: all 0.3s ease-out;
   border: 2px solid;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent; // iOS tap 後預設會加半透明高光，關掉
+
+  @media (min-width: 390px) {
+    padding: 0.875rem;
+    font-size: 1.0625rem;
+  }
 
   @media (min-width: 768px) {
     border-radius: 1rem;
@@ -195,13 +200,14 @@ const handleClick = (e: MouseEvent) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   &__left {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.625rem;
+    min-width: 0;
 
     @media (min-width: 768px) {
       gap: 1rem;

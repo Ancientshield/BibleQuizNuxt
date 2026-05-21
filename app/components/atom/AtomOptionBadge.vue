@@ -24,15 +24,24 @@ const stateClass = computed(() => `badge--${props.state}`);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 1.75rem;
   border-radius: 0.5rem;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9375rem;
+
+  @media (min-width: 390px) {
+    width: 2rem;
+    height: 2rem;
+    flex-basis: 2rem;
+    font-size: 1rem;
+  }
 
   @media (min-width: 768px) {
     width: 2.5rem;
     height: 2.5rem;
+    flex-basis: 2.5rem;
     font-size: 1.125rem;
   }
 
