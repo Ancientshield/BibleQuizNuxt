@@ -282,11 +282,11 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .quiz-page {
   position: relative;
+  min-height: 100vh;
   min-height: 100svh;
   min-height: 100dvh;
   width: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
   background: $bg-page;
   padding-top: $navbar-height;
 
@@ -297,10 +297,12 @@ onMounted(async () => {
     min-height: calc(100svh - #{$navbar-height});
     min-height: calc(100dvh - #{$navbar-height});
     flex-direction: column;
-    padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom));
+    padding: 0.75rem 1rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
 
     @media (min-width: 768px) {
       padding: 1.5rem 2rem;
+      padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
     }
   }
 

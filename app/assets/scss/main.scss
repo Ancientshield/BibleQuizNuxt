@@ -1,3 +1,29 @@
+html,
+body,
+#__nuxt {
+  min-height: 100%;
+  background: $bg-page;
+}
+
+:root {
+  color-scheme: dark;
+  background: $bg-page;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: $text-primary;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+#__nuxt {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 /**
  * main — 管理頁面的共用容器樣式。
  * 簡潔深色風格，保留玻璃卡片但不加粒子和光暈動畫。
