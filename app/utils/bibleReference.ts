@@ -91,38 +91,115 @@ export const getChapterOptions = (bookId: number | null): number[] => {
 
 const FHL_BASE = 'https://bible.fhl.net/new/read.php';
 
+const FHL_BOOK_ALIASES = [
+  ['創世記', '創', 'Ge'],
+  ['出埃及記', '出', 'Ex'],
+  ['利未記', '利', 'Le'],
+  ['民數記', '民', 'Nu'],
+  ['申命記', '申', 'De'],
+  ['約書亞記', '書', 'Jos'],
+  ['士師記', '士', 'Jud'],
+  ['路得記', '得', 'Ru'],
+  ['撒母耳記上', '撒上', '1Sa'],
+  ['撒母耳記下', '撒下', '2Sa'],
+  ['列王紀上', '王上', '1Ki'],
+  ['列王紀下', '王下', '2Ki'],
+  ['歷代志上', '代上', '1Ch'],
+  ['歷代志下', '代下', '2Ch'],
+  ['以斯拉記', '拉', 'Ezr'],
+  ['尼希米記', '尼', 'Ne'],
+  ['以斯帖記', '斯', 'Es'],
+  ['約伯記', '伯', 'Job'],
+  ['詩篇', '詩', 'Ps'],
+  ['箴言', '箴', 'Pr'],
+  ['傳道書', '傳', 'Ec'],
+  ['雅歌', '歌', 'So'],
+  ['以賽亞書', '賽', 'Isa'],
+  ['耶利米書', '耶', 'Jer'],
+  ['耶利米哀歌', '哀', 'La'],
+  ['以西結書', '結', 'Eze'],
+  ['但以理書', '但', 'Da'],
+  ['何西阿書', '何', 'Ho'],
+  ['約珥書', '珥', 'Joe'],
+  ['阿摩司書', '摩', 'Am'],
+  ['俄巴底亞書', '俄', 'Ob'],
+  ['約拿書', '拿', 'Jon'],
+  ['彌迦書', '彌', 'Mic'],
+  ['那鴻書', '鴻', 'Na'],
+  ['哈巴谷書', '哈', 'Hab'],
+  ['西番雅書', '番', 'Zep'],
+  ['哈該書', '該', 'Hag'],
+  ['撒迦利亞書', '亞', 'Zec'],
+  ['瑪拉基書', '瑪', 'Mal'],
+  ['馬太福音', '太', 'Mt'],
+  ['馬可福音', '可', 'Mr'],
+  ['路加福音', '路', 'Lu'],
+  ['約翰福音', '約', 'Joh'],
+  ['使徒行傳', '徒', 'Ac'],
+  ['羅馬書', '羅', 'Ro'],
+  ['哥林多前書', '林前', '1Co'],
+  ['哥林多後書', '林後', '2Co'],
+  ['加拉太書', '加', 'Ga'],
+  ['以弗所書', '弗', 'Eph'],
+  ['腓立比書', '腓', 'Php'],
+  ['歌羅西書', '西', 'Col'],
+  ['帖撒羅尼迦前書', '帖前', '1Th'],
+  ['帖撒羅尼迦後書', '帖後', '2Th'],
+  ['提摩太前書', '提前', '1Ti'],
+  ['提摩太後書', '提後', '2Ti'],
+  ['提多書', '多', 'Tit'],
+  ['腓利門書', '門', 'Phm'],
+  ['希伯來書', '來', 'Heb'],
+  ['雅各書', '雅', 'Jas'],
+  ['彼得前書', '彼前', '1Pe'],
+  ['彼得後書', '彼後', '2Pe'],
+  ['約翰一書', '約一', '1Jo'],
+  ['約翰二書', '約二', '2Jo'],
+  ['約翰三書', '約三', '3Jo'],
+  ['猶大書', '猶', 'Jude'],
+  ['啟示錄', '啟', 'Re'],
+] as const;
+
+const FHL_BOOK_CODES = FHL_BOOK_ALIASES.reduce<Record<string, string>>(
+  (codes, [fullName, chineseAbbr, englishAbbr]) => {
+    codes[fullName] = chineseAbbr;
+    codes[chineseAbbr] = chineseAbbr;
+    codes[englishAbbr] = englishAbbr;
+    return codes;
+  },
+  {}
+);
+
 /**
  * 把後端送來的 bibleRef 字串（例如 "詩篇 75:1-3" / "創世記 1:1"）組成
  * 信望愛閱讀頁（read.php）的 URL。格式不符就回 null。
  *
  * 後端格式：`{書卷全名} {chapter}:{verseStart}` 或 `{書卷全名} {chapter}:{verseStart}-{verseEnd}`
  *
- * 為什麼書卷直接塞全名？
- *   實測信望愛的 chineses 參數同時接受全名（詩篇）和簡稱（詩）。
- *   官方 JSON API（qb.php）能用 sec= 定位到節，但 qb.php 回 JSON 不是
- *   給人看的閱讀頁；給人看的 read.php 只接受 chap，不接受節參數。
- *   所以這裡只把書卷+章帶過去，使用者自己在閱讀頁掃到對應節。
- *
- * 書卷名比對交給信望愛伺服器，前端不維護對照表 —— 後端 bible_book 表
- * 的全名（創世記、撒母耳記上、哥林多前書...）跟信望愛下拉選單一致。
+ * FHL read.php 的 chineses 參數吃「中文縮寫」或「短英文縮寫」，不吃完整書名。
+ * 所以後端的全名（創世記、撒母耳記上、哥林多前書...）需要先轉成 FHL 縮寫。
  */
 export const buildFhlReadUrl = (text: string | null | undefined): string | null => {
   if (!text) return null;
 
   // 書卷名可能含「上 / 下」「前 / 後」「一 / 二 / 三」，不能用 \w+ 抓，
   // 改用「任何非空白字元」直到第一個空白後接章節。
-  const match = text.trim().match(/^(\S+)\s+(\d+)(?::\d+(?:-\d+)?)?$/);
+  const match = text.trim().match(/^(\S+)\s+(\d+)(?::(\d+(?:-\d+)?))?$/);
   if (!match) return null;
 
-  const [, bookName, chapter] = match;
+  const [, bookName, chapter, verse] = match;
+  const bookCode = FHL_BOOK_CODES[bookName];
+  if (!bookCode) return null;
 
   const params = new URLSearchParams({
     VERSION1: 'unv',
     strongflag: '0',
     TABFLAG: '1',
-    chineses: bookName,
+    chineses: bookCode,
     chap: chapter,
     submit1: '閱讀',
   });
+  if (verse) params.set('sec', verse);
+
   return `${FHL_BASE}?${params.toString()}`;
 };
