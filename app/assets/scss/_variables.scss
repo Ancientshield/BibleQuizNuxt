@@ -1,26 +1,36 @@
 // ── 背景 ──
-$bg-page: #020617;
-$bg-dark: #0f172a; // rgb(15, 23, 42)
+$bg-page: #faf7f2;
+$bg-card: #ffffff;
+$bg-subtle: #f3ede4;
 
 // ── 邊框 ──
-$border-base: #334155; // rgb(51, 65, 85)
+$border-base: #e2d9cc;
+$border-focus: #8b7355;
 
 // ── 文字 ──
-$text-bright: #e2e8f0;
-$text-primary: #cbd5e1;
-$text-muted: #94a3b8;
-$text-dim: #64748b;
+$text-heading: #2c1810;
+$text-primary: #3d2b1f;
+$text-muted: #7a6b5d;
+$text-dim: #a89b8c;
+
+// ── 主色 ──
+$primary: #6b4c2a;
+$primary-light: #8b6914;
+$primary-hover: #5a3d1e;
 
 // ── 強調色 ──
-$accent: #22d3ee;
-$gradient-start: #06b6d4;
-$gradient-end: #9333ea;
+$accent: #b8860b;
+$accent-light: #daa520;
+
+// ── 功能色 ──
+$secondary: #2e5a3e;
+$secondary-light: #3d7a52;
 
 // ── 狀態色 ──
-$danger: #ef4444; // rgb(239, 68, 68)
-$danger-light: #f87171;
-$success: #22c55e;
-$success-light: #86efac;
+$danger: #c53030;
+$danger-light: #e53e3e;
+$success: #2f855a;
+$success-light: #38a169;
 
 // ── Navbar ──
-$navbar-height: 5rem;
+$navbar-height: 4rem;

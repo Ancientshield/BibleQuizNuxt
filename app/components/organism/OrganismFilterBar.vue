@@ -42,8 +42,8 @@ const emit = defineEmits<{
 .o-filter {
   padding: 1.25rem;
   border-radius: 0.75rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba($border-base, 0.5);
+  background: $bg-card;
+  border: 1px solid $border-base;
   margin-bottom: 1.5rem;
 
   // ── Grid layout ──

@@ -49,7 +49,7 @@ defineEmits<{
   display: flex;
   gap: 0.25rem;
   margin-bottom: 1.25rem;
-  border-bottom: 1px solid rgba($border-base, 0.5);
+  border-bottom: 1px solid $border-base;
 
   &__item {
     display: flex;
@@ -66,12 +66,12 @@ defineEmits<{
     transition: all 0.2s;
 
     &:hover {
-      color: $text-bright;
+      color: $text-heading;
     }
 
     &--active {
-      color: $accent;
-      border-bottom-color: $accent;
+      color: $primary;
+      border-bottom-color: $primary;
     }
 
     svg {

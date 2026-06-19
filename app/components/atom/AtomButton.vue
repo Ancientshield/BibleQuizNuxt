@@ -80,7 +80,7 @@ const handleClick = (e: MouseEvent) => {
     color: white;
 
     &.a-btn--primary {
-      background: linear-gradient(to right, $gradient-start, $gradient-end);
+      background: $primary;
     }
 
     &.a-btn--positive {
@@ -92,7 +92,7 @@ const handleClick = (e: MouseEvent) => {
     }
 
     &.a-btn--warning {
-      background: #f59e0b;
+      background: $accent;
     }
 
     &:hover:not(:disabled) {
@@ -110,11 +110,11 @@ const handleClick = (e: MouseEvent) => {
     background: transparent;
 
     &.a-btn--primary {
-      border: 1px solid rgba($accent, 0.4);
-      color: $accent;
+      border: 1px solid rgba($primary, 0.4);
+      color: $primary;
 
       &:hover:not(:disabled) {
-        background: rgba($accent, 0.1);
+        background: rgba($primary, 0.06);
       }
     }
 
@@ -123,25 +123,25 @@ const handleClick = (e: MouseEvent) => {
       color: $success;
 
       &:hover:not(:disabled) {
-        background: rgba($success, 0.1);
+        background: rgba($success, 0.06);
       }
     }
 
     &.a-btn--danger {
       border: 1px solid rgba($danger, 0.4);
-      color: $danger-light;
+      color: $danger;
 
       &:hover:not(:disabled) {
-        background: rgba($danger, 0.1);
+        background: rgba($danger, 0.06);
       }
     }
 
     &.a-btn--warning {
-      border: 1px solid rgba(#f59e0b, 0.4);
-      color: #fbbf24;
+      border: 1px solid rgba($accent, 0.4);
+      color: $accent;
 
       &:hover:not(:disabled) {
-        background: rgba(#f59e0b, 0.1);
+        background: rgba($accent, 0.06);
       }
     }
   }
@@ -152,15 +152,15 @@ const handleClick = (e: MouseEvent) => {
     border: 1px solid transparent;
 
     &.a-btn--primary {
-      color: $accent;
+      color: $primary;
     }
 
     &.a-btn--danger {
-      color: $danger-light;
+      color: $danger;
     }
 
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.04);
     }
   }
 }

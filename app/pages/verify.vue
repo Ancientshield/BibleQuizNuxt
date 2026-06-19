@@ -1,6 +1,6 @@
 <template>
   <main class="verify-page">
-    <div class="verify-page__bg" />
+    <AtomGradientBackground />
 
     <div class="verify-page__center">
       <!-- Loading -->
@@ -99,15 +99,6 @@ onMounted(async () => {
   width: 100%;
   background: $bg-page;
 
-  &__bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom right, #581c87, $bg-dark, #1e3a5f);
-    background-size: 200% 200%;
-    animation: gradient-shift 15s ease infinite;
-  }
-
-  // ── 置中容器：不用卡片，就是乾淨的垂直堆疊 ──
   &__center {
     position: relative;
     z-index: 10;
@@ -120,7 +111,6 @@ onMounted(async () => {
     gap: 0.75rem;
   }
 
-  // ── 圓形 icon ──
   &__icon {
     width: 4rem;
     height: 4rem;
@@ -131,20 +121,18 @@ onMounted(async () => {
     margin-bottom: 0.5rem;
 
     &--loading {
-      background: rgba(100, 116, 139, 0.2);
-      border: 2px solid rgba(100, 116, 139, 0.4);
+      background: rgba($text-dim, 0.1);
+      border: 2px solid rgba($text-dim, 0.3);
     }
 
     &--success {
-      background: rgba($success, 0.15);
-      border: 2px solid rgba($success, 0.5);
-      box-shadow: 0 0 24px rgba($success, 0.2);
+      background: rgba($success, 0.1);
+      border: 2px solid rgba($success, 0.3);
     }
 
     &--error {
-      background: rgba($danger, 0.15);
-      border: 2px solid rgba($danger, 0.5);
-      box-shadow: 0 0 24px rgba($danger, 0.2);
+      background: rgba($danger, 0.1);
+      border: 2px solid rgba($danger, 0.3);
     }
   }
 
@@ -154,11 +142,11 @@ onMounted(async () => {
     color: $text-muted;
 
     .verify-page__icon--success & {
-      color: #4ade80;
+      color: $success;
     }
 
     .verify-page__icon--error & {
-      color: $danger-light;
+      color: $danger;
     }
 
     &--spin {
@@ -166,64 +154,39 @@ onMounted(async () => {
     }
   }
 
-  // ── 標題 ──
   &__title {
+    font-family: 'Noto Serif TC', serif;
     font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: -0.01em;
 
     &--success {
-      color: #4ade80;
+      color: $success;
     }
 
     &--error {
-      color: $danger-light;
+      color: $danger;
     }
   }
 
-  // ── 說明文字 ──
   &__msg {
     color: $text-muted;
     font-size: 0.9375rem;
   }
 
-  // ── 按鈕 ──
   &__btn {
     margin-top: 0.75rem;
     padding: 0.625rem 1.5rem;
     border-radius: 0.5rem;
-    background: rgba($border-base, 0.5);
-    border: 1px solid rgba(71, 85, 105, 0.5);
-    color: $text-bright;
+    background: $primary;
+    color: white;
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s;
 
     &:hover {
-      background: rgba($border-base, 0.8);
-      border-color: rgba(100, 116, 139, 0.5);
-      color: white;
+      background: $primary-hover;
     }
-  }
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 </style>

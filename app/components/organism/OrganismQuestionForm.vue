@@ -173,9 +173,9 @@ const handleSubmit = () => {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-primary;
     font-size: 0.9375rem;
     resize: vertical;
     outline: none;
@@ -187,9 +187,8 @@ const handleSubmit = () => {
     }
 
     &:focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 16px rgba($accent, 0.15);
-      background: rgba(30, 41, 59, 0.8);
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.08);
     }
   }
 
@@ -227,9 +226,9 @@ const handleSubmit = () => {
     height: 0;
 
     &:checked + .q-form__radio-dot {
-      border-color: $accent;
-      background: $accent;
-      box-shadow: inset 0 0 0 3px rgba($bg-dark, 0.8);
+      border-color: $primary;
+      background: $primary;
+      box-shadow: inset 0 0 0 3px $bg-card;
     }
   }
 
@@ -238,7 +237,7 @@ const handleSubmit = () => {
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
-    border: 2px solid rgba(71, 85, 105, 0.8);
+    border: 2px solid $border-base;
     background: transparent;
     transition: all 0.2s;
   }
@@ -248,9 +247,9 @@ const handleSubmit = () => {
     flex: 1;
     padding: 0.625rem 0.875rem;
     border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-primary;
     font-size: 0.875rem;
     outline: none;
     transition: all 0.25s;
@@ -260,9 +259,8 @@ const handleSubmit = () => {
     }
 
     &:focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 12px rgba($accent, 0.1);
-      background: rgba(30, 41, 59, 0.8);
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.08);
     }
   }
 
@@ -275,7 +273,7 @@ const handleSubmit = () => {
     border-radius: 0.75rem;
     background: rgba($danger, 0.1);
     border: 1px solid rgba($danger, 0.3);
-    color: #fca5a5;
+    color: $danger;
     font-size: 0.875rem;
   }
 
@@ -291,7 +289,7 @@ const handleSubmit = () => {
     width: 100%;
     padding: 0.75rem;
     border-radius: 0.75rem;
-    background: linear-gradient(to right, $gradient-start, $gradient-end);
+    background: $primary;
     color: white;
     font-weight: 700;
     font-size: 1rem;

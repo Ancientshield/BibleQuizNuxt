@@ -193,8 +193,8 @@ onMounted(async () => {
   &__card {
     padding: 1.25rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
 
     &--correct {
       border-left: 3px solid $success;
@@ -227,12 +227,12 @@ onMounted(async () => {
   &__badge--wrong {
     font-size: 1rem;
     font-weight: 600;
-    color: $danger-light;
+    color: $danger;
   }
 
   &__question {
     font-size: 1rem;
-    color: $text-bright;
+    color: $text-heading;
     line-height: 1.5;
     margin-bottom: 0.75rem;
   }
@@ -250,20 +250,20 @@ onMounted(async () => {
     justify-content: space-between;
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
-    background: rgba(30, 41, 59, 0.4);
+    background: $bg-subtle;
     border: 1px solid transparent;
     color: $text-muted;
     font-size: 1rem;
 
     &--correct-answer {
       border-color: rgba($success, 0.3);
-      color: $success-light;
+      color: $success;
       background: rgba($success, 0.06);
     }
 
     &--wrong-selected {
       border-color: rgba($danger, 0.3);
-      color: $danger-light;
+      color: $danger;
       background: rgba($danger, 0.06);
     }
   }
@@ -278,7 +278,7 @@ onMounted(async () => {
     }
 
     &--wrong {
-      color: $danger-light;
+      color: $danger;
     }
   }
 
@@ -295,10 +295,9 @@ onMounted(async () => {
     transform: translateX(-50%);
     padding: 0.75rem 1.5rem;
     border-radius: 9999px;
-    background: rgba($bg-dark, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba($accent, 0.3);
-    color: $accent;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $primary;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -307,7 +306,7 @@ onMounted(async () => {
     gap: 0.5rem;
     transition: all 0.2s;
     z-index: 40;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
     svg {
       width: 1.25rem;
@@ -315,9 +314,8 @@ onMounted(async () => {
     }
 
     &:hover {
-      background: rgba($accent, 0.15);
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 4px 24px rgba($accent, 0.2);
+      background: $bg-subtle;
+      border-color: rgba($primary, 0.3);
     }
   }
 }

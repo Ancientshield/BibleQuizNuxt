@@ -63,8 +63,6 @@ const startGame = () => {
   &__sparkle {
     width: 1.5rem;
     height: 1.5rem;
-    animation: pulse-slow 3s ease-in-out infinite;
-
     @media (min-width: 768px) {
       width: 1.75rem;
       height: 1.75rem;

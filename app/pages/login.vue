@@ -169,8 +169,7 @@ const handleSubmit = async () => {
 // - Google 用 `logos:` 集合（Gilbarbara Logos），裡面有官方多色品牌 icon，不用傳 color
 // - LINE 注意！`logos:` 集合沒收 LINE，要用 `simple-icons:`（單色）並自己傳品牌綠 #06C755
 //   @nuxt/icon 找不到 icon 時會靜默降級（空格子不報錯），踩過一次坑
-// - GitHub / X 用 `mdi:` / `simple-icons:` 單色 icon，透過 color 傳淡灰色配合深色背景
-//   （原本 X 是 #000 純黑，在深色卡片上幾乎看不見，改成 #e2e8f0 順便修掉）
+// - GitHub / X 用 `mdi:` / `simple-icons:` 單色 icon，透過 color 傳深色配合淺色背景
 interface SocialProvider {
   id: string;
   icon: string;
@@ -181,8 +180,8 @@ interface SocialProvider {
 const socialProviders: SocialProvider[] = [
   { id: 'GOOGLE', icon: 'logos:google-icon', label: 'Google' },
   { id: 'LINE', icon: 'simple-icons:line', label: 'LINE', color: '#06C755' },
-  { id: 'GITHUB', icon: 'mdi:github', label: 'GitHub', color: '#e2e8f0' },
-  { id: 'X', icon: 'simple-icons:x', label: 'X', color: '#e2e8f0' },
+  { id: 'GITHUB', icon: 'mdi:github', label: 'GitHub', color: '#24292f' },
+  { id: 'X', icon: 'simple-icons:x', label: 'X', color: '#000000' },
 ];
 
 const handleSocial = (provider: string) => {
@@ -242,7 +241,7 @@ const handleForgot = () => {
   &__footer {
     margin-top: 1.5rem;
     font-size: 0.75rem;
-    color: #475569;
+    color: $text-dim;
     text-align: center;
   }
 }

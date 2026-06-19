@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  content: string; // 題目文字
+  content: string;
 }>();
 </script>
 
@@ -18,21 +18,10 @@ defineProps<{
   width: 100%;
   max-width: 48rem;
   border-radius: 1rem;
-  background: rgba(15, 23, 42, 0.4); // slate-900/40
-  backdrop-filter: blur(24px); // 玻璃擬態毛玻璃效果
-  border: 1px solid rgba(51, 65, 85, 0.5); // slate-700/50
+  background: $bg-card;
+  border: 1px solid $border-base;
   padding: 1rem;
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
-
-  // 光暈偽邊框：purple → cyan → purple 漸層 + blur
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: inherit;
-    background: linear-gradient(to right, rgba(168, 85, 247, 0.2), rgba(34, 211, 238, 0.2), rgba(168, 85, 247, 0.2));
-    filter: blur(4px);
-  }
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
   @media (min-width: 768px) {
     border-radius: 1.5rem;
@@ -44,9 +33,9 @@ defineProps<{
     font-size: 1.0625rem;
     font-weight: 700;
     text-align: center;
-    color: #fff;
+    color: $text-heading;
     line-height: 1.6;
-    letter-spacing: 0;
+    font-family: 'Noto Serif TC', serif;
 
     @media (min-width: 390px) {
       font-size: 1.125rem;

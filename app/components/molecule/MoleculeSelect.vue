@@ -119,7 +119,6 @@ const select = (opt: MoleculeSelectOption) => {
   isOpen.value = false;
 };
 
-// 點外面關閉
 const onClickOutside = (e: MouseEvent) => {
   if (selectRef.value && !selectRef.value.contains(e.target as Node)) {
     isOpen.value = false;
@@ -137,14 +136,12 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
   flex-direction: column;
   gap: 0.375rem;
 
-  // ── Label ──
   &__label {
     font-size: 1rem;
     font-weight: 500;
     color: $text-primary;
   }
 
-  // ── Trigger ──
   &__trigger {
     display: flex;
     align-items: center;
@@ -153,9 +150,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
     width: 100%;
     padding: 0.5rem 0.75rem;
     border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-primary;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.25s;
@@ -188,7 +185,6 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
     }
   }
 
-  // ── Dropdown ──
   &__dropdown {
     position: absolute;
     top: 100%;
@@ -199,10 +195,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
     max-height: 14rem;
     overflow-y: auto;
     border-radius: 0.625rem;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba($border-base, 0.5);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background: $bg-card;
+    border: 1px solid $border-base;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
   &__option {
@@ -220,11 +215,11 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
     text-align: left;
 
     &:hover:not(&--disabled) {
-      background: rgba(255, 255, 255, 0.05);
+      background: $bg-subtle;
     }
 
     &--selected {
-      color: $accent;
+      color: $primary;
     }
 
     &--disabled {
@@ -236,32 +231,29 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
   &__check {
     width: 1rem;
     height: 1rem;
-    color: $accent;
+    color: $primary;
     flex-shrink: 0;
   }
 
-  // ── Helper text ──
   &__helper {
     font-size: 1rem;
     color: $text-dim;
   }
 
-  // ── States ──
   &--open &__trigger {
-    border-color: rgba($accent, 0.5);
-    box-shadow: 0 0 12px rgba($accent, 0.1);
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.08);
   }
 
   &--error &__trigger {
-    border-color: rgba($danger, 0.5);
+    border-color: $danger;
   }
 
   &--error &__helper {
-    color: $danger-light;
+    color: $danger;
   }
 }
 
-// ── Dropdown transition ──
 .dropdown-enter-active,
 .dropdown-leave-active {
   transition: all 0.2s ease;

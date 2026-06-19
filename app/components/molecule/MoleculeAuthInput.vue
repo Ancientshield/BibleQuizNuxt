@@ -1,14 +1,3 @@
-<!--
-  MoleculeAuthInput — 帶 icon 和光暈 focus 效果的 input。
-
-  主要用於 auth 頁面（login / forgot-password / reset-password）的表單欄位。
-  - icon: 左側的 lucide icon（mail / lock 等）
-  - toggleable: 密碼欄位專用，會顯示右側的眼睛圖示切換 show/hide
-  - hint: 欄位下方的灰色提示文字（例如「密碼至少 8 個字元」）
-
-  為什麼要自管 `focused` 和 `showPassword`：
-  這兩個純 UI 狀態不需要讓外部知道，外部只關心 v-model 的值。
--->
 <template>
   <div class="auth-input">
     <div
@@ -92,14 +81,13 @@ const computedType = computed(() => {
     padding: 0 1rem;
     height: 3.25rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
     transition: all 0.25s;
 
     &--focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 16px rgba($accent, 0.15);
-      background: rgba(30, 41, 59, 0.8);
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.08);
     }
   }
 
@@ -111,7 +99,7 @@ const computedType = computed(() => {
     transition: color 0.25s;
 
     .auth-input__wrapper--focus & {
-      color: $accent;
+      color: $primary;
     }
   }
 
@@ -120,7 +108,7 @@ const computedType = computed(() => {
     background: none;
     border: none;
     outline: none;
-    color: $text-bright;
+    color: $text-primary;
     font-size: 0.9375rem;
 
     &::placeholder {

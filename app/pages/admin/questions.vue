@@ -560,8 +560,8 @@ onMounted(async () => {
   &__card {
     padding: 1.25rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
   }
 
   &__card-top {
@@ -578,8 +578,8 @@ onMounted(async () => {
     border-radius: 9999px;
 
     &--pending {
-      background: rgba(251, 191, 36, 0.15);
-      color: #fbbf24;
+      background: rgba($accent, 0.1);
+      color: $accent;
     }
 
     &--published {
@@ -589,7 +589,7 @@ onMounted(async () => {
 
     &--rejected {
       background: rgba($danger, 0.15);
-      color: $danger-light;
+      color: $danger;
     }
   }
 
@@ -599,7 +599,7 @@ onMounted(async () => {
   }
 
   &__content {
-    color: $text-bright;
+    color: $text-heading;
     font-size: 1rem;
     line-height: 1.5;
     margin-bottom: 0.75rem;
@@ -617,13 +617,13 @@ onMounted(async () => {
     font-size: 1rem;
     padding: 0.25rem 0.625rem;
     border-radius: 0.375rem;
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-subtle;
+    border: 1px solid $border-base;
     color: $text-muted;
 
     &--correct {
       border-color: rgba($success, 0.4);
-      color: $success-light;
+      color: $success;
       background: rgba($success, 0.08);
     }
   }
@@ -645,12 +645,12 @@ onMounted(async () => {
     }
 
     &--mid {
-      color: #fbbf24;
+      color: $accent;
       font-weight: 600;
     }
 
     &--low {
-      color: $danger-light;
+      color: $danger;
       font-weight: 600;
     }
   }

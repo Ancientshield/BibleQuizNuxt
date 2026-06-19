@@ -147,8 +147,8 @@ onMounted(async () => {
     margin-bottom: 1.5rem;
     padding: 2rem;
     border-radius: 1rem;
-    background: radial-gradient(ellipse at 50% 0%, rgba(#fbbf24, 0.08) 0%, transparent 60%), rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(#fbbf24, 0.2);
+    background: $bg-card;
+    border: 1px solid rgba($accent, 0.2);
 
     // 上下金色光條
     &::before,
@@ -158,7 +158,7 @@ onMounted(async () => {
       left: 15%;
       right: 15%;
       height: 2px;
-      background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+      background: linear-gradient(90deg, transparent, $accent, transparent);
     }
 
     &::before {
@@ -177,11 +177,7 @@ onMounted(async () => {
     gap: 0.5rem;
     // 左邊加一個跟 EXP 等寬的 padding，讓數字視覺置中
     padding-left: 3.5rem;
-    background: linear-gradient(135deg, #fde68a, #fbbf24, #d97706);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.4));
+    color: $accent;
   }
 
   &__total-score-value {
@@ -221,7 +217,7 @@ onMounted(async () => {
   &__empty-icon {
     width: 3rem;
     height: 3rem;
-    color: #475569;
+    color: $text-dim;
   }
 
   // ── 歷史列表 ──
@@ -237,17 +233,16 @@ onMounted(async () => {
     gap: 1rem;
     padding: 0.875rem 1.25rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
     cursor: pointer;
     transition: all 0.2s;
-    // NuxtLink 渲染成 <a>，清掉預設底線與顏色
     text-decoration: none;
     color: inherit;
 
     &:hover {
-      border-color: rgba($accent, 0.3);
-      background: rgba(30, 41, 59, 0.7);
+      border-color: rgba($primary, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
   }
 
@@ -290,14 +285,14 @@ onMounted(async () => {
   &__bar-wrapper {
     height: 0.375rem;
     border-radius: 9999px;
-    background: rgba(30, 41, 59, 0.8);
+    background: $bg-subtle;
     overflow: hidden;
   }
 
   &__bar {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(to right, $gradient-start, #a855f7);
+    background: linear-gradient(to right, $primary, $accent);
     transition: width 0.5s ease;
   }
 }

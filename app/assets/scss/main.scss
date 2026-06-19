@@ -6,7 +6,7 @@ body,
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   background: $bg-page;
 }
 
@@ -24,22 +24,16 @@ body {
   min-height: 100dvh;
 }
 
-/**
- * main — 管理頁面的共用容器樣式。
- * 簡潔深色風格，保留玻璃卡片但不加粒子和光暈動畫。
- * 所有管理 / 工具頁面共用。
- */
 .main {
   min-height: 100vh;
   background: $bg-page;
-  padding: $navbar-height 1rem 2rem; // 上方 = Navbar 高度
+  padding: $navbar-height 1rem 2rem;
 
   &__container {
     max-width: 48rem;
     margin: 0 auto;
   }
 
-  // ── 頁面標題列 ──
   &__header {
     display: flex;
     align-items: center;
@@ -55,7 +49,7 @@ body {
     gap: 0.625rem;
     font-size: 1.5rem;
     font-weight: 800;
-    color: $text-bright;
+    color: $text-heading;
     margin-bottom: 0.25rem;
 
     @media (min-width: 768px) {
@@ -75,12 +69,11 @@ body {
     margin-bottom: 1.5rem;
   }
 
-  // ── 玻璃卡片 ──
   &__card {
     border-radius: 1rem;
-    background: rgba($bg-dark, 0.5);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     padding: 1.5rem;
 
     @media (min-width: 768px) {
@@ -88,7 +81,6 @@ body {
     }
   }
 
-  // ── Loading ──
   &__loading {
     text-align: center;
     padding: 3rem;
@@ -96,16 +88,15 @@ body {
     font-size: 1rem;
   }
 
-  // ── 成功訊息 ──
   &__success {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background: rgba($success, 0.1);
-    border: 1px solid rgba($success, 0.3);
-    color: $success-light;
+    background: rgba($success, 0.06);
+    border: 1px solid rgba($success, 0.2);
+    color: $success;
     font-size: 1rem;
     margin-top: 1rem;
   }

@@ -7,7 +7,6 @@
     @pointerenter="handlePointerEnter"
     @pointerleave="handlePointerLeave"
   >
-    <!-- Ripple 水波紋：從點擊位置擴散的圓形半透明動畫 -->
     <span
       v-if="ripple"
       class="option-btn__ripple"
@@ -18,7 +17,6 @@
     />
 
     <div class="option-btn__content">
-      <!-- 左側：徽章 + 文字 -->
       <div class="option-btn__left">
         <AtomOptionBadge
           :label="label"
@@ -27,7 +25,6 @@
         <span>{{ text }}</span>
       </div>
 
-      <!-- 右側：投票百分比 or 答題結果圖示 -->
       <span
         v-if="pollPercentage != null && state === 'default'"
         class="option-btn__poll"
@@ -47,7 +44,6 @@
 </template>
 
 <script setup lang="ts">
-// 匯出型別，供 quiz.vue 等外部元件使用
 export type OptionState = 'default' | 'correct' | 'wrong' | 'disabled';
 
 const props = withDefaults(
@@ -63,15 +59,13 @@ const props = withDefaults(
 );
 
 interface Emits {
-  select: [label: string, event: MouseEvent]; // 點擊事件，傳回選項代號
+  select: [label: string, event: MouseEvent];
 }
 
 const emit = defineEmits<Emits>();
 
-// 動態 BEM modifier class：option-btn--default / --correct / --wrong / --disabled
 const stateClass = computed(() => `option-btn--${props.state}`);
 
-// 只有滑鼠 pointer 才啟用 hover 效果，觸控永遠不觸發
 const isHovered = ref(false);
 
 const handlePointerEnter = (e: PointerEvent) => {
@@ -82,10 +76,8 @@ const handlePointerLeave = () => {
   isHovered.value = false;
 };
 
-// Ripple 水波紋座標（null 表示不顯示）
 const ripple = ref<{ x: number; y: number } | null>(null);
 
-// 點擊 → 算座標觸發 ripple → 600ms 清除 → emit 給父層
 const handleClick = (e: MouseEvent) => {
   const target = e.currentTarget as HTMLElement;
   const rect = target.getBoundingClientRect();
@@ -114,7 +106,7 @@ const handleClick = (e: MouseEvent) => {
   transition: all 0.3s ease-out;
   border: 2px solid;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent; // iOS tap 後預設會加半透明高光，關掉
+  -webkit-tap-highlight-color: transparent;
 
   @media (min-width: 390px) {
     padding: 0.875rem;
@@ -131,9 +123,8 @@ const handleClick = (e: MouseEvent) => {
     cursor: not-allowed;
   }
 
-  // 觸控裝置點擊後不殘留 focus 發光邊框
   &:focus-visible {
-    outline: 2px solid rgba($accent, 0.7);
+    outline: 2px solid $primary;
     outline-offset: 2px;
   }
 
@@ -142,52 +133,43 @@ const handleClick = (e: MouseEvent) => {
     box-shadow: inherit;
   }
 
-  // ── States ──
   &--default {
-    background: rgba(30, 41, 59, 0.6); // slate-800/60
-    backdrop-filter: blur(12px);
-    border-color: rgba(71, 85, 105, 0.5); // slate-600/50
-    color: #fff;
+    background: $bg-card;
+    border-color: $border-base;
+    color: $text-primary;
 
-    // hover 效果：JS PointerEvent（pointerType === 'mouse'）控制 class，
-    // CSS @media (hover: hover) 做第二道防線。
-    // iOS WebKit tap 後會發合成 mouse 事件（pointerType 報 'mouse'），
-    // 繞過 JS 判斷讓光圈殘留，media query 確保觸控裝置不套用。
     @media (hover: hover) {
       &.option-btn--hovered {
         transform: scale(1.02);
-        border-color: rgba($accent, 0.7); // cyan-400/70
-        box-shadow: 0 0 25px rgba($accent, 0.3);
+        border-color: $primary;
+        box-shadow: 0 2px 12px rgba($primary, 0.12);
       }
     }
   }
 
   &--correct {
-    background: rgba(6, 78, 59, 0.6); // emerald-900/60
-    border-color: #34d399; // emerald-400
-    color: #d1fae5; // emerald-100
-    box-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
-    animation: pulse-glow-green 1s ease-in-out infinite; // 答對呼吸光暈
+    background: rgba($success, 0.06);
+    border-color: $success;
+    color: $text-primary;
   }
 
   &--wrong {
-    background: rgba(127, 29, 29, 0.6); // red-900/60
-    border-color: $danger-light; // red-400
-    color: #fee2e2; // red-100
-    box-shadow: 0 0 30px rgba(248, 113, 113, 0.4);
-    animation: shake 0.5s ease-in-out; // 答錯左右搖晃
+    background: rgba($danger, 0.06);
+    border-color: $danger;
+    color: $text-primary;
+    animation: shake 0.5s ease-in-out;
   }
 
   &--disabled {
-    background: rgba(30, 41, 59, 0.3); // slate-800/30
-    border-color: rgba($border-base, 0.3); // slate-700/30
-    color: $text-dim; // slate-500
+    background: $bg-subtle;
+    border-color: rgba($border-base, 0.5);
+    color: $text-dim;
   }
 
   &--eliminated {
     opacity: 0.35;
-    background: rgba(30, 41, 59, 0.2);
-    border-color: rgba($border-base, 0.15);
+    background: $bg-subtle;
+    border-color: rgba($border-base, 0.3);
     color: $text-dim;
     text-decoration: line-through;
     transition:
@@ -195,7 +177,6 @@ const handleClick = (e: MouseEvent) => {
       background 0.4s ease;
   }
 
-  // ── Inner elements ──
   &__content {
     display: flex;
     align-items: center;
@@ -224,7 +205,7 @@ const handleClick = (e: MouseEvent) => {
   &__ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba($accent, 0.3); // cyan-400/30
+    background: rgba($primary, 0.12);
     width: 10px;
     height: 10px;
     transform: translate(-50%, -50%) scale(1);
@@ -234,7 +215,6 @@ const handleClick = (e: MouseEvent) => {
   }
 }
 
-// 用 transform: scale() 取代 width/height 動畫，避免觸發 layout
 @keyframes ripple {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -243,31 +223,6 @@ const handleClick = (e: MouseEvent) => {
   100% {
     transform: translate(-50%, -50%) scale(50);
     opacity: 0;
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  20%,
-  60% {
-    transform: translateX(-8px);
-  }
-  40%,
-  80% {
-    transform: translateX(8px);
-  }
-}
-
-@keyframes pulse-glow-green {
-  0%,
-  100% {
-    box-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 50px rgba(52, 211, 153, 0.6);
   }
 }
 </style>

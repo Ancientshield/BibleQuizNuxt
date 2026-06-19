@@ -1,10 +1,3 @@
-<!--
-  MoleculeStatCard — 統計數字卡片（大數字 + 小標籤）。
-
-  使用場景：首頁統計預覽、my-history 總覽。
-  - size: md（首頁）/ lg（my-history，數字更大、padding 更大）
-  - color: cyan / amber / purple 三色，對應不同語意（cyan 主色、amber 金幣/成就、purple 強調）
--->
 <template>
   <div
     class="stat-card"
@@ -38,9 +31,8 @@ withDefaults(
 <style lang="scss" scoped>
 .stat-card {
   border-radius: 0.75rem;
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba($border-base, 0.5);
+  background: $bg-card;
+  border: 1px solid $border-base;
   text-align: center;
 
   &--md {
@@ -68,18 +60,15 @@ withDefaults(
     }
 
     &--cyan {
-      color: $accent;
-      filter: drop-shadow(0 0 10px rgba($accent, 0.5));
+      color: $primary;
     }
 
     &--amber {
-      color: #fbbf24;
-      filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
+      color: $accent;
     }
 
     &--purple {
-      color: #a855f7;
-      filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+      color: $secondary;
     }
   }
 

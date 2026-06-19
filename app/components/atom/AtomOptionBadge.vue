@@ -8,12 +8,11 @@
 </template>
 
 <script setup lang="ts">
-// default=未作答 / correct=答對 / wrong=答錯 / disabled=未選中
 type BadgeState = 'default' | 'correct' | 'wrong' | 'disabled';
 
 const props = defineProps<{
-  label: string; // 選項代號："A" | "B" | "C" | "D"
-  state: BadgeState; // 視覺狀態，由父層 MoleculeOptionButton 傳入
+  label: string;
+  state: BadgeState;
 }>();
 
 const stateClass = computed(() => `badge--${props.state}`);
@@ -46,23 +45,24 @@ const stateClass = computed(() => `badge--${props.state}`);
   }
 
   &--default {
-    background: rgba($border-base, 0.8); // slate-700/80
-    color: $accent; // cyan-400
+    background: $bg-subtle;
+    color: $primary;
   }
 
   &--correct {
-    background: rgba(16, 185, 129, 0.8); // emerald-500/80
-    color: #fff;
+    background: rgba($success, 0.15);
+    color: $success;
   }
 
   &--wrong {
-    background: rgba($danger, 0.8); // red-500/80
+    background: rgba($danger, 0.15);
     color: #fff;
+    background: $danger;
   }
 
   &--disabled {
-    background: rgba($border-base, 0.4); // slate-700/40
-    color: $text-dim; // slate-500
+    background: $bg-subtle;
+    color: $text-dim;
   }
 }
 </style>

@@ -1,23 +1,65 @@
 <template>
   <div class="navbar-root">
-    <header
-      class="navbar"
-      :class="{ 'navbar--scrolled': isScrolled }"
-    >
-      <!-- 左側：漢堡選單 -->
-      <button
-        class="navbar__hamburger"
-        @click="menuOpen = !menuOpen"
-      >
-        <Icon
-          :name="menuOpen ? 'lucide:x' : 'lucide:menu'"
-          class="navbar__hamburger-icon"
-        />
-      </button>
+    <header class="navbar">
+      <!-- 左側：漢堡選單（手機）+ Logo -->
+      <div class="navbar__left">
+        <button
+          class="navbar__hamburger"
+          @click="menuOpen = !menuOpen"
+        >
+          <Icon
+            :name="menuOpen ? 'lucide:x' : 'lucide:menu'"
+            class="navbar__hamburger-icon"
+          />
+        </button>
 
-      <!-- 右側：登入狀態（常駐顯示） -->
+        <NuxtLink
+          to="/"
+          class="navbar__logo"
+        >
+          <Icon
+            name="lucide:book-open"
+            class="navbar__logo-icon"
+          />
+          <span class="navbar__logo-text">Bible Quiz</span>
+        </NuxtLink>
+      </div>
+
+      <!-- 中間：桌面導航連結 -->
+      <nav class="navbar__nav">
+        <NuxtLink
+          to="/"
+          class="navbar__nav-link"
+          :class="{ 'navbar__nav-link--active': route.path === '/' }"
+        >
+          首頁
+        </NuxtLink>
+        <NuxtLink
+          to="/questions/submissions"
+          class="navbar__nav-link"
+          :class="{ 'navbar__nav-link--active': route.path.startsWith('/questions') }"
+        >
+          投稿
+        </NuxtLink>
+        <NuxtLink
+          to="/my-history"
+          class="navbar__nav-link"
+          :class="{ 'navbar__nav-link--active': route.path.startsWith('/my-history') }"
+        >
+          紀錄
+        </NuxtLink>
+        <NuxtLink
+          v-if="auth.isAdmin"
+          to="/admin/questions"
+          class="navbar__nav-link"
+          :class="{ 'navbar__nav-link--active': route.path.startsWith('/admin') }"
+        >
+          管理
+        </NuxtLink>
+      </nav>
+
+      <!-- 右側：登入狀態 -->
       <div class="navbar__right">
-        <!-- 未登入 -->
         <button
           v-if="!auth.isLoggedIn && !isLoginPage"
           class="navbar__login-btn"
@@ -30,10 +72,9 @@
           登入
         </button>
 
-        <!-- 登入頁：回首頁 -->
         <button
           v-else-if="isLoginPage"
-          class="navbar__login-btn"
+          class="navbar__home-btn"
           @click="navigateTo('/')"
         >
           <Icon
@@ -43,7 +84,6 @@
           回首頁
         </button>
 
-        <!-- 已登入 -->
         <div
           v-else-if="auth.isLoggedIn"
           ref="userMenuRef"
@@ -69,7 +109,6 @@
             </span>
           </button>
 
-          <!-- 頭像下拉 -->
           <Transition name="menu">
             <div
               v-if="userMenuOpen"
@@ -91,7 +130,7 @@
       </div>
     </header>
 
-    <!-- 漢堡展開選單 -->
+    <!-- 漢堡展開選單（手機） -->
     <Transition name="menu">
       <nav
         v-if="menuOpen"
@@ -146,7 +185,6 @@
       </nav>
     </Transition>
 
-    <!-- 點外面關閉 -->
     <Transition name="overlay">
       <div
         v-if="menuOpen"
@@ -165,9 +203,7 @@ const isLoginPage = computed(() => route.path === '/login');
 const menuOpen = ref(false);
 const userMenuOpen = ref(false);
 const userMenuRef = ref<HTMLDivElement | null>(null);
-const isScrolled = ref(false);
 
-// 路由切換時自動關閉選單
 watch(
   () => route.path,
   () => {
@@ -176,7 +212,6 @@ watch(
   }
 );
 
-// 點外面關閉頭像下拉
 const onClickOutsideUser = (e: MouseEvent) => {
   if (userMenuRef.value && !userMenuRef.value.contains(e.target as Node)) {
     userMenuOpen.value = false;
@@ -184,13 +219,8 @@ const onClickOutsideUser = (e: MouseEvent) => {
 };
 
 onMounted(() => {
-  const onScroll = () => {
-    isScrolled.value = window.scrollY > 20;
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('click', onClickOutsideUser);
   onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll);
     document.removeEventListener('click', onClickOutsideUser);
   });
 });
@@ -209,10 +239,6 @@ const handleLogout = () => {
 </script>
 
 <style lang="scss" scoped>
-$nav-action-cream: #fff8e7;
-$nav-action-cream-hover: #fffdf5;
-$nav-action-text: #172033;
-
 .navbar {
   position: fixed;
   top: 0;
@@ -224,19 +250,16 @@ $nav-action-text: #172033;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  background: transparent;
-  transition:
-    background 0.3s,
-    border-color 0.3s;
-  border-bottom: 1px solid transparent;
+  background: $bg-card;
+  border-bottom: 1px solid $border-base;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
-  &--scrolled {
-    background: rgba($bg-dark, 0.7);
-    backdrop-filter: blur(24px);
-    border-bottom-color: rgba($border-base, 0.4);
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
-  // ── 漢堡按鈕 ──
   &__hamburger {
     display: flex;
     align-items: center;
@@ -244,33 +267,80 @@ $nav-action-text: #172033;
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.5rem;
-    background: rgba($nav-action-cream, 0.94);
-    border: 1px solid rgba($nav-action-cream, 0.9);
-    color: $nav-action-text;
-    box-shadow:
-      0 8px 20px rgba(2, 6, 23, 0.18),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.36);
+    background: $primary;
+    border: none;
+    color: white;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      color: $bg-page;
-      border-color: rgba($nav-action-cream-hover, 1);
-      background: rgba($nav-action-cream-hover, 0.98);
-      box-shadow:
-        0 10px 24px rgba(2, 6, 23, 0.24),
-        0 0 18px rgba($accent, 0.14),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+      background: $primary-hover;
     }
 
     &:active {
       transform: scale(0.93);
     }
+
+    @media (min-width: 768px) {
+      display: none;
+    }
   }
 
   &__hamburger-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: $text-heading;
+  }
+
+  &__logo-icon {
     width: 1.5rem;
     height: 1.5rem;
+    color: $primary;
+  }
+
+  &__logo-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text-heading;
+  }
+
+  // ── 桌面導航連結 ──
+  &__nav {
+    display: none;
+
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+  }
+
+  &__nav-link {
+    padding: 0.5rem 0.875rem;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: $text-muted;
+    text-decoration: none;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $text-heading;
+      background: $bg-subtle;
+    }
+
+    &--active {
+      color: $primary;
+      background: rgba($primary, 0.06);
+    }
   }
 
   // ── 右側區域 ──
@@ -279,47 +349,57 @@ $nav-action-text: #172033;
     align-items: center;
   }
 
-  // ── 登入按鈕（未登入） ──
   &__login-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    border-radius: 9999px;
-    background: rgba($nav-action-cream, 0.94);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba($nav-action-cream, 0.9);
-    color: $nav-action-text;
-    box-shadow:
-      0 8px 20px rgba(2, 6, 23, 0.18),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.36);
+    padding: 0.5rem 1.125rem;
+    border-radius: 0.5rem;
+    background: $primary;
+    border: none;
+    color: white;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.25s;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba($primary, 0.2);
 
     &:hover {
-      background: rgba($nav-action-cream-hover, 0.98);
-      color: $bg-page;
-      border-color: rgba($nav-action-cream-hover, 1);
-      box-shadow:
-        0 10px 24px rgba(2, 6, 23, 0.24),
-        0 0 18px rgba($accent, 0.14),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+      background: $primary-hover;
+      box-shadow: 0 2px 6px rgba($primary, 0.3);
     }
 
     &:active {
-      transform: scale(0.95);
+      transform: scale(0.96);
+    }
+  }
+
+  &__home-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.125rem;
+    border-radius: 0.5rem;
+    background: $bg-subtle;
+    border: 1px solid $border-base;
+    color: $text-primary;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $border-base;
     }
   }
 
   &__login-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
-  // ── 已登入使用者區域 ──
   &__user {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -327,7 +407,7 @@ $nav-action-text: #172033;
 
   &__user-name {
     color: $text-primary;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     max-width: 10rem;
     overflow: hidden;
@@ -339,45 +419,36 @@ $nav-action-text: #172033;
     }
   }
 
-  // ── 已登入使用者（相對定位，讓下拉對齊） ──
-  &__user {
-    position: relative;
-  }
-
-  // ── 頭像 ──
   &__avatar {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 50%;
     overflow: hidden;
-    border: 1.5px solid rgba($accent, 0.4);
-    box-shadow: 0 0 12px rgba($accent, 0.15);
+    border: 2px solid $border-base;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to bottom right, $gradient-start, $gradient-end);
+    background: $primary;
     flex-shrink: 0;
     cursor: pointer;
     padding: 0;
     transition: all 0.2s;
 
     &:hover {
-      box-shadow: 0 0 18px rgba($accent, 0.3);
+      border-color: $primary;
     }
   }
 
-  // ── 頭像下拉選單 ──
   &__user-dropdown {
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 0;
     min-width: 7rem;
     padding: 0.375rem;
-    background: rgba($bg-dark, 0.95);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
     border-radius: 0.625rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
   &__user-dropdown-item {
@@ -390,14 +461,14 @@ $nav-action-text: #172033;
     background: none;
     border: none;
     color: $text-primary;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
 
     &--danger:hover {
-      background: rgba($danger, 0.1);
-      color: $danger-light;
+      background: rgba($danger, 0.06);
+      color: $danger;
     }
   }
 
@@ -414,31 +485,32 @@ $nav-action-text: #172033;
 
   &__avatar-text {
     color: white;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 700;
     line-height: 1;
   }
 }
 
-// ── 展開選單 ──
+// ── 展開選單（手機） ──
 .navbar-menu {
   position: fixed;
-  top: 4.25rem;
-  left: 1.5rem;
+  top: calc($navbar-height + 0.5rem);
+  left: 1rem;
   z-index: 49;
   width: 15rem;
-  max-width: calc(100vw - 3rem);
+  max-width: calc(100vw - 2rem);
   padding: 0.5rem;
-  background: rgba($nav-action-cream, 0.96);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba($nav-action-cream-hover, 0.95);
+  background: $bg-card;
+  border: 1px solid $border-base;
   border-radius: 0.75rem;
-  box-shadow:
-    0 12px 32px rgba(2, 6, 23, 0.24),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.36);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 
   &__item {
     display: flex;
@@ -446,9 +518,9 @@ $nav-action-text: #172033;
     gap: 0.75rem;
     padding: 0.625rem 0.75rem;
     border-radius: 0.5rem;
-    color: $nav-action-text;
-    font-size: 1rem;
-    font-weight: 650;
+    color: $text-primary;
+    font-size: 0.9375rem;
+    font-weight: 600;
     text-decoration: none;
     background: none;
     border: none;
@@ -457,20 +529,12 @@ $nav-action-text: #172033;
     transition: all 0.2s;
 
     &:hover {
-      background: rgba($nav-action-cream-hover, 0.98);
-      color: $bg-page;
-      box-shadow:
-        0 6px 16px rgba(2, 6, 23, 0.12),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+      background: $bg-subtle;
+      color: $text-heading;
     }
 
     &:active {
       transform: scale(0.98);
-    }
-
-    &--danger:hover {
-      background: rgba($danger, 0.1);
-      color: $danger-light;
     }
   }
 
@@ -478,24 +542,23 @@ $nav-action-text: #172033;
     width: 1.125rem;
     height: 1.125rem;
     flex-shrink: 0;
+    color: $text-muted;
   }
 
   &__divider {
     height: 1px;
-    background: rgba($nav-action-text, 0.14);
+    background: $border-base;
     margin: 0.25rem 0.5rem;
   }
 }
 
-// ── 背景遮罩 ──
 .navbar-overlay {
   position: fixed;
   inset: 0;
   z-index: 48;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.15);
 }
 
-// ── Transitions ──
 .menu-enter-active,
 .menu-leave-active {
   transition: all 0.2s ease;

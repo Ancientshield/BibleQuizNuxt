@@ -161,7 +161,7 @@ onMounted(fetchQuestions);
   &__empty-icon {
     width: 3rem;
     height: 3rem;
-    color: #475569;
+    color: $text-dim;
   }
 
   // ── 題目列表 ──
@@ -174,12 +174,12 @@ onMounted(fetchQuestions);
   &__card {
     padding: 1rem 1.25rem;
     border-radius: 0.75rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba($border-base, 0.5);
+    background: $bg-card;
+    border: 1px solid $border-base;
     transition: border-color 0.2s;
 
     &:hover {
-      border-color: rgba(71, 85, 105, 0.7);
+      border-color: rgba($primary, 0.3);
     }
   }
 
@@ -198,8 +198,8 @@ onMounted(fetchQuestions);
     border-radius: 9999px;
 
     &--pending {
-      background: rgba(251, 191, 36, 0.15);
-      color: #fbbf24;
+      background: rgba($accent, 0.1);
+      color: $accent;
     }
 
     &--published {
@@ -209,7 +209,7 @@ onMounted(fetchQuestions);
 
     &--rejected {
       background: rgba($danger, 0.15);
-      color: $danger-light;
+      color: $danger;
     }
   }
 
@@ -219,7 +219,7 @@ onMounted(fetchQuestions);
   }
 
   &__content {
-    color: $text-bright;
+    color: $text-heading;
     font-size: 0.9375rem;
     line-height: 1.5;
     margin-bottom: 0.75rem;

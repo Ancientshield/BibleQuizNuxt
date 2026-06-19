@@ -160,7 +160,7 @@ const colStyle = (col: TableColumn) => {
   width: 100%;
   overflow-x: auto;
   border-radius: 0.75rem;
-  border: 1px solid rgba($border-base, 0.5);
+  border: 1px solid $border-base;
 }
 
 .a-table {
@@ -168,7 +168,6 @@ const colStyle = (col: TableColumn) => {
   border-collapse: collapse;
 }
 
-// ── 表頭 ──
 .a-table__th {
   padding: 0.75rem;
   font-size: 1rem;
@@ -177,14 +176,14 @@ const colStyle = (col: TableColumn) => {
   text-align: left;
   white-space: nowrap;
   user-select: none;
-  background: rgba(30, 41, 59, 0.6);
-  border-bottom: 1px solid rgba($border-base, 0.5);
+  background: $bg-subtle;
+  border-bottom: 1px solid $border-base;
 
   &--sortable {
     cursor: pointer;
 
     &:hover {
-      color: $accent;
+      color: $primary;
     }
   }
 }
@@ -195,7 +194,6 @@ const colStyle = (col: TableColumn) => {
   gap: 0.25rem;
 }
 
-// ── 排序箭頭 ──
 .a-table__sort {
   display: inline-flex;
   flex-direction: column;
@@ -210,24 +208,23 @@ const colStyle = (col: TableColumn) => {
 }
 
 .a-table__th--asc .a-table__arrow--up {
-  color: $accent;
+  color: $primary;
 }
 
 .a-table__th--desc .a-table__arrow--down {
-  color: $accent;
+  color: $primary;
 }
 
-// ── 表身 ──
 .a-table__row {
-  border-bottom: 1px solid rgba($border-base, 0.3);
+  border-bottom: 1px solid rgba($border-base, 0.6);
   transition: background 0.15s;
 
   &--hoverable:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: $bg-subtle;
   }
 
   &--striped {
-    background: rgba(30, 41, 59, 0.3);
+    background: rgba($bg-subtle, 0.5);
   }
 }
 
@@ -238,7 +235,6 @@ const colStyle = (col: TableColumn) => {
   vertical-align: middle;
 }
 
-// ── 空狀態 ──
 .a-table__td--empty {
   padding: 3rem;
   text-align: center;

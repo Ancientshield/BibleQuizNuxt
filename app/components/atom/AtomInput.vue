@@ -91,21 +91,19 @@ const statusClass = computed(() => {
   flex-direction: column;
   gap: 0.375rem;
 
-  // ── Label ──
   &__label {
     font-size: 1rem;
     font-weight: 500;
     color: $text-primary;
   }
 
-  // ── Input ──
   &__field {
     width: 100%;
     padding: 0.5rem 0.75rem;
     border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-primary;
     font-size: 1rem;
     outline: none;
     transition: all 0.25s;
@@ -120,26 +118,23 @@ const statusClass = computed(() => {
     }
   }
 
-  // ── Helper text ──
   &__helper {
     font-size: 1rem;
     color: $text-dim;
   }
 
-  // ── States ──
   &--focus &__field {
-    border-color: rgba($accent, 0.5);
-    box-shadow: 0 0 12px rgba($accent, 0.1);
-    background: rgba(30, 41, 59, 0.8);
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.08);
   }
 
   &--error &__field {
-    border-color: rgba($danger, 0.5);
-    box-shadow: 0 0 12px rgba($danger, 0.1);
+    border-color: $danger;
+    box-shadow: 0 0 0 3px rgba($danger, 0.08);
   }
 
   &--error &__helper {
-    color: $danger-light;
+    color: $danger;
   }
 }
 </style>

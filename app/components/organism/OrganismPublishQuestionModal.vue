@@ -234,17 +234,16 @@ const handleSubmit = async () => {
   width: min(36rem, 92vw);
   max-height: 88vh;
   overflow-y: auto;
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba($border-base, 0.6);
+  background: $bg-card;
+  border: 1px solid $border-base;
   border-radius: 1rem;
   padding: 1.5rem;
-  backdrop-filter: blur(24px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
 
   &__overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,7 +254,7 @@ const handleSubmit = async () => {
   &__title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: $text-bright;
+    color: $text-heading;
     margin: 0 0 0.5rem;
   }
 
@@ -297,9 +296,9 @@ const handleSubmit = async () => {
     transition: all 0.2s;
 
     &:hover {
-      color: $accent;
-      border-color: rgba($accent, 0.5);
-      background: rgba($accent, 0.08);
+      color: $primary;
+      border-color: rgba($primary, 0.3);
+      background: rgba($primary, 0.06);
     }
   }
 
@@ -313,9 +312,9 @@ const handleSubmit = async () => {
     box-sizing: border-box;
     padding: 0.5rem 0.75rem;
     border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba($border-base, 0.5);
-    color: $text-bright;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-heading;
     font-size: 1rem;
     outline: none;
     transition: all 0.25s;
@@ -328,8 +327,8 @@ const handleSubmit = async () => {
     cursor: pointer;
 
     &:focus {
-      border-color: rgba($accent, 0.5);
-      box-shadow: 0 0 12px rgba($accent, 0.1);
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.08);
     }
 
     &:disabled {
@@ -338,8 +337,8 @@ const handleSubmit = async () => {
     }
 
     option {
-      background: #1e293b;
-      color: $text-bright;
+      background: $bg-card;
+      color: $text-heading;
     }
   }
 

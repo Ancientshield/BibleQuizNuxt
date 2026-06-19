@@ -175,14 +175,14 @@ const goTo = (page: number) => {
     transition: all 0.2s;
 
     &:hover:not(:disabled):not(&--active) {
-      color: $text-bright;
-      background: rgba(255, 255, 255, 0.05);
+      color: $text-heading;
+      background: $bg-subtle;
     }
 
     &--active {
-      background: rgba($accent, 0.15);
-      color: $accent;
-      border-color: rgba($accent, 0.3);
+      background: rgba($primary, 0.1);
+      color: $primary;
+      border-color: rgba($primary, 0.25);
     }
 
     &:disabled {
@@ -204,7 +204,7 @@ const goTo = (page: number) => {
     letter-spacing: 0.05em;
 
     &:hover {
-      color: $accent;
+      color: $primary;
     }
   }
 
