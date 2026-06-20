@@ -29,6 +29,8 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: ${{ secrets.DOCKER_USERNAME }}/biblequiz-frontend:latest
+          build-args: |
+            NUXT_PUBLIC_CF_AI_SEARCH_URL=${{ secrets.NUXT_PUBLIC_CF_AI_SEARCH_URL }}
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1

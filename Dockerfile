@@ -6,6 +6,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
+ARG NUXT_PUBLIC_CF_AI_SEARCH_URL=""
+ENV NUXT_PUBLIC_CF_AI_SEARCH_URL=$NUXT_PUBLIC_CF_AI_SEARCH_URL
 RUN pnpm run generate
 
 # ── Run stage ── nginx 託管靜態檔案 + 反向代理 /api
