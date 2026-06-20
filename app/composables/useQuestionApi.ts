@@ -11,6 +11,9 @@
 export interface QuestionFormData {
   content: string;
   options: { content: string; correct: boolean }[];
+  explanation?: string;
+  categoryId?: number;
+  suggestedCategory?: string;
 }
 
 /** 「我的投稿」列表項目（含狀態標籤顯示：待審核 / 已上架 / 未通過） */
@@ -27,6 +30,9 @@ export interface QuestionDetail {
   id: number;
   content: string;
   options: { id: number; content: string; correct: boolean }[];
+  explanation: string | null;
+  categoryId: number | null;
+  suggestedCategory: string | null;
 }
 
 export const useQuestionApi = () => {

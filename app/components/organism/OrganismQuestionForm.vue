@@ -50,6 +50,45 @@
       </div>
     </div>
 
+    <!-- 題目分類（選填） -->
+    <div class="q-form__field">
+      <label class="q-form__label">題目分類（選填）</label>
+      <select
+        v-model="categorySelection"
+        class="q-form__select"
+      >
+        <option value="">請選擇分類</option>
+        <option
+          v-for="cat in categories"
+          :key="cat.id"
+          :value="String(cat.id)"
+        >
+          {{ cat.name }}
+        </option>
+        <option value="__new__">我要新增...</option>
+      </select>
+
+      <Transition name="fade">
+        <input
+          v-if="categorySelection === '__new__'"
+          v-model="suggestedCategory"
+          class="q-form__option-input"
+          placeholder="輸入建議的分類名稱"
+        />
+      </Transition>
+    </div>
+
+    <!-- 題目解釋（選填） -->
+    <div class="q-form__field">
+      <label class="q-form__label">題目解釋（選填）</label>
+      <textarea
+        v-model="explanation"
+        class="q-form__textarea"
+        placeholder="為什麼正確答案是這個？"
+        rows="3"
+      />
+    </div>
+
     <!-- 錯誤訊息 -->
     <Transition name="fade">
       <div
@@ -83,11 +122,22 @@ interface OptionItem {
 interface QuestionFormData {
   content: string;
   options: { content: string; correct: boolean }[];
+  explanation?: string;
+  categoryId?: number;
+  suggestedCategory?: string;
+}
+
+interface CategoryItem {
+  id: number;
+  name: string;
 }
 
 interface InitialData {
   content: string;
   options: { content: string; correct: boolean }[];
+  explanation?: string | null;
+  categoryId?: number | null;
+  suggestedCategory?: string | null;
 }
 
 const props = withDefaults(
@@ -106,6 +156,16 @@ const emit = defineEmits<{
 const formId = useId();
 const errorMsg = ref('');
 
+// ── 分類列表 ──
+const categories = ref<CategoryItem[]>([]);
+onMounted(async () => {
+  try {
+    categories.value = await $fetch<CategoryItem[]>('/api/categories');
+  } catch {
+    // 分類是選填，取不到就算了
+  }
+});
+
 // ── 表單狀態 ──
 const content = ref(props.initialData?.content ?? '');
 const correctIndex = ref(props.initialData ? props.initialData.options.findIndex(o => o.correct) : 0);
@@ -114,6 +174,15 @@ const options = ref<OptionItem[]>(
     ? props.initialData.options.map(o => ({ content: o.content }))
     : [{ content: '' }, { content: '' }, { content: '' }, { content: '' }]
 );
+const explanation = ref(props.initialData?.explanation ?? '');
+const categorySelection = ref(
+  props.initialData?.suggestedCategory
+    ? '__new__'
+    : props.initialData?.categoryId
+      ? String(props.initialData.categoryId)
+      : ''
+);
+const suggestedCategory = ref(props.initialData?.suggestedCategory ?? '');
 
 // 編輯模式：initialData 變化時重設表單
 watch(
@@ -123,6 +192,9 @@ watch(
       content.value = val.content;
       correctIndex.value = val.options.findIndex(o => o.correct);
       options.value = val.options.map(o => ({ content: o.content }));
+      explanation.value = val.explanation ?? '';
+      categorySelection.value = val.suggestedCategory ? '__new__' : val.categoryId ? String(val.categoryId) : '';
+      suggestedCategory.value = val.suggestedCategory ?? '';
     }
   }
 );
@@ -139,13 +211,24 @@ const handleSubmit = () => {
     return;
   }
 
-  emit('submit', {
+  const data: QuestionFormData = {
     content: content.value.trim(),
     options: options.value.map((o, i) => ({
       content: o.content.trim(),
       correct: i === correctIndex.value,
     })),
-  });
+  };
+
+  if (explanation.value.trim()) {
+    data.explanation = explanation.value.trim();
+  }
+  if (categorySelection.value === '__new__' && suggestedCategory.value.trim()) {
+    data.suggestedCategory = suggestedCategory.value.trim();
+  } else if (categorySelection.value && categorySelection.value !== '__new__') {
+    data.categoryId = Number(categorySelection.value);
+  }
+
+  emit('submit', data);
 };
 </script>
 
@@ -185,6 +268,31 @@ const handleSubmit = () => {
     &::placeholder {
       color: $text-dim;
     }
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.08);
+    }
+  }
+
+  // ── 下拉選單 ──
+  &__select {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    background: $bg-card;
+    border: 1px solid $border-base;
+    color: $text-primary;
+    font-size: 0.9375rem;
+    outline: none;
+    transition: all 0.25s;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b4c2a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
 
     &:focus {
       border-color: $primary;

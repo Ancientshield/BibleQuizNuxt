@@ -19,6 +19,7 @@ interface QuestionDTO {
   content: string;
   category: string | null;
   bibleRef: string | null;
+  explanation: string | null;
   options: OptionDTO[];
 }
 

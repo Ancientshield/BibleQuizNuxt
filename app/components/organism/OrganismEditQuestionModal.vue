@@ -79,6 +79,17 @@
             </select>
           </div>
 
+          <!-- 解釋 -->
+          <div class="edit-modal__field">
+            <label class="edit-modal__label">題目解釋（選填）</label>
+            <textarea
+              v-model="form.explanation"
+              class="edit-modal__textarea"
+              rows="3"
+              placeholder="為什麼正確答案是這個？"
+            />
+          </div>
+
           <!-- 書卷 -->
           <div class="edit-modal__field">
             <label class="edit-modal__label">書卷</label>
@@ -210,6 +221,7 @@ const correctIndex = ref(0);
 const form = reactive({
   content: '',
   options: [{ content: '' }, { content: '' }, { content: '' }, { content: '' }] as { content: string }[],
+  explanation: '',
   categoryId: null as number | null,
   bibleBookId: null as number | null,
   bibleChapter: null as number | null,
@@ -226,6 +238,7 @@ watch(
     form.options = t.options.map(o => ({ content: o.content }));
     while (form.options.length < 4) form.options.push({ content: '' });
     correctIndex.value = t.options.findIndex(o => o.correct);
+    form.explanation = t.explanation ?? '';
     form.categoryId = t.categoryId;
     form.bibleBookId = t.bibleBookId;
     form.bibleChapter = t.bibleChapter;
@@ -266,6 +279,7 @@ const handleSubmit = async () => {
     await adminApi.update(props.target.id, {
       content: form.content.trim(),
       options: validOptions,
+      explanation: form.explanation.trim() || null,
       categoryId: form.categoryId,
       bibleBookId: form.bibleBookId,
       bibleChapter: form.bibleChapter,

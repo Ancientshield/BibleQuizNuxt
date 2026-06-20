@@ -25,6 +25,8 @@ export interface AdminQuestionItem {
   totalAnswered: number | null; // 總作答次數
   correctCount: number | null; // 答對次數
   accuracyRate: number | null; // 正確率
+  explanation: string | null;
+  suggestedCategory: string | null;
   mostSelectedWrongOption: string | null; // 最常被選的錯答（幫助 admin 改題）
   authorName: string | null;
   createdAt: string;

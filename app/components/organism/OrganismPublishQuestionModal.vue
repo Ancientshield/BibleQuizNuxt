@@ -10,6 +10,14 @@
           <h2 class="pub-modal__title">核准上架</h2>
           <p class="pub-modal__desc">指定分類和經文出處：</p>
 
+          <div
+            v-if="target?.suggestedCategory"
+            class="pub-modal__hint"
+          >
+            <Icon name="lucide:lightbulb" />
+            投稿者建議分類：{{ target.suggestedCategory }}
+          </div>
+
           <div class="pub-modal__field">
             <label class="pub-modal__label">
               <span>分類</span>
@@ -191,12 +199,11 @@ const form = reactive({
   bibleVerseEnd: null as number | null,
 });
 
-// 每次打開 Modal 時（target 從 null 變非 null）把表單重置乾淨
 watch(
   () => props.target,
   t => {
     if (t) {
-      form.categoryId = null;
+      form.categoryId = t.categoryId;
       form.bibleBookId = null;
       form.bibleChapter = null;
       form.bibleVerseStart = null;
@@ -262,6 +269,19 @@ const handleSubmit = async () => {
     font-size: 1rem;
     color: $text-muted;
     margin: 0 0 1.25rem;
+  }
+
+  &__hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.625rem;
+    background: rgba($accent, 0.08);
+    border: 1px solid rgba($accent, 0.2);
+    color: $accent;
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
 
   &__field {

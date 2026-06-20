@@ -59,6 +59,12 @@
           v-model="filters.dateTo"
           label="日期迄"
         />
+        <MoleculeSelect
+          v-model="filters.hasExplanation"
+          label="解釋"
+          :options="explanationOptions"
+          placeholder="全部"
+        />
       </OrganismFilterBar>
 
       <!-- ══ Loading ══ -->
@@ -115,6 +121,24 @@
               <span v-if="q.categoryName">{{ q.categoryName }}</span>
               <span v-if="q.bibleRef">{{ q.bibleRef }}</span>
             </div>
+
+            <div
+              v-if="q.suggestedCategory"
+              class="aq__suggested-cat"
+            >
+              建議分類：{{ q.suggestedCategory }}
+            </div>
+
+            <p
+              v-if="q.explanation"
+              class="aq__explanation-preview"
+            >
+              <Icon
+                name="lucide:lightbulb"
+                class="aq__explanation-icon"
+              />
+              {{ q.explanation }}
+            </p>
 
             <div class="aq__actions">
               <AtomButton
@@ -206,13 +230,14 @@
         </AtomTable>
       </template>
 
-      <!-- ══ 分頁 ══ -->
-      <AtomPagination
-        :total="totalElements"
-        :page-size="PAGE_SIZE"
-        :current-page="currentPage"
-        @update:current-page="onPageChange"
-      />
+      <!-- ══ 無限捲動哨兵 ══ -->
+      <div
+        ref="sentinelRef"
+        class="aq__sentinel"
+      >
+        <template v-if="loadingMore">載入中...</template>
+        <template v-else-if="!hasMore && questions.length > 0">已顯示全部</template>
+      </div>
 
       <!-- ══ 核准 Modal ══ -->
       <OrganismPublishQuestionModal
@@ -277,7 +302,6 @@ const switchTab = (tab: string) => {
   const next = tab as TabKey;
   if (activeTab.value === next) return;
   activeTab.value = next;
-  currentPage.value = 1;
   sortField.value = '';
   fetchQuestions();
 };
@@ -379,6 +403,7 @@ const filters = reactive({
   author: '',
   dateFrom: '',
   dateTo: '',
+  hasExplanation: '' as string | number,
 });
 
 const statusOptions = [
@@ -388,14 +413,23 @@ const statusOptions = [
   { label: '未通過', value: 'REJECTED' },
 ];
 
+const explanationOptions = [
+  { label: '全部', value: '' },
+  { label: '有解釋', value: 'true' },
+  { label: '無解釋', value: 'false' },
+];
+
 // ── 資料 ──
 
 const loading = ref(true);
+const loadingMore = ref(false);
 const questions = ref<QuestionItem[]>([]);
 const totalElements = ref(0);
 const currentPage = ref(1);
+const hasMore = ref(true);
 const categories = ref<Category[]>([]);
 const bibleBooks = ref<BibleBook[]>([]);
+const sentinelRef = ref<HTMLElement | null>(null);
 
 const categoryOptions = computed(() => [
   { label: '全部分類', value: '' as string | number },
@@ -440,24 +474,30 @@ const formatDate = (iso: string) => {
 
 // ── API ──
 
+const buildParams = () => {
+  const params = new URLSearchParams();
+  if (filters.status) params.set('status', String(filters.status));
+  if (filters.categoryId) params.set('categoryId', String(filters.categoryId));
+  if (filters.keyword) params.set('keyword', filters.keyword);
+  if (filters.optionKeyword) params.set('optionKeyword', filters.optionKeyword);
+  if (filters.author) params.set('author', filters.author);
+  if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
+  if (filters.dateTo) params.set('dateTo', filters.dateTo);
+  if (filters.hasExplanation) params.set('hasExplanation', String(filters.hasExplanation));
+  params.set('page', String(currentPage.value - 1));
+  params.set('size', String(PAGE_SIZE));
+  if (activeTab.value === 'stats' || activeTab.value === 'options') params.set('includeStats', 'true');
+  return params;
+};
+
 const fetchQuestions = async () => {
   loading.value = true;
+  currentPage.value = 1;
   try {
-    const params = new URLSearchParams();
-    if (filters.status) params.set('status', String(filters.status));
-    if (filters.categoryId) params.set('categoryId', String(filters.categoryId));
-    if (filters.keyword) params.set('keyword', filters.keyword);
-    if (filters.optionKeyword) params.set('optionKeyword', filters.optionKeyword);
-    if (filters.author) params.set('author', filters.author);
-    if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
-    if (filters.dateTo) params.set('dateTo', filters.dateTo);
-    params.set('page', String(currentPage.value - 1));
-    params.set('size', String(PAGE_SIZE));
-    if (activeTab.value === 'stats' || activeTab.value === 'options') params.set('includeStats', 'true');
-
-    const data = await adminApi.listQuestions(params.toString());
+    const data = await adminApi.listQuestions(buildParams().toString());
     questions.value = data.content;
     totalElements.value = data.totalElements;
+    hasMore.value = data.content.length < data.totalElements;
   } catch {
     alert('載入失敗');
   } finally {
@@ -465,8 +505,22 @@ const fetchQuestions = async () => {
   }
 };
 
+const loadMoreQuestions = async () => {
+  if (loadingMore.value || !hasMore.value) return;
+  loadingMore.value = true;
+  currentPage.value++;
+  try {
+    const data = await adminApi.listQuestions(buildParams().toString());
+    questions.value.push(...data.content);
+    hasMore.value = questions.value.length < data.totalElements;
+  } catch {
+    currentPage.value--;
+  } finally {
+    loadingMore.value = false;
+  }
+};
+
 const handleSearch = () => {
-  currentPage.value = 1;
   fetchQuestions();
 };
 
@@ -478,12 +532,7 @@ const handleClear = () => {
   filters.author = '';
   filters.dateFrom = '';
   filters.dateTo = '';
-  currentPage.value = 1;
-  fetchQuestions();
-};
-
-const onPageChange = (page: number) => {
-  currentPage.value = page;
+  filters.hasExplanation = '';
   fetchQuestions();
 };
 
@@ -531,6 +580,17 @@ onMounted(async () => {
     adminApi.getCategories().then(d => (categories.value = d)),
     adminApi.getBibleBooks().then(d => (bibleBooks.value = d)),
   ]);
+
+  if (sentinelRef.value) {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0]?.isIntersecting) loadMoreQuestions();
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(sentinelRef.value);
+    onUnmounted(() => observer.disconnect());
+  }
 });
 </script>
 
@@ -668,11 +728,53 @@ onMounted(async () => {
     color: $text-dim;
   }
 
+  // ── 建議分類標記 ──
+  &__suggested-cat {
+    font-size: 1rem;
+    color: $accent;
+    background: rgba($accent, 0.08);
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  // ── 解釋預覽 ──
+  &__explanation-preview {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: 1rem;
+    color: $text-muted;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__explanation-icon {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    color: $accent;
+    margin-top: 0.25rem;
+  }
+
   // ── 操作按鈕 ──
   &__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  // ── 無限捲動哨兵 ──
+  &__sentinel {
+    text-align: center;
+    padding: 1.5rem;
+    color: $text-dim;
+    font-size: 1rem;
   }
 
   // ── Modal 共用 ──

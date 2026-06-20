@@ -83,6 +83,29 @@
             />
           </div>
         </section>
+
+        <!-- 有解釋時：答完顯示操作按鈕 -->
+        <Transition name="fade-up">
+          <div
+            v-if="showActionButtons"
+            class="quiz-page__actions"
+          >
+            <button
+              class="quiz-page__explain-btn"
+              @click="handleShowExplanation"
+            >
+              <Icon name="lucide:lightbulb" />
+              解釋
+            </button>
+            <button
+              class="quiz-page__next-btn"
+              @click="handleNextQuestion"
+            >
+              下一題
+              <Icon name="lucide:arrow-right" />
+            </button>
+          </div>
+        </Transition>
       </template>
 
       <!-- ===== 結算畫面 ===== -->
@@ -93,6 +116,37 @@
         @restart="handleRestart"
       />
     </div>
+    <!-- 解釋彈窗 -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div
+          v-if="showExplanationModal"
+          class="explanation-overlay"
+          @click.self="showExplanationModal = false"
+        >
+          <div class="explanation-card">
+            <button
+              class="explanation-card__close"
+              @click="showExplanationModal = false"
+            >
+              <Icon name="lucide:x" />
+            </button>
+            <h3 class="explanation-card__title">
+              <Icon name="lucide:lightbulb" />
+              解釋
+            </h3>
+            <p class="explanation-card__text">{{ currentQuestion?.explanation }}</p>
+            <button
+              class="explanation-card__next"
+              @click="handleNextQuestion"
+            >
+              下一題
+              <Icon name="lucide:arrow-right" />
+            </button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </main>
 </template>
 
@@ -135,6 +189,8 @@ const selectedOptionId = ref<number | null>(null);
 const answered = ref(false);
 const correctOptionId = ref<number | null>(null);
 const isTransitioning = ref(false);
+const showActionButtons = ref(false);
+const showExplanationModal = ref(false);
 
 // ── 道具使用特效 ──
 const justUsed = reactive({ eliminate: false, scriptureHint: false, audiencePoll: false });
@@ -222,34 +278,49 @@ const getOptionState = (label: string): OptionState => {
  *
  * 為什麼一進來就檢查 answered：防止使用者在展示期間快速再點別的選項。
  */
+const advanceToNext = () => {
+  nextQuestion();
+  resetForNextQuestion();
+  selectedOptionId.value = null;
+  answered.value = false;
+  correctOptionId.value = null;
+  isTransitioning.value = false;
+  showActionButtons.value = false;
+  showExplanationModal.value = false;
+};
+
 const handleSelect = (label: string) => {
   if (answered.value || !currentQuestion.value) return;
 
   const opt = options.value.find(o => o.label === label);
   if (!opt) return;
 
-  // 鎖定當題狀態：記錄選了哪個、標記已答、算出正確答案、存進度
   selectedOptionId.value = opt.optionId;
   answered.value = true;
   correctOptionId.value = checkAnswer(currentQuestion.value.id, opt.optionId);
   saveProgress();
 
-  // 1.2 秒展示對錯
-  setTimeout(() => {
-    isTransitioning.value = true;
-    // 移開焦點避免按鈕 focus ring 殘留到下一題
-    (document.activeElement as HTMLElement)?.blur();
-
-    // 0.3 秒淡出動畫後才真的切題，等 DOM 更新完才重置 UI 狀態
+  if (currentQuestion.value.explanation) {
     setTimeout(() => {
-      nextQuestion();
-      resetForNextQuestion();
-      selectedOptionId.value = null;
-      answered.value = false;
-      correctOptionId.value = null;
-      isTransitioning.value = false;
-    }, 300);
-  }, 1200);
+      showActionButtons.value = true;
+    }, 800);
+  } else {
+    setTimeout(() => {
+      isTransitioning.value = true;
+      (document.activeElement as HTMLElement)?.blur();
+      setTimeout(advanceToNext, 300);
+    }, 1200);
+  }
+};
+
+const handleShowExplanation = () => {
+  showExplanationModal.value = true;
+};
+
+const handleNextQuestion = () => {
+  isTransitioning.value = true;
+  (document.activeElement as HTMLElement)?.blur();
+  setTimeout(advanceToNext, 300);
 };
 
 // 結算 → 提交紀錄
@@ -389,6 +460,131 @@ onMounted(async () => {
       gap: 1.25rem;
     }
   }
+
+  // ── 操作按鈕列（解釋 + 下一題） ──
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  &__explain-btn,
+  &__next-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  &__explain-btn {
+    background: rgba($accent, 0.15);
+    color: $accent;
+    border: 1px solid rgba($accent, 0.3);
+  }
+
+  &__next-btn {
+    background: $primary;
+    color: white;
+  }
+}
+
+// ── 解釋彈窗 ──
+.explanation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+}
+
+.explanation-card {
+  position: relative;
+  max-width: 32rem;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: $bg-card;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+  &__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: $bg-subtle;
+    color: $text-dim;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $border-base;
+      color: $text-primary;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $accent;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    color: $text-primary;
+    font-size: 1rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  &__next {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 1.25rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    background: $primary;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+  }
 }
 
 // ── 經文提示進出動畫 ──
@@ -401,5 +597,32 @@ onMounted(async () => {
 .hint-leave-to {
   opacity: 0;
   transform: translateY(0.5rem);
+}
+
+// ── 操作按鈕淡入動畫 ──
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+
+// ── 彈窗動畫 ──
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+
+  .explanation-card {
+    transform: scale(0.95) translateY(1rem);
+  }
 }
 </style>
