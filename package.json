@@ -25,6 +25,7 @@
     ]
   },
   "dependencies": {
+    "@cloudflare/ai-search-snippet": "^0.0.40",
     "@pinia/nuxt": "^0.11.3",
     "nuxt": "^4.4.2",
     "pinia": "^3.0.4",

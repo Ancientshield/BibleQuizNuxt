@@ -6,7 +6,18 @@
       <chat-bubble-snippet
         v-if="cfAiSearchUrl"
         :api-url="cfAiSearchUrl"
-        style="--chat-bubble-button-bg: #6b4c2a; --chat-bubble-header-bg: #6b4c2a"
+        placeholder="問我聖經相關問題..."
+        chat-title="聖經問答"
+        hide-branding
+        style="
+          --search-snippet-primary-color: #6b4c2a;
+          --search-snippet-primary-hover: #5a3d1e;
+          --search-snippet-user-message-bg: #6b4c2a;
+          --search-snippet-user-message-text: #ffffff;
+          --search-snippet-background: #ffffff;
+          --search-snippet-surface: #f3ede4;
+          --search-snippet-border-color: #e2d9cc;
+        "
       />
     </ClientOnly>
   </div>

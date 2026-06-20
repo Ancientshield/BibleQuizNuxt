@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@cloudflare/ai-search-snippet':
+        specifier: ^0.0.40
+        version: 0.0.40
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))
@@ -222,6 +225,10 @@ packages:
 
   '@clack/prompts@1.1.0':
     resolution: {integrity: sha512-pkqbPGtohJAvm4Dphs2M8xE29ggupihHdy1x84HNojZuMtFsHiUlRvqD24tM2+XmI+61LlfNceM3Wr7U5QES5g==}
+
+  '@cloudflare/ai-search-snippet@0.0.40':
+    resolution: {integrity: sha512-DB2sUIT7ZASoIv2bGNK6OzfUSEF6qNZJ/pz7opbLasgMPDz9e5ArtNEp3UyyNjy8Pfj+2sGsNcHpESHUkbGTuw==}
+    engines: {node: '>=16.0.0'}
 
   '@cloudflare/kv-asset-handler@0.4.2':
     resolution: {integrity: sha512-SIOD2DxrRRwQ+jgzlXCqoEFiKOFqaPjhnNTGKXSRLvp1HiOvapLaFG2kEr9dYQTYe8rKrd9uvDUzmAITeNyaHQ==}
@@ -4865,6 +4872,8 @@ snapshots:
     dependencies:
       '@clack/core': 1.1.0
       sisteransi: 1.0.5
+
+  '@cloudflare/ai-search-snippet@0.0.40': {}
 
   '@cloudflare/kv-asset-handler@0.4.2': {}
 
