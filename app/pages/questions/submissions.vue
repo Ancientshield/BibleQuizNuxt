@@ -1,23 +1,13 @@
 <template>
   <main class="main">
     <div class="main__container">
-      <div class="main__header">
-        <h1 class="main__title">
-          <Icon
-            name="lucide:file-text"
-            class="main__title-icon"
-          />
-          我要投稿
-        </h1>
-        <AtomButton
-          variant="primary"
-          size="button-l"
-          @click="navigateTo('/questions/create')"
-        >
-          <Icon name="lucide:plus" />
-          投稿新題目
-        </AtomButton>
-      </div>
+      <h1 class="main__title">
+        <Icon
+          name="lucide:file-text"
+          class="main__title-icon"
+        />
+        我要投稿
+      </h1>
 
       <!-- Loading -->
       <div
@@ -42,57 +32,67 @@
           size="button-l"
           @click="navigateTo('/questions/create')"
         >
-          投稿第一題
+          <Icon name="lucide:plus" />
+          投稿新題目
         </AtomButton>
       </div>
 
       <!-- 題目列表 -->
-      <div
-        v-else
-        class="mine__list"
-      >
-        <div
-          v-for="q in questions"
-          :key="q.id"
-          class="mine__card"
-        >
-          <div class="mine__card-top">
-            <span :class="['mine__status', `mine__status--${q.status.toLowerCase()}`]">
-              {{ statusLabel(q.status) }}
-            </span>
-            <span class="mine__date">{{ formatDate(q.createdAt) }}</span>
-          </div>
+      <template v-else>
+        <div class="mine__toolbar">
+          <AtomButton
+            variant="primary"
+            size="button-l"
+            @click="navigateTo('/questions/create')"
+          >
+            <Icon name="lucide:plus" />
+            投稿新題目
+          </AtomButton>
+        </div>
+        <div class="mine__list">
+          <div
+            v-for="q in questions"
+            :key="q.id"
+            class="mine__card"
+          >
+            <div class="mine__card-top">
+              <span :class="['mine__status', `mine__status--${q.status.toLowerCase()}`]">
+                {{ statusLabel(q.status) }}
+              </span>
+              <span class="mine__date">{{ formatDate(q.createdAt) }}</span>
+            </div>
 
-          <p class="mine__content">{{ q.content }}</p>
+            <p class="mine__content">{{ q.content }}</p>
 
-          <div class="mine__card-bottom">
-            <span class="mine__option-count">{{ q.options.length }} 個選項</span>
-            <div
-              v-if="q.status === 'PENDING' || q.status === 'REJECTED'"
-              class="mine__actions"
-            >
-              <AtomButton
-                variant="primary"
-                appearance="outline-view"
-                size="button-s"
-                @click="navigateTo(`/questions/${q.id}`)"
+            <div class="mine__card-bottom">
+              <span class="mine__option-count">{{ q.options.length }} 個選項</span>
+              <div
+                v-if="q.status === 'PENDING' || q.status === 'REJECTED'"
+                class="mine__actions"
               >
-                <Icon name="lucide:pencil" />
-                編輯
-              </AtomButton>
-              <AtomButton
-                variant="danger"
-                appearance="outline-view"
-                size="button-s"
-                @click="handleDelete(q.id)"
-              >
-                <Icon name="lucide:trash-2" />
-                刪除
-              </AtomButton>
+                <AtomButton
+                  variant="primary"
+                  appearance="outline-view"
+                  size="button-s"
+                  @click="navigateTo(`/questions/${q.id}`)"
+                >
+                  <Icon name="lucide:pencil" />
+                  編輯
+                </AtomButton>
+                <AtomButton
+                  variant="danger"
+                  appearance="outline-view"
+                  size="button-s"
+                  @click="handleDelete(q.id)"
+                >
+                  <Icon name="lucide:trash-2" />
+                  刪除
+                </AtomButton>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
   </main>
 </template>
@@ -162,6 +162,13 @@ onMounted(fetchQuestions);
     width: 3rem;
     height: 3rem;
     color: $text-dim;
+  }
+
+  // ── 工具列 ──
+  &__toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
   }
 
   // ── 題目列表 ──
