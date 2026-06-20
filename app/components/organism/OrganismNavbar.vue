@@ -258,6 +258,8 @@ const handleLogout = () => {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
   }
 
   &__hamburger {
@@ -347,6 +349,9 @@ const handleLogout = () => {
   &__right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+    min-width: 0;
   }
 
   &__login-btn {

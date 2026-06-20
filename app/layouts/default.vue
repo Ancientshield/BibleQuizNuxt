@@ -8,13 +8,7 @@
         :api-url="cfAiSearchUrl"
         placeholder="問我聖經相關問題..."
         hide-branding
-        :translations="
-          JSON.stringify({
-            chatTitle: '聖經問答',
-            chatEmptyTitle: '開始對話',
-            chatEmptyDescription: '輸入訊息開始聊天',
-          })
-        "
+        :translations="{ chatTitle: '聖經問答', chatEmptyTitle: '開始對話', chatEmptyDescription: '輸入訊息開始聊天' }"
         style="
           --search-snippet-primary-color: #6b4c2a;
           --search-snippet-primary-hover: #5a3d1e;
